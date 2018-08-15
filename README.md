@@ -1,11 +1,11 @@
 # ungravity
 ## A docker swarm / prometheus / alertmanager / grafana stack with optional persistent storage and  high-availability features
 
-### Easily deploy docker to a set of 3+ EL7 hosts (baremetal, VM, or a combination) that can be used to host highly-available containerized applications.
+### Easily deploy and grow a docker swarm across (3) or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal, VM, or combination)_ that can be used to host highly-available containerized applications.
 
 ### Includes a working modern DevOps stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides optional automatic installation of [Portworx PX-Dev](https://portworx.com), for persistant storage for containers volumes across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)).
 
-
+---
 
 # (WIP) Aug 15 2018 initial github release TBA
 
