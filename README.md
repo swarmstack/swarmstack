@@ -9,7 +9,7 @@
 
 # (WIP) Aug 15 2018 initial github release TBA
 
-##Features a collection of ansible playbooks and a docker-compose stack that:
+## Features a collection of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 sysctls for optimal network performance
 - Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
 - Optionally brings up HA Portworx PX-Dev storage cluster (used to persistent container volumes across nodes)
@@ -61,7 +61,9 @@ Prometheus         | [optionally run 2 for HA]
 
 3 or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices to the storage cluster. _More devices = better performance_.
 
- With [Portworx PX Developer version](https://github.com/portworx/px-dev) we'll install a storage cluster for each set of (3) hosts added to the cluster that will provide up to _1TB_ of persistent storage for up to _40_ volumes. Only a subset of your application containers will likely require persistent storage. When using PX Enterprise, or bringing your own storage solution, these limitations will no longer apply, and the storage can be made available simultaneously to a larger number of nodes.
+ With [Portworx PX Developer version](https://github.com/portworx/px-dev) we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying more than 3 nodes in the docker swarm, you'll use constraints and node tags within your docker services to pin them to one particular grouping of 3 hosts within the larger cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage. 
+ 
+ When using [Portworx PX Enterprise](https://portworx.com/) or bringing another storage solution, these limitations may no longer apply and the storage can be made available simultaneously to a larger number of nodes the swarm cluster. 
 
 # INSTALLATION:
 `git clone https://github.com/swarmstack/ungravity.git`
