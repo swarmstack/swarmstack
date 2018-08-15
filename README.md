@@ -5,22 +5,22 @@
 
 ### Includes a working modern DevOps stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides optional automatic installation of [Portworx PX-Dev](https://portworx.com), for persistant storage for containers volumes across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)).
 
----
+
 
 # (WIP) Aug 15 2018 initial github release TBA
 
-Features a collection of ansible playbooks and a docker-compose stack that:
+##Features a collection of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 sysctls for optimal network performance
-- Brings up a 3-node HA ETCD cluster (used by Portworx for storage clustering)
-- Brings up a 3-node Portworx PX-Dev cluster (used for persist)
-- Installs and configures docker service
-- Installs and configures a turn-key DevOps stack based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
-- Automatic pruning of unused docker containers / volumes / images from nodes
+- Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
+- Optionally brings up HA Portworx PX-Dev storage cluster (used to persistent container volumes across nodes)
+- Optionally brings up a 3+ node docker swarm cluster
+- Deploys and configures a turn-key HA DevOps docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
+- Automatically prunes unused docker containers / volumes / images from nodes
 
 
 ---
 
-# Network URLs
+# NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
 Alertmanager     | 9093,9095 (->mon_net:9093) | prom/alertmanager
@@ -53,27 +53,37 @@ High Availability: | |
 Alertmanager       |
 Docker Swarm       |
 Etcd3              |
-Portworx storage   | 1TB / 3 host / 40 attached volumes - [Portworx PX Developer version](https://github.com/portworx/px-dev)
+Portworx storage   | Limits per 3-node cluster:  1TB / 40 attached volumes - [Portworx PX Developer version](https://github.com/portworx/px-dev)
 Prometheus         | [optionally run 2 for HA]
 
 
+# REQUIREMENTS:
 
-# INSTALLATION
+3 or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices to the storage cluster. _More devices = better performance_.
 
-### The following assumes 3 EL7 hosts (baremetal/VM/combination) each contributing (1) 350gb block device (or 2 175gb+ devices for better performance)
+ With [Portworx PX Developer version](https://github.com/portworx/px-dev) we'll install a storage cluster for each set of (3) hosts added to the cluster that will provide up to _1TB_ of persistent storage for up to _40_ volumes. Only a subset of your application containers will likely require persistent storage. When using PX Enterprise, or bringing your own storage solution, these limitations will no longer apply, and the storage can be made available simultaneously to a larger number of nodes.
 
+# INSTALLATION:
 `git clone https://github.com/swarmstack/ungravity.git`
 
-Edit these files: |
----- |
-clusters/ungravity-dev |
-roles/files/etc/ungravity_fw/rules/firewall.rules |
-roles/files/etc/ungravity_fw/rules/docker.rules |
+Edit these files: | |
+---- | - |
+clusters/ungravity-dev | _(defines the nodes and IP addresses of the cluster)_ |
+roles/files/etc/ungravity_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
+roles/files/etc/ungravity_fw/rules/docker.rules | _(used to limit access to docker service ports)_ |
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/docker.html -k` _(optional - if you haven't already brought up a docker swarm)_
+`ansible-playbook -i clusters/ungravity-dev playbooks/docker.html -k` 
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/firewall.html -k` _(re-run to manage docker host firewalls)_
+- _(optional if you haven't already brought up a docker swarm)_
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/portworx.html -k` _(optional if bringing your own persistant storage, be sure to update the pxd driver in docker-compose.yml)_
+`ansible-playbook -i clusters/ungravity-dev playbooks/firewall.html -k` 
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/swarmstack.html -k` _((re)deploy the docker monitoring stack to the cluster)_
+- _(run and re-run to manage firewalls on all docker swarm nodes)_
+
+`ansible-playbook -i clusters/ungravity-dev playbooks/portworx.html -k`
+
+- _(optional if bringing your own persistant storage, be sure to update the pxd driver in docker-compose.yml)_
+
+`ansible-playbook -i clusters/ungravity-dev playbooks/swarmstack.html -k`
+
+- _(re)deploy the docker monitoring stack to the cluster_
