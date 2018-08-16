@@ -28,13 +28,11 @@ You can add some cron entries to each node to forward dockerd/portworx/etcd metr
 
 You'll want to configure a firewall if you need to limit access to the exposed Docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
 
-`iptables -F DOCKER-USER`
+`iptables -F DOCKER-USER  # blank out the DOCKER-USER chain`
 
-`iptables -A DOCKER-USER -s 10.0.138.1/32 -p tcp -m tcp --dport 9090 -j ACCEPT  # allow Grafana`
+`iptables -A DOCKER-USER -s 10.0.138.1/32 -p tcp -m tcp --dport 3000 -j ACCEPT  # allow Grafana from 1 IP`
 
-`iptables -A DOCKER-USER -s 172.16.0.0/16 -p tcp -m tcp --dport 9090 -j ACCEPT  # allow Grafana`
-
-`iptables -A DOCKER-USER -p tcp -m tcp --dport 9090 -j DROP  # block all others`
+`iptables -A DOCKER-USER -p tcp -m tcp --dport 3000 -j DROP  # block all others`
 
 _The default action of the chain should just return, so that the FORWARD chain can continue into the other forwarding chains that Docker maintains :_
 
