@@ -52,8 +52,6 @@ configs:
     file: ./grafana/dashboards/portworx-volumes-dash.json
   grafana_dashboard_etcd-dash:
     file: ./grafana/dashboards/etcd-dash.json
-  grafana_dashboard_grafana-internals-dash:
-    file: ./grafana/dashboards/grafana-internals-dash.json
 
 services:
   cadvisor:
@@ -110,8 +108,6 @@ services:
         target: /etc/grafana/dashboards/portworx-volumes-dash.json
       - source: grafana_dashboard_etcd-dash
         target: /etc/grafana/dashboards/etcd-dash.json
-      - source: grafana_dashboard_grafana-internals-dash
-        target: /etc/grafana/dashboards/grafana-internals-dash.json
     deploy:
       mode: replicated
       replicas: 1
