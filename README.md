@@ -15,7 +15,7 @@
 
 \# `git clone https://github.com/swarmstack/ungravity.git`
 
-\# `ADMIN_USER=admin ADMIN_PASSWORD=somepassword docker stack deploy -c docker-compose.yml mon`
+\# `ADMIN_USER=admin ADMIN_PASSWORD=somepassword PUSH_USER=pushuser PUSH_PASSWORD=pushpass  docker stack deploy -c docker-compose.yml mon`
 
 ### You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
@@ -26,7 +26,7 @@
 `*/1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1`
 
 
-### You'll want to configure a firewall if you need to limit access to the exposed docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended, `yum remove firewalld; yum install iptables iptables-services) can be used to program the kernel's firewall chains:
+### You'll want to configure a firewall if you need to limit access to the exposed docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
 
 `iptables -F DOCKER-USER`
 

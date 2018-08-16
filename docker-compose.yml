@@ -1,0 +1,274 @@
+version: "3.3"
+
+networks:
+  net:
+    driver: overlay
+    attachable: true
+
+volumes:
+    prometheus:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 10
+    grafana:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 10
+    alertmanager:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 10
+    alertmanagerB:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 10
+
+configs:
+  caddy_config:
+    file: ./caddy/Caddyfile
+  node_rules:
+    file: ./prometheus/rules/swarm_node.rules.yml
+  task_rules:
+    file: ./prometheus/rules/swarm_task.rules.yml
+  prometheus_conf:
+    file: ./prometheus/conf/prometheus.yml
+  grafana_provisioning_datasources:
+    file: ./grafana/datasources/prometheus.yaml
+  grafana_provisioning_dashboards:
+    file: ./grafana/swarmprom_dashboards.yml
+  grafana_dashboard_swarmprom-nodes-dash:
+    file: ./grafana/dashboards/swarmprom-nodes-dash.json
+  grafana_dashboard_swarmprom-prometheus-dash:
+    file: ./grafana/dashboards/swarmprom-prometheus-dash.json
+  grafana_dashboard_swarmprom-services-dash:
+    file: ./grafana/dashboards/swarmprom-services-dash.json
+  grafana_dashboard_portworx-cluster-dash:
+    file: ./grafana/dashboards/portworx-cluster-dash.json
+  grafana_dashboard_portworx-volumes-dash:
+    file: ./grafana/dashboards/portworx-volumes-dash.json
+  grafana_dashboard_etcd-dash:
+    file: ./grafana/dashboards/etcd-dash.json
+  grafana_dashboard_grafana-internals-dash:
+    file: ./grafana/dashboards/grafana-internals-dash.json
+
+services:
+  cadvisor:
+    image: google/cadvisor
+    networks:
+      - net
+    command: -logtostderr -docker_only
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  grafana:
+    image: grafana/grafana:latest
+    networks:
+      - net
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      #- GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+      #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL:-localhost}
+      #- GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
+      #- GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS:-grafana@test.com}
+      #- GF_SMTP_FROM_NAME=${GF_SMTP_FROM_NAME:-Grafana}
+      #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
+      #- GF_SMTP_USER=${GF_SMTP_USER}
+      #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+    volumes:
+      - grafana:/var/lib/grafana
+    configs:
+      - source: grafana_provisioning_datasources
+        target: /etc/grafana/provisioning/datasources/prometheus.yaml
+      - source: grafana_provisioning_dashboards
+        target: /etc/grafana/provisioning/dashboards/swarmprom_dashboards.yml
+      - source: grafana_dashboard_swarmprom-nodes-dash
+        target: /etc/grafana/dashboards/swarmprom-nodes-dash.json
+      - source: grafana_dashboard_swarmprom-prometheus-dash
+        target: /etc/grafana/dashboards/swarmprom-prometheus-dash.json
+      - source: grafana_dashboard_swarmprom-services-dash
+        target: /etc/grafana/dashboards/swarmprom-services-dash.json
+      - source: grafana_dashboard_portworx-cluster-dash
+        target: /etc/grafana/dashboards/portworx-cluster-dash.json
+      - source: grafana_dashboard_portworx-volumes-dash
+        target: /etc/grafana/dashboards/portworx-volumes-dash.json
+      - source: grafana_dashboard_etcd-dash
+        target: /etc/grafana/dashboards/etcd-dash.json
+      - source: grafana_dashboard_grafana-internals-dash
+        target: /etc/grafana/dashboards/grafana-internals-dash.json
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  alertmanager:
+    image: prom/alertmanager
+    networks:
+      - net
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--cluster.listen-address=0.0.0.0:9094'
+      - '--cluster.advertise-address=:9094'
+      - '--cluster.peer=tasks.alertmanagerB:9094'
+    volumes:
+      - alertmanager:/alertmanager
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  alertmanagerB:
+    image: prom/alertmanager
+    networks:
+      - net
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--cluster.listen-address=0.0.0.0:9094'
+      - '--cluster.advertise-address=:9094'
+      - '--cluster.peer=alertmanager:9094'
+    volumes:
+      - alertmanagerB:/alertmanager
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  unsee:
+    image: cloudflare/unsee:v0.8.0
+    networks:
+      - net
+    environment:
+      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  node-exporter:
+    image: stefanprodan/swarmprom-node-exporter:v0.15.2
+    networks:
+      - net
+    environment:
+      - NODE_ID={{.Node.ID}}
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/nodename
+    command:
+      - '--path.sysfs=/host/sys'
+      - '--path.procfs=/host/proc'
+      - '--collector.textfile.directory=/etc/node-exporter/'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      # no collectors are explicitely enabled here, because the defaults are just fine,
+      # see https://github.com/prometheus/node_exporter
+      # disable ipvs collector because it barfs the node-exporter logs full with errors on my centos 7 vm's
+      - '--no-collector.ipvs'
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - net
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=24h'
+    volumes:
+      - prometheus:/prometheus
+    configs:
+      - source: prometheus_conf
+        target: /etc/prometheus/prometheus.yml
+      - source: node_rules
+        target: /etc/prometheus/swarm_node.rules.yml
+      - source: task_rules
+        target: /etc/prometheus/swarm_task.rules.yml
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 128M
+
+  pushgateway:
+    image: prom/pushgateway
+    networks:
+      - net
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  caddy:
+    image: stefanprodan/caddy
+    ports:
+      - "3000:3000"
+      - "9090:9090"
+      - "9091:9091"
+      - "9093:9093"
+      - "9094:9094"
+      - "9095:9093"
+    networks:
+      - net
+    environment:
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+    configs:
+      - source: caddy_config
+        target: /etc/caddy/Caddyfile
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
