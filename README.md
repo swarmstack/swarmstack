@@ -7,7 +7,49 @@
 
 ---
 
-# (WIP) Aug 15 2018 initial github release TBA
+# THIS IS A WORK IN PROGRESS (WIP) Aug 15 2018 initial github ansible release TBA
+
+### While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetel or VMs running EL7 (RHEL/CentOS), each running docker configured as a swarm with 1 or more manaagers, etcd3, and [Portporx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+
+### Afterwards, download the git archive below onto a docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
+
+\# `git clone https://github.com/swarmstack/ungravity.git`
+
+\# `ADMIN_USER=admin ADMIN_PASSWORD=somepassword docker stack deploy -c docker-compose.yml mon`
+
+### You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
+
+`*/1 * * * * curl http://127.0.0.1:9001/metrics > /tmp/portworx.metrics 2>/dev/null && sed '/go_/d' /tmp/portworx.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/portworx/instance/`hostname -a` >/dev/null 2>&1`
+
+`*/1 * * * * sleep 2 && curl http://127.0.0.1:9323/metrics > /tmp/dockerd.metrics 2>/dev/null && sed '/go_/d' /tmp/dockerd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1`
+
+`*/1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1`
+
+
+### You'll want to configure a firewall if you need to limit access to the exposed docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended, `yum remove firewalld; yum install iptables iptables-services) can be used to program the kernel's firewall chains:
+
+`iptables -F DOCKER-USER`
+
+`iptables -A DOCKER-USER -s 10.0.138.1/32 -p tcp -m tcp --dport 9090 -j ACCEPT  # allow Grafana`
+
+`iptables -A DOCKER-USER -s 172.16.0.0/16 -p tcp -m tcp --dport 9090 -j ACCEPT  # allow Grafana`
+
+`iptables -A DOCKER-USER -p tcp -m tcp --dport 9090 -j DROP  # block all others`
+
+_The default action of the chain should just return, so that the FORWARD chain can continue into the other forwarding chains that Docker maintains :_
+
+`iptables -A DOCKER-USER -j RETURN`
+
+
+### You'll need to similarly protect each node in the swarm, as docker swarm will accept traffic to service ports on all nodes and forward to the correct node. An ansible playbook will soon be included here that can be used to manage the firewalls on all of the docker nodes.
+
+---
+
+## WHY? 
+
+### Portworx provides a highly-redundant storage solution that seeks to eliminate "ERROR: volume still atttached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from another node. 
+
+---
 
 ## Features a collection of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 sysctls for optimal network performance
@@ -20,7 +62,7 @@
 
 ---
 
-# NETWORK URLs:
+## NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
 Alertmanager     | 9093,9095 (->mon_net:9093) | prom/alertmanager
@@ -34,7 +76,7 @@ Unsee            | 9094                       | cloudflare/unsee::v0.8.0
 
 Security: | | |
 --------- | - | -
-Firewall management | iptables                 | ansible->/etc/caa_fw
+Firewall management | iptables                 | ansible->/etc/ungravity_fw
 caddy reverse proxy	| 3000,9090-9091,9093-9095 | stefanprodan/caddy:latest
 
 ---
@@ -48,24 +90,17 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ---
 
-High Availability: | |
------------------- | - |
-Alertmanager       |
-Docker Swarm       |
-Etcd3              |
-Portworx storage   | Limits per 3-node cluster:  1TB / 40 attached volumes - [Portworx PX Developer version](https://github.com/portworx/px-dev)
-Prometheus         | [optionally run 2 for HA]
-
-
-# REQUIREMENTS:
+## REQUIREMENTS:
 
 3 or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices to the storage cluster. _More devices = better performance_.
 
- With [Portworx PX Developer version](https://github.com/portworx/px-dev) we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying more than 3 nodes in the docker swarm, you'll use constraints and node tags within your docker services to pin them to one particular grouping of 3 hosts within the larger cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage. 
+ With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying more than 3 nodes in the docker swarm, you'll use constraints and node tags within your docker services to pin them to one particular grouping of 3 hosts within the larger cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage. 
  
- When using [Portworx PX Enterprise](https://portworx.com/) or bringing another storage solution, these limitations may no longer apply and the storage can be made available simultaneously to a larger number of nodes the swarm cluster. 
+ When using [Portworx PX Enterprise](https://portworx.com/) or bringing another storage solution, these limitations may no longer apply and the storage can be made available simultaneously to a larger number of nodes the swarm cluster.
 
-# INSTALLATION:
+ ---
+ 
+## INSTALLATION (please ignore for now, but this is what's coming):
 `git clone https://github.com/swarmstack/ungravity.git`
 
 Edit these files: | |
