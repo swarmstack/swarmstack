@@ -86,8 +86,6 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen1.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen2.png)
-
 ![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen3.png)
 
 ![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen4.png)
