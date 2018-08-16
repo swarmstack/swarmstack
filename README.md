@@ -1,5 +1,5 @@
 # ungravity
-## A docker swarm / prometheus / alertmanager / grafana stack with optional persistent storage and  high-availability features
+## A Docker swarm / Prometheus / Alertmanager / Grafana DevOps stack for running containerized applications, with optional persistent storage and high-availability features
 
 ### Easily deploy and grow a docker swarm across (3) or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal, VM, or combination)_ that can be used to host highly-available containerized applications.
 
@@ -9,9 +9,9 @@
 
 # THIS IS A WORK IN PROGRESS (WIP) Aug 15 2018 initial github ansible release TBA
 
-### While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetel or VMs running EL7 (RHEL/CentOS), each running docker configured as a swarm with 1 or more manaagers, etcd3, and [Portporx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+### While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more manaagers, etcd3, and [Portporx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
 
-### Afterwards, download the git archive below onto a docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
+### Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
 \# `git clone https://github.com/swarmstack/ungravity.git`
 
@@ -26,7 +26,7 @@
 `*/1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1`
 
 
-### You'll want to configure a firewall if you need to limit access to the exposed docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
+### You'll want to configure a firewall if you need to limit access to the exposed Docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
 
 `iptables -F DOCKER-USER`
 
@@ -41,7 +41,7 @@ _The default action of the chain should just return, so that the FORWARD chain c
 `iptables -A DOCKER-USER -j RETURN`
 
 
-### You'll need to similarly protect each node in the swarm, as docker swarm will accept traffic to service ports on all nodes and forward to the correct node. An ansible playbook will soon be included here that can be used to manage the firewalls on all of the docker nodes.
+### You'll need to similarly protect each node in the swarm, as Docker swarm will accept traffic to service ports on all nodes and forward to the correct node. An ansible playbook will soon be included here that can be used to manage the firewalls on all of the Docker nodes.
 
 ---
 
@@ -56,8 +56,8 @@ _The default action of the chain should just return, so that the FORWARD chain c
 - Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
 - Optionally brings up HA Portworx PX-Dev storage cluster (used to persistent container volumes across nodes)
 - Optionally brings up a 3+ node docker swarm cluster
-- Deploys and configures a turn-key HA DevOps docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
-- Automatically prunes unused docker containers / volumes / images from nodes
+- Deploys and configures a turn-key HA DevOps Docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
+- Automatically prunes unused Docker containers / volumes / images from nodes
 
 
 ---
@@ -94,7 +94,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 3 or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices to the storage cluster. _More devices = better performance_.
 
- With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying more than 3 nodes in the docker swarm, you'll use constraints and node tags within your docker services to pin them to one particular grouping of 3 hosts within the larger cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage. 
+ With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying more than 3 nodes in the Docker swarm, you'll use constraints and node tags within your Docker services to pin them to one particular grouping of 3 hosts within the larger cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage. 
  
  When using [Portworx PX Enterprise](https://portworx.com/) or bringing another storage solution, these limitations may no longer apply and the storage can be made available simultaneously to a larger number of nodes the swarm cluster.
 
@@ -107,15 +107,15 @@ Edit these files: | |
 ---- | - |
 clusters/ungravity-dev | _(defines the nodes and IP addresses of the cluster)_ |
 roles/files/etc/ungravity_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
-roles/files/etc/ungravity_fw/rules/docker.rules | _(used to limit access to docker service ports)_ |
+roles/files/etc/ungravity_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
 
 `ansible-playbook -i clusters/ungravity-dev playbooks/docker.html -k` 
 
-- _(optional if you haven't already brought up a docker swarm)_
+- _(optional if you haven't already brought up a Docker swarm)_
 
 `ansible-playbook -i clusters/ungravity-dev playbooks/firewall.html -k` 
 
-- _(run and re-run to manage firewalls on all docker swarm nodes)_
+- _(run and re-run to manage firewalls on all Docker swarm nodes)_
 
 `ansible-playbook -i clusters/ungravity-dev playbooks/portworx.html -k`
 
@@ -123,4 +123,4 @@ roles/files/etc/ungravity_fw/rules/docker.rules | _(used to limit access to dock
 
 `ansible-playbook -i clusters/ungravity-dev playbooks/swarmstack.html -k`
 
-- _(re)deploy the docker monitoring stack to the cluster_
+- _(re)deploy the Docker monitoring stack to the cluster_
