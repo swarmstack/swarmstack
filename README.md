@@ -102,19 +102,19 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ## Metrics Dashboards
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen1.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen1.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen3.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen3.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen4.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen4.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen5.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen5.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen6.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen6.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen7.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen7.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen8.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen8.png)
 
 # (please ignore everything below for now, but this is what's coming):
 
