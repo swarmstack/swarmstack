@@ -47,7 +47,7 @@ _The default action of the chain should just return, so that the FORWARD chain c
 
 ## WHY? 
 
-### Portworx provides a highly-redundant storage solution that seeks to eliminate "ERROR: volume still atttached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from another node. 
+### Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still atttached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from another node. 
 
 ---
 
