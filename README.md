@@ -9,7 +9,14 @@ Includes a working modern DevOps monitoring stack based on [Prometheus](https://
 
 ## THIS IS A WORK-IN-PROGRESS (WIP) AUG 15 2018: Full ansible release soon
 
-While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more managers, plus [etcd and Portworx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+
+_Hint_: If installing Portworx PX-Developer, be sure to follow the links to install portworx/px-dev as standalone OCI runC containers on each node [https://docs.portworx.com/runc/](https://docs.portworx.com/runc/) to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
+
+> sudo docker run --entrypoint /runc-entry-point.sh \
+>     --rm -i --privileged=true \
+>     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
+>     portworx/px-dev
 
 Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
@@ -97,7 +104,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ## Features a collection of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 sysctls for optimal network performance
-- Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
+- Optionally brings up HA etcd cluster (used by Portworx for cluster metadata)
 - Optionally brings up HA Portworx PX-Dev storage cluster (used to replicate persistent container volumes across Docker nodes)
 - Optionally brings up a 3+ node docker swarm cluster
 - Deploys and configures a turn-key HA DevOps Docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
