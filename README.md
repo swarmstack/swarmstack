@@ -5,7 +5,7 @@ Easily deploy and grow a docker swarm across (3) or more baremetal servers, ec2 
 
 Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx PX-Developer](https://portworx.com), for persistent storage for container volume across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can be used by your own applications and visualized in Grafana or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Metrics from Prometheus can be persisted out to one or more external timeseries databases (tsdb) such as InfluxDB, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
 
-For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards and using the Prometheus tsdb as a datasource, see: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
+For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards while using the Prometheus tsdb as a datasource, see: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
 
 ---
 
