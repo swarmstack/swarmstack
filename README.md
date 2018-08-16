@@ -1,15 +1,15 @@
 # ungravity
 ## A Docker swarm / Prometheus / Alertmanager / Grafana DevOps stack for running containerized applications, with optional persistent storage and high-availability features
 
-### Easily deploy and grow a docker swarm across (3) or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal, VM, or combination)_ that can be used to host highly-available containerized applications.
+Easily deploy and grow a docker swarm across (3) or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal, VM, or combination)_ that can be used to host highly-available containerized applications.
 
-Includes a working modern DevOps stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides optional automatic installation of [Portworx PX-Dev](https://portworx.com), for persistant storage for containers volumes across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)).
+Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides optional automatic installation of [Portworx PX-Dev](https://portworx.com), for persistant storage for containers volumes across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you browse the health of the cluster, and the same metrics pipeline through Prometheus can be used by your own applications and visualized in Grafana or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications.
 
 ---
 
-# THIS IS A WORK IN PROGRESS (WIP) Aug 15 2018 initial github ansible release TBA
+## THIS IS A WORK-IN-PROGRESS (WIP) AUG 15 2018: Full ansible release soon
 
-While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more managers, plus [etcd and Portworx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more managers, plus [etcd and Portworx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
 
 Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
