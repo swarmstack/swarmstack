@@ -49,16 +49,6 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ---
 
-## Features a collection of ansible playbooks and a docker-compose stack that:
-- Tunes EL7 sysctls for optimal network performance
-- Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
-- Optionally brings up HA Portworx PX-Dev storage cluster (used to persistent container volumes across nodes)
-- Optionally brings up a 3+ node docker swarm cluster
-- Deploys and configures a turn-key HA DevOps Docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
-- Automatically prunes unused Docker containers / volumes / images from nodes
-
----
-
 ## NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
@@ -87,6 +77,18 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ---
 
+(please ignore everything below for now, but this is what's coming):
+
+## Features a collection of ansible playbooks and a docker-compose stack that:
+- Tunes EL7 sysctls for optimal network performance
+- Optionally brings up HA ETCD cluster (used by Portworx for cluster metadata)
+- Optionally brings up HA Portworx PX-Dev storage cluster (used to replicate persistent container volumes across Docker nodes)
+- Optionally brings up a 3+ node docker swarm cluster
+- Deploys and configures a turn-key HA DevOps Docker swarm stack, based on Prometheus and various exporters, Alertmanager, Grafana and Grafana dashboards
+- Automatically prunes unused Docker containers / volumes / images from nodes
+
+---
+
 ## REQUIREMENTS:
 
 3 or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices to the storage cluster. _More devices = better performance_.
@@ -97,7 +99,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
  ---
  
-## INSTALLATION (please ignore for now, but this is what's coming):
+## INSTALLATION:
 `git clone https://github.com/swarmstack/ungravity.git`
 
 Edit these files: | |
