@@ -1,4 +1,4 @@
-# ungravity
+# swarmstack
 ## A Docker swarm / Prometheus / Alertmanager / Grafana DevOps stack for running containerized applications, with optional persistent storage and high-availability features
 
 Easily deploy and grow a docker swarm across (3) or more Enterprise Linux 7 (RHEL/CentOS) hosts _(baremetal, VM, or combination)_ that can be used to host highly-available containerized applications.
@@ -20,7 +20,7 @@ _Hint_: If installing Portworx PX-Developer, be sure to follow the links to inst
 
 Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
-\# `git clone https://github.com/swarmstack/ungravity.git`
+\# `git clone https://github.com/swarmstack/swarmstack.git`
 
 \# `ADMIN_USER=admin ADMIN_PASSWORD=somepassword PUSH_USER=pushuser PUSH_PASSWORD=pushpass  docker stack deploy -c docker-compose.yml mon`
 
@@ -70,7 +70,7 @@ Unsee            | 9094                       | cloudflare/unsee::v0.8.0
 
 Security: | | |
 --------- | - | -
-Firewall management | iptables                 | ansible->/etc/ungravity_fw
+Firewall management | iptables                 | ansible->/etc/swarmstack_fw
 caddy reverse proxy	| 3000,9090-9091,9093-9095 | stefanprodan/caddy:latest
 
 ---
@@ -84,21 +84,21 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ---
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen1.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen1.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen2.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen2.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen3.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen3.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen4.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen4.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen5.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen5.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen6.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen6.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen7.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen7.png)
 
-![Host](https://raw.githubusercontent.com/swarmstack/ungravity/master/screens/screen8.png)
+![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen8.png)
 
 # (please ignore everything below for now, but this is what's coming):
 
@@ -123,26 +123,26 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
  ---
  
 ## INSTALLATION:
-`git clone https://github.com/swarmstack/ungravity.git`
+`git clone https://github.com/swarmstack/swarmstack.git`
 
 Edit these files: | |
 ---- | - |
-clusters/ungravity-dev | _(defines the nodes and IP addresses of the cluster)_ |
-roles/files/etc/ungravity_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
-roles/files/etc/ungravity_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
+clusters/swarmstack-dev | _(defines the nodes and IP addresses of the cluster)_ |
+roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
+roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/docker.html -k` 
+`ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k` 
 
 - _(optional if you haven't already brought up a Docker swarm)_
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/firewall.html -k` 
+`ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k` 
 
 - _(run and re-run to manage firewalls on all Docker swarm nodes)_
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/portworx.html -k`
+`ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k`
 
 - _(optional if bringing your own persistant storage, be sure to update the pxd driver in docker-compose.yml)_
 
-`ansible-playbook -i clusters/ungravity-dev playbooks/swarmstack.html -k`
+`ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k`
 
 - _(re)deploy the Docker monitoring stack to the cluster_
