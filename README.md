@@ -3,7 +3,9 @@
 
 Easily deploy and grow a docker swarm across (3) or more baremetal servers, ec2 instances, or VMs _(in any combination)_ that can be used to host highly-available containerized applications.
 
-Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx PX-Developer](https://portworx.com), for persistent storage for container volume across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can be used by your own applications and visualized in Grafana or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Metrics from Prometheus can be persisted out to one or more external timeseries databases (tsdb) such as InfluxDB, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using the Prometheus tsdb as a visualizer and dashboards using the Prometheus tsdb as a datasource,  here's a great demo: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
+Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx PX-Developer](https://portworx.com), for persistent storage for container volume across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can be used by your own applications and visualized in Grafana or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Metrics from Prometheus can be persisted out to one or more external timeseries databases (tsdb) such as InfluxDB, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
+
+For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using the Prometheus tsdb as a visualizer and dashboards using the Prometheus tsdb as a datasource, see: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
 
 ---
 
@@ -13,40 +15,52 @@ While you wait for the full ansible playbook release that will install the clust
 
 _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/developer/), be sure to follow links to instead install portworx/px-dev as standalone OCI [runC](https://docs.portworx.com/runc/) containers on each node in order to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
 
-> sudo docker run --entrypoint /runc-entry-point.sh \
->     --rm -i --privileged=true \
->     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
->     portworx/px-dev
+    # sudo docker run --entrypoint /runc-entry-point.sh \
+    --rm -i --privileged=true \
+    -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
+    portworx/px-dev
 
 Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
-\# `git clone https://github.com/swarmstack/swarmstack.git`
+    # git clone https://github.com/swarmstack/swarmstack.git
 
-\# `ADMIN_USER=admin ADMIN_PASSWORD=somepassword PUSH_USER=pushuser PUSH_PASSWORD=pushpass  docker stack deploy -c docker-compose.yml mon`
+    # ADMIN_USER=admin ADMIN_PASSWORD=somepassword \
+    PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
+    sudo docker stack deploy -c docker-compose.yml mon
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
-`*/1 * * * * curl http://127.0.0.1:9001/metrics > /tmp/portworx.metrics 2>/dev/null && sed '/go_/d' /tmp/portworx.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/portworx/instance/\`hostname -a\` >/dev/null 2>&1`
+    */1 * * * * curl http://127.0.0.1:9001/metrics > /tmp/portworx.metrics 2>/dev/null && sed '/go_/d' /tmp/portworx.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/portworx/instance/`hostname -a` >/dev/null 2>&1
 
-`*/1 * * * * sleep 2 && curl http://127.0.0.1:9323/metrics > /tmp/dockerd.metrics 2>/dev/null && sed '/go_/d' /tmp/dockerd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/\`hostname -a\` >/dev/null 2>&1`
+    */1 * * * * sleep 2 && curl http://127.0.0.1:9323/metrics > /tmp/dockerd.metrics 2>/dev/null && sed '/go_/d' /tmp/dockerd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
-`*/1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/\`hostname -a\` >/dev/null 2>&1`
+    */1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
 
 You'll want to configure a firewall if you need to limit access to the exposed Docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
 
-`iptables -F DOCKER-USER  # blank out the DOCKER-USER chain`
-
-`iptables -A DOCKER-USER -s 10.0.138.1/32 -p tcp -m tcp --dport 3000 -j ACCEPT  # allow Grafana from 1 IP`
-
-`iptables -A DOCKER-USER -p tcp -m tcp --dport 3000 -j DROP  # block all others`
+    # iptables -F DOCKER-USER  # blank out the DOCKER-USER chain
+    # iptables -A DOCKER-USER -s 10.0.138.1/32 -p tcp -m tcp --dport 3000 -j ACCEPT  # allow Grafana from 1 IP
+    # iptables -A DOCKER-USER -p tcp -m tcp --dport 3000 -j DROP  # block all others
 
 _The default action of the chain should just return, so that the FORWARD chain can continue into the other forwarding chains that Docker maintains :_
 
-`iptables -A DOCKER-USER -j RETURN`
+    iptables -A DOCKER-USER -j RETURN
 
 
 You'll need to similarly protect each node in the swarm, as Docker swarm will accept traffic to service ports on all nodes and forward to the correct node. An ansible playbook will soon be included here that can be used to manage the firewalls on all of the Docker nodes.
+
+You'll also want to add something to each host to keep the local filesystem clear of unneeded containers, local volumes, and images:
+
+    sudo cat <<EOF >>/etc/cron.daily/clean-docker
+    #!/bin/bash
+
+    /bin/docker container prune -f > /dev/null 2>&1
+    sleep 10
+    /bin/docker volume prune -f > /dev/null 2>&1
+    sleep 10
+    /bin/docker image prune -a -f > /dev/null 2>&1
+    EOF
 
 ---
 
@@ -86,6 +100,8 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ---
 
+## Metrics Dashboards
+
 ![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen1.png)
 
 ![Host](https://raw.githubusercontent.com/swarmstack/swarmstack/master/screens/screen3.png)
@@ -123,7 +139,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
  ---
  
 ## INSTALLATION:
-`git clone https://github.com/swarmstack/swarmstack.git`
+    # git clone https://github.com/swarmstack/swarmstack.git
 
 Edit these files: | |
 ---- | - |
@@ -131,18 +147,18 @@ clusters/swarmstack-dev | _(defines the nodes and IP addresses of the cluster)_ 
 roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
 roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
 
-`ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k` 
+    # ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k
 
-- _(optional if you haven't already brought up a Docker swarm)_
+- _(optional, use this if you haven't already brought up a Docker swarm)_
 
-`ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k` 
+    # ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k
 
-- _(run and re-run to manage firewalls on all Docker swarm nodes)_
+- _(you can run and re-run this playbook to manage firewalls on all Docker swarm nodes)_
 
-`ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k`
+    # ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k
 
-- _(optional if bringing your own persistent storage, be sure to update the pxd driver in docker-compose.yml)_
+- _(optional, if bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml)_
 
-`ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k`
+    # ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k
 
-- _(re)deploy the Docker monitoring stack to the cluster_
+- _(deploy or redeploy the swarmstack DevOps monitoring stack to the cluster)_
