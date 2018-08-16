@@ -9,7 +9,7 @@
 
 # THIS IS A WORK IN PROGRESS (WIP) Aug 15 2018 initial github ansible release TBA
 
-### While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more manaagers, etcd3, and [Portporx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
+### While you wait for the full ansible release, feel free to get a head-start learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of baremetal or VMs running EL7 (RHEL/CentOS), each running Docker configured as a swarm with 1 or more managers, plus [etcd and Portporx PX-Developer](https://docs.portworx.com/developer/) _(or change pxd in docker-compose.yml to your persistant storage layer of choice)_.
 
 ### Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
