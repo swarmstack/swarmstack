@@ -140,7 +140,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
  ---
  
-## INSTALLATION:
+## CLUSTER INSTALLATION: (not yet available)
     # git clone https://github.com/swarmstack/swarmstack.git
 
 Edit these files: | |
@@ -148,19 +148,19 @@ Edit these files: | |
 clusters/swarmstack-dev | _(defines the nodes and IP addresses of the cluster)_ |
 roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
 roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
-
-    # ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k
-
-- _(optional, use this if you haven't already brought up a Docker swarm)_
-
-    # ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k
-
-- _(you can run and re-run this playbook to manage firewalls on all Docker swarm nodes)_
-
-    # ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k
-
-- _(optional, if bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml)_
-
-    # ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k
-
-- _(deploy or redeploy the swarmstack DevOps monitoring stack to the cluster)_
+```
+# ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k
+```
+* optional, use this if you haven't already brought up a Docker swarm
+```
+# ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k`
+```
+* you can run and re-run this playbook to manage firewalls on all Docker swarm nodes
+```
+# ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k
+```
+* optional, if bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml
+```
+# ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k
+```
+* deploy or redeploy the swarmstack DevOps monitoring stack to the cluster
