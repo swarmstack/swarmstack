@@ -9,6 +9,14 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 ---
 
+## WHY? 
+
+A modern data-driven monitoring and alerting solution helps DevOps teams develop and support containerized applications, providing the ability to observe metrics about how the application performs over time, and alerting the team when things go off-the-rails. This project, like others before it, attempts to reduce the installation steps necessary to install and configure such a stack, in a way that can be easily deployed to one of more clusters of Docker swarm.
+
+Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
+
+---
+
 ## THIS IS A WORK-IN-PROGRESS (WIP) AUG 15 2018: Full ansible release soon
 
 While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of physical or virtual nodes, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
@@ -74,15 +82,6 @@ You'll also want to add something to each host to keep the local filesystem clea
     sleep 10
     /bin/docker image prune -a -f > /dev/null 2>&1
     EOF
-
----
-
-## WHY? 
-
-A modern data-driven monitoring and alerting solution helps DevOps teams develop and support containerized applications, providing the ability to observe metrics about how the application performs over time, and alerting the team when things go off-the-rails. This project, like others before it, attempts to reduce the installation steps necessary to install and configure such a stack, in a way that can be easily deployed to one of more clusters of Docker swarm.
-
-Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from another node. 
-
 ---
 
 ## NETWORK URLs:
