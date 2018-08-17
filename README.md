@@ -20,7 +20,7 @@ _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/develope
     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
     portworx/px-dev
 
-_Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
+_Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
 ## INSTALL SWARMSTACK TO AN EXISTING CLUSTER:
 
