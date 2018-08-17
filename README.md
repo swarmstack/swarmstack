@@ -25,7 +25,7 @@ _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/develope
 _Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
 ## INSTALLING SWARMSTACK TO AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
-Download the git archive below onto a Docker manager node and deploy Docker stack using the docker-compose.yml file:
+Download the git archive below onto a Docker manager node and deploy swarmstack services as a Docker stack using the docker-compose.yml file:
 
     # git clone https://github.com/swarmstack/swarmstack.git
 
