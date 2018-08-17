@@ -16,9 +16,9 @@ Then update systemd and restart Docker on each node:
     # systemctl daemon-reload
     # systemctl restart docker
 
-_Hint:_ You may find that varying applications within containers parse their environment for proxies with differing requirements, such as requiring leading URI:// _(e.g. http_proxy=proxy.example.com:80 or http_proxy=http://proxy.example.com:80)_. Some applications might want to see HTTPS_PROXY instead. Consult application documentation in these cases, and add the appropriate environent statements to the individual container that requires internet access via proxy.
-
 ## Grafana (and other containers)
+
+_Hint:_ You may find that varying applications within containers parse their environment for proxies with differing requirements, such as requiring leading URI:// _(e.g. http_proxy=proxy.example.com:80 or http_proxy=http://proxy.example.com:80)_. Some applications might want to see HTTPS_PROXY instead. Consult application documentation in these cases, and add the appropriate environent statements to the individual container that requires internet access via proxy.
 
 If you plan to install plugins using internet sources, you'll need add your https_proxy to to containers within the docker-compose.yml:
 
