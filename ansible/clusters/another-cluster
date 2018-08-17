@@ -1,0 +1,18 @@
+[swarmstack-dev:vars]
+CLUSTER=swarmstack-dev
+# For physical machines, try REBOOT_DELAY=300, REBOOT_TIMEOUT=600 below. Physical hosts may take much longer to boot:
+REBOOT_DELAY=30
+REBOOT_TIMEOUT=120
+
+[swarmstack-dev:children]
+etcd
+no-docker
+
+[etcd]
+host1.example.com IP=10.0.13.15
+host2.example.com IP=10.0.13.16
+host3.example.com IP=10.0.13.17
+
+[no-docker]
+# Add any hosts here that do not run docker but are managed as part of this cluster. This prevents some playbooks from attempting certain Docker-related actions on the host such as modifying the DOCKER-USER iptables firewall chain
+#host1.example.com

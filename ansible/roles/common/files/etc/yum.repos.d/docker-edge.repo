@@ -1,0 +1,6 @@
+[docker-edge]
+name=Docker Edge Repository
+baseurl=https://download.docker.com/linux/centos/7/x86_64/edge
+enabled=1
+gpgcheck=1
+gpgkey=https://download.docker.com/linux/centos/gpg

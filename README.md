@@ -13,6 +13,8 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of physical or virtual nodes, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
 
+Before proceeding, make sure your hosts have their time in sync via NTP
+
 _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/developer/), be sure to follow links to instead install portworx/px-dev as standalone OCI [runC](https://docs.portworx.com/runc/) containers on each node in order to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
 
     # sudo docker run --entrypoint /runc-entry-point.sh \
@@ -22,7 +24,7 @@ _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/develope
 
 _Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
-## INSTALL SWARMSTACK TO AN EXISTING CLUSTER:
+## INSTALLING SWARMSTACK TO AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
 
     # git clone https://github.com/swarmstack/swarmstack.git
 
@@ -40,6 +42,12 @@ You can add some cron entries to each node to forward dockerd/portworx/etcd metr
 
     */1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
+---
+
+### FIREWALL MANAGEMENT USING ANSIBLE:
+You can now use the ansible playbook in the [ansible](https://github.com/swarmstack/swarmstack/blob/master/ansible/README.md) folder to manage the firewalls on your EL7 Docker swarm cluster. For other distributions see the manual method below for now.
+
+### MANUAL FIREWALL MANAGEMENT:
 
 You'll want to configure a firewall if you need to limit access to the exposed Docker service ports below, and any others your other applications bring. Generally speaking this means allowing access to specific IPs and then to no others by modifying the DOCKER-USER iptables chain. This is because routing for exposed Docker service ports happens through the kernel FORWARD chain. firewalld or iptables (recommended: `yum remove firewalld; yum install iptables iptables-services`) can be used to program the kernel's firewall chains:
 

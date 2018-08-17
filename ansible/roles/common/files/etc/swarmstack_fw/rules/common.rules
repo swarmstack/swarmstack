@@ -1,0 +1,14 @@
+# THIS FILE IS MANAGED BY ANSIBLE, LOCAL EDITS WILL BE REPLACED
+
+# Allow existing (established / related) connections without restriction
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow loopback traffic
+-A INPUT -i lo -j ACCEPT
+
+# Allow SSH from anywhere
+-A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Allow ICMP unrestricted
+-A INPUT -p icmp -j ACCEPT
+

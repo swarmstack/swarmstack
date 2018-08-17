@@ -1,0 +1,10 @@
+#
+# custom txqueuelen parameter value
+#
+# Sets a custom txqueuelen parameter value for network interfaces.
+# This variable sets the length of the transmit queue of a device.
+# The default value is 1000 - depending on your application setup you
+# might want to increase this value (e.g. 5000)
+#
+
+KERNEL=="eth[0,1]", RUN+="/sbin/ifconfig %k txqueuelen 10000"

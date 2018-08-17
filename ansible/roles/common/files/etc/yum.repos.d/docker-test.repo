@@ -1,0 +1,6 @@
+[docker-test]
+name=Docker test Repository
+baseurl=https://download.docker.com/linux/centos/7/x86_64/test
+enabled=1
+gpgcheck=1
+gpgkey=https://download.docker.com/linux/centos/gpg

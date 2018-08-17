@@ -1,0 +1,11 @@
+---
+  - name: Set prompts green for bash users on this host
+    blockinfile:
+      mode: 0644
+      create: no
+      path: "/etc/profile"
+      block: |
+        PS_EMPH=`echo -en "\x1B[42;37;1m"`
+        PS_NORM=`echo -en "\x1B[0m"`
+        export PS1="\u@\[${PS_EMPH}\]\h\[${PS_NORM}\]:\W\\$ "
+...

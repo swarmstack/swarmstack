@@ -1,0 +1,7 @@
+#!/bin/bash
+
+/bin/docker container prune -f > /dev/null 2>&1
+sleep 60
+/bin/docker volume prune -f > /dev/null 2>&1
+sleep 60
+/bin/docker image prune -a -f > /dev/null 2>&1

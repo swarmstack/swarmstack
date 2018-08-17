@@ -1,0 +1,17 @@
+# THIS FILE IS MANAGED BY ANSIBLE, LOCAL EDITS WILL BE REPLACED
+
+# SSH access from 0.0.0.0/0 (all) is enabled by default in ansible/roles/common/files/etc/swarmstack_fw/rules/common.rules
+
+# The FORWARD chain handles most ports exposed by Docker swarm services, see docker.rules to manage access to these ports
+
+# Docker networking over tcp/udp 7946 is allowed below by allowing all traffic from other Docker swarm hosts below
+
+
+# Allow all traffic from Docker swarm hosts in the cluster
+
+-A INPUT -s 10.0.13.15/32 -j ACCEPT                  # host1.example.com
+-A INPUT -s 10.0.13.16/32 -j ACCEPT                  # host2.example.com
+-A INPUT -s 10.0.13.17/32 -j ACCEPT                  # host3.example.com
+
+# Default DENY ALL 
+-A INPUT -j REJECT --reject-with icmp-host-prohibited

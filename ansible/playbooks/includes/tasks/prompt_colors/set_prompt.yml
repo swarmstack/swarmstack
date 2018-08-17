@@ -1,0 +1,7 @@
+---
+  - name: Update the exported PS1 prompt
+    lineinfile:
+      path: /etc/profile
+      regexp: '^export PS1'
+      line: 'export PS1="\u@\[${PS_EMPH}\]\h\[${PS_NORM}\]:\W\\$ "'
+...

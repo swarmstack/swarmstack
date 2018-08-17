@@ -1,0 +1,111 @@
+---
+
+- hosts: all
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - name: yum clean all
+    command: yum clean all
+    args:
+      warn: no
+    changed_when: false
+
+  - name: mask firewalld
+    systemd: name=firewalld masked=yes
+
+  - name: remove firewalld
+    yum: name=firewalld state=absent
+
+  - name: install initscripts
+    yum: name=initscripts state=installed
+
+  - name: install iptables, iptables-services
+    yum: name=iptables,iptables-services state=latest
+
+  - name: ensure /etc/swarmstack_fw/rules/
+    file:
+      path: /etc/swarmstack_fw/rules/
+      state: directory
+
+  - name: copy /etc/swarmstack_fw/rules/common.rules
+    copy: src=../roles/common/files/etc/swarmstack_fw/rules/common.rules dest=/etc/swarmstack_fw/rules/common.rules owner=root group=root mode="u=rw,g=r,o=r"
+
+  - name: copy /etc/swarmstack_fw/rules/cluster.rules
+    copy: src=../roles/{{CLUSTER}}/files/etc/swarmstack_fw/rules/cluster.rules dest=/etc/swarmstack_fw/rules/cluster.rules owner=root group=root mode="u=rw,g=r,o=r"
+
+  - name: copy /etc/swarmstack_fw/rules/docker.rules
+    copy: src=../roles/{{CLUSTER}}/files/etc/swarmstack_fw/rules/docker.rules dest=/etc/swarmstack_fw/rules/docker.rules owner=root group=root mode="u=rw,g=r,o=r"
+    when: "'no-docker' not in group_names"
+
+  - name: Save the existing firewall rules to /etc/sysconfig/iptables file
+    shell: /sbin/service iptables save
+    args:
+      warn: false
+    ignore_errors: yes
+
+  - name:  Ensure that the iptables is running and enabled
+    systemd: name=iptables state=started masked=no enabled=yes
+
+  - name: inject a no-op rule into the INPUT chain so there is at least one rule
+    shell: iptables -t filter -I INPUT -p icmp -d 192.168.0.1
+    args:
+      warn: false
+
+  - name: ensure DOCKER-USER chain exists
+    shell: /sbin/iptables -t filter -N DOCKER-USER
+    args:
+      warn: false
+    ignore_errors: yes
+    when: "'no-docker' not in group_names"
+
+  - name: ensure DOCKER-USER chain is flushed
+    iptables: chain=DOCKER-USER flush=yes
+    when: "'no-docker' not in group_names"
+
+  - name: Save the existing firewall rules to /etc/sysconfig/iptables file
+    shell: /sbin/service iptables save
+    args:
+      warn: false
+
+  - name: Remove our last record of what we applied
+    file:
+      path: /etc/swarmstack_fw/lastfw.applied
+      state: absent
+
+  - name: First part of /etc/sysconfig/iptables
+    shell: cat /etc/sysconfig/iptables | awk '/^-A INPUT/{exit}1' > /etc/swarmstack_fw/proposedfw.tmp
+
+  - name: Add common.rules
+    shell: cat /etc/swarmstack_fw/rules/common.rules | awk -F '#' '{print $1}' | sed '/^\s*$/d' >> /etc/swarmstack_fw/proposedfw.tmp
+
+  - name: Add docker.rules
+    shell: cat /etc/swarmstack_fw/rules/docker.rules | awk -F '#' '{print $1}' | sed '/^\s*$/d' >> /etc/swarmstack_fw/proposedfw.tmp
+    when: "'no-docker' not in group_names"
+
+  - name: Add cluster.rules
+    shell: cat /etc/swarmstack_fw/rules/cluster.rules | awk -F '#' '{print $1}' | sed '/^\s*$/d' >> /etc/swarmstack_fw/proposedfw.tmp
+
+  - name: Trailing part of /etc/sysconfig/iptables
+    shell: cat /etc/sysconfig/iptables | tac | awk '/^-A INPUT/{exit}1' | tac >> /etc/swarmstack_fw/proposedfw.tmp
+
+  - name: try the new filter rules, fail ansible on non-zero exit code
+    shell: cat /etc/swarmstack_fw/proposedfw.tmp | iptables-restore
+
+  - name: set the INPUT chain policy to DROP now that our rules are in place
+    iptables: chain=INPUT policy=DROP
+
+  - name: set the FORWARD chain policy to DROP now that our rules are in place
+    iptables: chain=FORWARD policy=DROP
+
+  - name: Save the existing firewall rules to /etc/sysconfig/iptables file
+    shell: /sbin/service iptables save
+    args:
+      warn: false
+
+  - name: retain last applied fw rules
+    shell: cp /etc/sysconfig/iptables /etc/swarmstack_fw/lastfw.applied
+
+...

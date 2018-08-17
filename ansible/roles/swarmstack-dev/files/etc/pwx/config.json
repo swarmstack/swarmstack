@@ -1,0 +1,17 @@
+{
+  "clusterid": "swarmstack-dev",
+      "dataiface": "ens1f0",
+      "mgtiface": "ens1f0",
+  "kvdb": [ 
+      "etcd: hostvars TODO :2379",
+      "etcd:  :2379",
+      "etcd: :2379"
+    ],
+  "storage": {
+    "devices": [
+      "/dev/sdb",
+      "/dev/sdc"
+    ]
+  }
+}
+

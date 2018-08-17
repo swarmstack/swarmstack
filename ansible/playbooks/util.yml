@@ -1,0 +1,18 @@
+---
+
+# Use this playbook to change the prompts and colors on your hosts
+
+- hosts: all
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  #- import_tasks: includes/tasks/prompt_colors/set_prompt.yml
+  #- import_tasks: includes/tasks/prompt_colors/set_prompts_blue.yml
+  - import_tasks: includes/tasks/prompt_colors/set_prompts_green.yml
+  #- import_tasks: includes/tasks/prompt_colors/set_prompts_red.yml
+  #- import_tasks: includes/tasks/sysctl_el7.yml
+
+...
