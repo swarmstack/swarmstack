@@ -23,7 +23,7 @@ While you wait for the full ansible playbook release that will install the clust
 
 Before proceeding, make sure your hosts have their time in sync via NTP
 
-_Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/developer/), be sure to follow links to instead install portworx/px-dev as standalone OCI [runC](https://docs.portworx.com/runc/) containers on each node in order to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
+_Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/developer/), after configuring an HA etcd across the cluster (run from systemd rather than from container so that Portworx doesn't depend on Docker running), install portworx/px-dev as [standalone OCI runC containers](https://docs.portworx.com/runc/) on each node in order to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
 
     # sudo docker run --entrypoint /runc-entry-point.sh \
     --rm -i --privileged=true \
