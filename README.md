@@ -17,7 +17,7 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ---
 
-## THIS IS A WORK-IN-PROGRESS (WIP) AUG 15 2018: Full ansible release soon
+## THIS IS A WORK-IN-PROGRESS (WIP) AUGUST 2018: Full ansible release soon
 
 While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, Docker swarm, feel free to get a head-start by learning the DevOps stack itself, borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of physical or virtual nodes, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
 
