@@ -33,7 +33,7 @@ Download the git archive below onto a Docker manager node and deploy swarmstack 
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
     sudo docker stack deploy -c docker-compose.yml mon
 
-If everything works out you can consult the charts further down this page for the locations of the DevOps tools, which should now be running.
+If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
@@ -46,7 +46,7 @@ You can add some cron entries to each node to forward dockerd/portworx/etcd metr
 ---
 
 ### FIREWALL MANAGEMENT USING ANSIBLE:
-You can now use the ansible playbook in the [ansible](https://github.com/swarmstack/swarmstack/blob/master/ansible/README.md) folder to manage the firewalls on your EL7 Docker swarm cluster. For other distributions see the manual method below for now.
+You should consider using the ansible playbook in the [ansible](https://github.com/swarmstack/swarmstack/blob/master/ansible/README.md) folder to manage the firewalls on your EL7 Docker swarm cluster. For other distributions, see the manual method below for now.
 
 ### MANUAL FIREWALL MANAGEMENT:
 
@@ -60,9 +60,9 @@ _The default action of the chain should just return, so that the FORWARD chain c
 
     iptables -A DOCKER-USER -j RETURN
 
+You'll need to similarly protect each node in the swarm, as Docker swarm will accept traffic to service ports on all nodes and forward to the correct node.
 
-You'll need to similarly protect each node in the swarm, as Docker swarm will accept traffic to service ports on all nodes and forward to the correct node. An ansible playbook will soon be included here that can be used to manage the firewalls on all of the Docker nodes.
-
+## DOCKER NODE DISK CLEANUP
 You'll also want to add something to each host to keep the local filesystem clear of unneeded containers, local volumes, and images:
 
     sudo cat <<EOF >>/etc/cron.daily/clean-docker
