@@ -2,13 +2,16 @@
 
 For Docker to retrieve images from the internet, you'll need to add the following file on each Docker node:
 
-    /etc/systemd/system/docker.service.d/http-proxy.conf
+* /etc/systemd/system/docker.service.d/http-proxy.conf
 
+```
+[Service]
+Environment="http_proxy=proxy.example.com:80"
+Environment="https_proxy=proxy.example.com:443"
+Environment="no_proxy=mycompany.com,10.0.0.0/8,172.16.0.0/16,127.0.0.1"
+```
 
-    [Service]
-    Environment="http_proxy=proxy.example.com:80" "https_proxy=proxy.example.com:443" "no_proxy=*.example.com"
-
-Then reload systemd and restart Docker on each node:
+Then update systemd and restart Docker on each node:
 
     # systemctl daemon-reload
     # systemctl restart docker
