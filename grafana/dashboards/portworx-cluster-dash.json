@@ -1183,7 +1183,9 @@
   "refresh": "1m",
   "schemaVersion": 16,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "portwrox"
+  ],
   "templating": {
     "list": [
       {

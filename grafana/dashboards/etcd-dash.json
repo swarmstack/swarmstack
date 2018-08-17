@@ -1764,7 +1764,9 @@
   ],
   "schemaVersion": 16,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "etcd"
+  ],
   "templating": {
     "list": []
   },

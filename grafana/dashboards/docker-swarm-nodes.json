@@ -1897,7 +1897,7 @@
   "schemaVersion": 16,
   "style": "dark",
   "tags": [
-    "swarmprom"
+    "docker"
   ],
   "templating": {
     "list": [
