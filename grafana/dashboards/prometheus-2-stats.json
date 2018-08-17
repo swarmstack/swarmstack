@@ -372,7 +372,7 @@
         }
       ],
       "thresholds": "0.1,1",
-      "title": "WAL Corruptions",
+      "title": "Write-ahead-logs Corruptions",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
