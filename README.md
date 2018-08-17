@@ -20,13 +20,17 @@ _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/develope
     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
     portworx/px-dev
 
-Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
+_Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.swarmstack/swarmstack/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
+
+## INSTALL SWARMSTACK TO AN EXISTING CLUSTER:
 
     # git clone https://github.com/swarmstack/swarmstack.git
 
     # ADMIN_USER=admin ADMIN_PASSWORD=somepassword \
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
     sudo docker stack deploy -c docker-compose.yml mon
+
+Afterwards, download the git archive below onto a Docker manager node and deploy the docker-compose.yml file. If everything works out you can consult the charts further down this page for the locations of the DevOps tools.
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
