@@ -14,7 +14,7 @@
             transparent
         }
 
-    basicauth /metrics/job/ {PUSH_USER} {PUSH_PASSWORD}
+    basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
     proxy /metrics/job/ pushgateway:9091 {
             transparent
         }

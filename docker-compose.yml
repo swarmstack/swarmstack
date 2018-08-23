@@ -252,6 +252,8 @@ services:
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - PUSH_USER=${PUSH_USER:-pushuser}
+      - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
     configs:
       - source: caddy_config
         target: /etc/caddy/Caddyfile
