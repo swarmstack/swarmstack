@@ -37,9 +37,13 @@ Download the git archive below onto a Docker manager node and deploy swarmstack 
 
     # git clone https://github.com/swarmstack/swarmstack.git
 
-    # ADMIN_USER=admin ADMIN_PASSWORD=somepassword \
+    # ADMIN_USER=admin ADMIN_PASSWORD=admin \
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
-    sudo docker stack deploy -c docker-compose.yml mon
+    docker stack deploy -c docker-compose.yml mon
+
+Or just take most of the defaults above:
+
+    # ADMIN_PASSWORD=somepassword docker stack deploy -c docker-compose.yml mon
 
 If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
 
