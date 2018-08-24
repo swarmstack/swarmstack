@@ -1,15 +1,19 @@
 # ansible playbooks for swarmstack
 
-### Please note that the ansible playbooks in this folder are WORK-IN-PROGRESS. Currently only the firewall playbook is available and and supports only EL7 (RHEL/CentOS) targets at the present time. It will remove firewalld if present and install iptables to manage kernel iptables chains.
+### Please note that the ansible playbooks in this folder are WORK-IN-PROGRESS. Currently the firewall playbook is available and supports only EL7 (RHEL/CentOS) targets at the present time. It will remove firewalld if present and install iptables to manage kernel iptables chains.
 
-From any host on your network that can route to your Docker hosts:
+From any host on your network that can route to your Docker hosts, including any of the hosts in your Docker swarm:
 
 ```
 # yum install epel-release
 # yum install ansible
+# yum install git
+# cd /usr/local/src
+# git clone https://github.com/swarmstack/swarmstack.git
+
 ```
 
-Edit these files: 
+Edit these files in the swarmstack/ansible folder: 
 
 * ansible/clusters/swarmstack-dev _(define the nodes in your cluster)_
 
