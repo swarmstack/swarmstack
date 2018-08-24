@@ -17,9 +17,9 @@ Edit these files in the swarmstack/ansible folder:
 
 * ansible/clusters/swarmstack-dev _(define the nodes in your cluster)_
 
-* ansible/roles/swarmstack-dev/files/etc/swarmstack_fw/rules/firewall.rules _(used to permit traffic via the hosts INPUT chain)_
+* ansible/roles/swarmstack-dev/files/etc/swarmstack_fw/rules/firewall.rules _(used to permit traffic via the INPUT chain)_
 
-* ansible/roles/swarmstack-dev/files/etc/swarmstack_fw/rules/docker.rules _(used to limit access to Docker service ports)_
+* ansible/roles/swarmstack-dev/files/etc/swarmstack_fw/rules/docker.rules _(used to limit access to Docker services via the FORWARD chain)_
 
 Afterwards you can run the playbook below against your entire cluster, and re-run it any time you need to make firewall changes:
 
