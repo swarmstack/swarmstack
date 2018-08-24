@@ -3,7 +3,7 @@
 
 Easily deploy and grow a docker swarm across (3) or more baremetal servers, ec2 instances, or VMs _(in any combination)_ that can be used to host highly-available containerized applications.
 
-Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx PX-Developer](https://portworx.com), for persistent storage for container volume across nodes, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can be used by your own applications and visualized in Grafana or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Metrics from Prometheus can be persisted out to one or more external timeseries databases (tsdb) such as InfluxDB, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
+Includes a working modern DevOps monitoring stack based on [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + HA [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx PX-Developer](https://portworx.com), for persistent storage for containers that need persistent storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Prometheus can optionally replicate metrics stored within it's internal own time-series database (tsdb) out to one or more external tsdb such as InfluxDB for analysis or longer-term storage, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
 
 For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards while using the Prometheus tsdb as a datasource, see: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
 
@@ -11,7 +11,21 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 ## WHY? 
 
-A modern data-driven monitoring and alerting solution helps DevOps teams develop and support containerized applications, providing the ability to observe metrics about how the application performs over time, and alerting the team when things go off-the-rails. This project, like others before it, attempts to reduce the installation steps necessary to install and configure such a stack, in a way that can be easily deployed to one of more clusters of Docker swarm.
+A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how the applications performs over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team when things go off-the-rails, but Prometheus brings with it an easier way to configure alerts using tsdb aggregated data, such as:
+
+```
+alert: node_disk_fill_rate_6h
+expr: predict_linear(node_filesystem_free{mountpoint="/"}[1h],
+  6 * 3600) * on(instance) group_left(node_name) node_meta < 0
+for: 1h
+labels:
+  severity: critical
+annotations:
+  description: Swarm node {{ $labels.node_name }} disk is going to fill up in 6h.
+  summary: Disk fill alert for Swarm node '{{ $labels.node_name }}'
+```
+
+This project attempts to reduce the installation steps necessary to install and configure such a stack in a way as to easily manage one or even many separate Docker swarm clusters, with considerations for enterprise users as well.
 
 Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
 
@@ -25,7 +39,7 @@ Before proceeding, make sure your hosts have their time in sync via NTP
 
 _Hint_: If installing [Portworx PX-Developer](https://docs.portworx.com/developer/), after configuring an HA etcd across the cluster (run from systemd rather than from container so that Portworx doesn't depend on Docker running), install portworx/px-dev as [standalone OCI runC containers](https://docs.portworx.com/runc/) on each node in order to eliminate circular dependancies between Docker and Portworx. Rather than setting the `$latest_stable` variable per instructions on that page (which returns a PX-Enterprise version), you can supply `portworx/px-dev` instead:
 
-    # sudo docker run --entrypoint /runc-entry-point.sh \
+    # docker run --entrypoint /runc-entry-point.sh \
     --rm -i --privileged=true \
     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
     portworx/px-dev
@@ -161,18 +175,18 @@ clusters/swarmstack-dev | _(defines the nodes and IP addresses of the cluster)_ 
 roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
 roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/docker.html -k
+# ansible-playbook -i clusters/swarmstack-dev playbooks/docker.yml -k
 ```
 * optional, use this if you haven't already brought up a Docker swarm
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.html -k`
+# ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.yml -k
 ```
 * you can run and re-run this playbook to manage firewalls on all Docker swarm nodes
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.html -k
+# ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.yml -k
 ```
-* optional, if bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml
+* optional, if you are instead bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.html -k
+# ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.yml -k
 ```
 * deploy or redeploy the swarmstack DevOps monitoring stack to the cluster
