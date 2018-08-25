@@ -11,7 +11,7 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 ## WHY? 
 
-A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how the applications performs over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team when things go off-the-rails, but Prometheus brings with it an easier way to configure alerts using tsdb aggregated data, such as:
+A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how the applications performs over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails, but Prometheus also brings with it an easier way to configure alerts using tsdb aggregated data, such as:
 
 ```
 alert: node_disk_fill_rate_6h
