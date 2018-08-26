@@ -7,8 +7,7 @@ Provides a modern DevOps Docker stack for running Docker containers with firewal
 
 For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards while using the Prometheus tsdb as a datasource, see: [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
 
----
-
+![](https://prometheus.io/assets/architecture-cb2ada1ece6.png "Prometheus architecture")
 ## WHY? 
 
 A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how the applications performs over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails, but Prometheus also brings with it an easier way to configure alerts based on aggregated time-series data, for example:
