@@ -1,0 +1,85 @@
+# An ansible cluster file in YAML format
+all:
+  vars:
+    CLUSTER: another-example-cluster
+    REBOOT_DELAY: 30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
+    REBOOT_TIMEOUT: 120  # Physical hosts may take much longer to boot
+  children:
+
+    swarm:
+      children:
+
+        swarm-managers:
+          children:
+            # Use groups of 3 nodes per label when using Portworx PX-Developer version.
+            # Docker recommends no more than 7 manager nodes in a cluster.
+            # 5 or 3 managers are warranted for smaller clusters.
+
+            swarm-managers-RED:
+              hosts:
+                swarm01.ex.com:
+                swarm02.ex.com:
+                swarm03.ex.com:
+              vars:
+                DOCKER_LABEL: RED
+
+            swarm-managers-BLUE:
+              hosts:
+                #swarm04.ex.com:
+                #swarm05.ex.com:
+              vars:
+                DOCKER_LABEL: BLUE
+          vars:
+            ROLE: manager
+
+        swarm-workers:
+          children:
+
+            swarm-workers-BLUE:
+              hosts:
+                #swarm06.ex.com:
+              vars:
+                DOCKER_LABEL: BLUE
+
+            swarm-workers-GREEN:
+              hosts:
+                #swarm07.ex.com:
+                #swarm08.ex.com:
+                #swarm09.ex.com:
+              vars:
+                DOCKER_LABEL: GREEN
+          vars:
+            ROLE: worker 
+      vars:
+        JOIN: swarm01.ex.com        
+
+    etcd:
+      hosts:
+        swarm01.ex.com:
+        swarm02.ex.com:
+        swarm03.ex.com:
+
+    portworx:
+      children:
+
+        portworx-RED:
+          hosts:
+            swarm01.ex.com:
+              vars:
+                #DEVICES: '["/dev/sdc"]'  # You can override the devices and interfaces per-host
+            swarm02.ex.com:
+            swarm03.ex.com:
+          vars:
+            CLUSTERID: portworx-RED
+
+        portworx-BLUE:
+          hosts:
+            #swarm04.ex.com:
+            #swarm05.ex.com:
+            #swarm06.ex.com:
+          vars:
+            CLUSTERID: portworx-BLUE
+      vars:
+        DEVICES: '["/dev/sdb"]'
+        DATAIFACE: eth0
+        MGTIFACE: eth0
