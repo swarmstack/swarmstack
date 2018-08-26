@@ -1,16 +1,13 @@
 [another-cluster:vars]
 CLUSTER=another-cluster
-# For physical machines, try REBOOT_DELAY=300, REBOOT_TIMEOUT=600 below. Physical hosts may take much longer to boot:
+ETCD='["10.0.13.15", "10.0.13.16", "10.0.13.17"] # swarm01.ex.com, swarm02.ex.com, swarm03.ex.com
 REBOOT_DELAY=30
 REBOOT_TIMEOUT=120
-
-[another-cluster:children]
-etcd
-docker
-portworx
+# For physical machines, try REBOOT_DELAY=300, REBOOT_TIMEOUT=600 below. Physical hosts may take much longer to boot:
 
 [docker]
 # Use groups of 3 nodes per label when using Portworx PX-Developer version
+# Docker recommends no more than 7 manager nodes in a cluster, 5 or 3 managers are warranted for smaller clusters
 swarm07.ex.com  LABEL='RED'  ROLE='MANAGER' JOIN=true
 swarm08.ex.com  LABEL='RED'  ROLE='MANAGER'
 swarm09.ex.com  LABEL='RED'  ROLE='MANAGER'
@@ -18,15 +15,24 @@ swarm09.ex.com  LABEL='RED'  ROLE='MANAGER'
 #swarm11.ex.com LABEL='BLUE' ROLE='MANAGER'
 #swarm12.ex.com LABEL='BLUE' ROLE='WORKER'
 
-[etcd]
-swarm07.ex.com IP=10.0.13.15
-swarm08.ex.com IP=10.0.13.16
-swarm09.ex.com IP=10.0.13.17
+[portworx-group1]
+swarm07.ex.com
+swarm08.ex.com
+swarm09.ex.com
 
-[portworx]
-swarm07.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm07.ex.com", "swarm08.ex.com", "swarm09.ex.com"]'
-swarm08.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm07.ex.com", "swarm08.ex.com", "swarm09.ex.com"]'
-swarm09.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm07.ex.com", "swarm08.ex.com", "swarm09.ex.com"]'
-#swarm10.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm10.ex.com", "swarm11.ex.com", "swarm12.ex.com"]'
-#swarm11.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm10.ex.com", "swarm11.ex.com", "swarm12.ex.com"]'
-#swarm12.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm10.ex.com", "swarm11.ex.com", "swarm12.ex.com"]'
+[portworx-group1:vars]
+DEVICES='["/dev/sdb"]'
+DATAIFACE=eth0
+MGTIFACE=eth0
+PWX='["swarm07.ex.com", "swarm08.ex.com", "swarm09.ex.com"]'
+
+#[portworx-group2]
+#swarm10.ex.com
+#swarm11.ex.com
+#swarm12.ex.com
+#
+#[portworx-group2:vars]
+#DEVICES='["/dev/sdb"]'
+#DATAIFACE=eth0
+#MGTIFACE=eth0
+#PWX='["swarm10.ex.com", "swarm11.ex.com", "swarm12.ex.com"]'
