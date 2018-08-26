@@ -172,22 +172,22 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 Edit these files: | |
 ---- | - |
-clusters/swarmstack-dev | _(defines the nodes and IP addresses of the cluster)_ |
+clusters/swarmstack | _(defines the nodes and IP addresses of the cluster)_ |
 roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
 roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/docker.yml -k
+# ansible-playbook -i clusters/swarmstack playbooks/docker.yml -k
 ```
 * optional, use this if you haven't already brought up a Docker swarm
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/firewall.yml -k
+# ansible-playbook -i clusters/swarmstack playbooks/firewall.yml -k
 ```
 * you can run and re-run this playbook to manage firewalls on all Docker swarm nodes
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/portworx.yml -k
+# ansible-playbook -i clusters/swarmstack playbooks/portworx.yml -k
 ```
 * optional, if you are instead bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml
 ```
-# ansible-playbook -i clusters/swarmstack-dev playbooks/swarmstack.yml -k
+# ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
 * deploy or redeploy the swarmstack DevOps monitoring stack to the cluster
