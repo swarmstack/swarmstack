@@ -1,18 +1,32 @@
-[swarmstack-dev:vars]
-CLUSTER=swarmstack-dev
+[another-cluster:vars]
+CLUSTER=another-cluster
 # For physical machines, try REBOOT_DELAY=300, REBOOT_TIMEOUT=600 below. Physical hosts may take much longer to boot:
 REBOOT_DELAY=30
 REBOOT_TIMEOUT=120
 
-[swarmstack-dev:children]
+[another-cluster:children]
 etcd
-no-docker
+docker
+portworx
+
+[docker]
+# Use groups of 3 nodes per label when using Portworx PX-Developer version
+swarm01.ex.com  LABEL='RED'  ROLE='MANAGER'
+swarm02.ex.com  LABEL='RED'  ROLE='MANAGER'
+swarm03.ex.com  LABEL='RED'  ROLE='MANAGER'
+#swarm04.ex.com LABEL='BLUE' ROLE='MANAGER'
+#swarm05.ex.com LABEL='BLUE' ROLE='MANAGER'
+#swarm06.ex.com LABEL='BLUE' ROLE='WORKER'
 
 [etcd]
-host1.example.com IP=10.0.13.15
-host2.example.com IP=10.0.13.16
-host3.example.com IP=10.0.13.17
+swarm01.ex.com IP=10.0.13.15
+swarm02.ex.com IP=10.0.13.16
+swarm03.ex.com IP=10.0.13.17
 
-[no-docker]
-# Add any hosts here that do not run docker but are managed as part of this cluster. This prevents some playbooks from attempting certain Docker-related actions on the host such as modifying the DOCKER-USER iptables firewall chain
-#host1.example.com
+[portworx]
+swarm01.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm01.ex.com", "swarm02.ex.com", "swarm03.ex.com"]'
+swarm02.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm01.ex.com", "swarm02.ex.com", "swarm03.ex.com"]'
+swarm03.ex.com  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm01.ex.com", "swarm02.ex.com", "swarm03.ex.com"]'
+#swarm04.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm04.ex.com", "swarm05.ex.com", "swarm06.ex.com"]'
+#swarm05.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm04.ex.com", "swarm05.ex.com", "swarm06.ex.com"]'
+#swarm06.ex.com DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0 MEMBERS='["swarm04.ex.com", "swarm05.ex.com", "swarm06.ex.com"]'
