@@ -1,5 +1,5 @@
 # swarmstack
-## A Docker swarm / Prometheus / Alertmanager / Grafana DevOps stack for running containerized applications, with optional persistent storage and high-availability features
+## HA Docker swarm / Prometheus / Alertmanager / Grafana DevOps stack for running containerized applications, with optional persistent storage, firewall management, and high-availability features 
 
 Easily deploy and grow a docker swarm across (3) or more baremetal servers, ec2 instances, or VMs _(in any combination)_ that can be used to host highly-available containerized applications.
 
