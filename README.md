@@ -27,6 +27,8 @@ annotations:
 
 This project attempts to reduce the installation steps necessary to install and configure such a stack in a way as to easily manage one or even many separate Docker swarm clusters, with considerations for enterprise users as well.
 
+![](https://raw.githubusercontent.com/portworx/px-dev/master/images/mysql.png "Portworx replicating volumes")
+
 Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
 
 ---
