@@ -11,7 +11,7 @@ portworx
 
 [docker]
 # Use groups of 3 nodes per label when using Portworx PX-Developer version
-swarm01.ex.com  LABEL='RED'  ROLE='MANAGER'
+swarm01.ex.com  LABEL='RED'  ROLE='MANAGER' JOIN=true
 swarm02.ex.com  LABEL='RED'  ROLE='MANAGER'
 swarm03.ex.com  LABEL='RED'  ROLE='MANAGER'
 #swarm04.ex.com LABEL='BLUE' ROLE='MANAGER'
