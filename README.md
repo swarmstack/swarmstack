@@ -35,7 +35,6 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ## THIS IS A WORK-IN-PROGRESS (WIP) - Full ansible release soon
 
-
 Currently the firewall management ansible playbook and the Docker DevOps tool stack has been released. While you wait for the full ansible playbook release that will install the cluster for you including etcd, Portworx, and Docker swarm, feel free to get a head-start by installing the DevOps stack itself - borrowed heavily from [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). You'll need to bring some kit of your own at the moment, namely install a 3-node cluster of physical or virtual machines or ec2 instances, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
 
 Before proceeding, make sure your hosts have their time in sync via NTP
@@ -52,15 +51,16 @@ _Hint_: If installing behind a web proxy, see [documentation/Working with swarms
 ## INSTALLING SWARMSTACK TO AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
 Download the git archive below onto a Docker manager node and deploy swarmstack services as a Docker stack using the docker-compose.yml file:
 
+    # cd /usr/local/src
     # git clone https://github.com/swarmstack/swarmstack.git
 
     # ADMIN_USER=admin ADMIN_PASSWORD=admin \
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
-    docker stack deploy -c docker-compose.yml swarmstack
+    docker stack deploy -c swarmstack/docker-compose.yml swarmstack
 
 Or just take most of the defaults above:
 
-    # ADMIN_PASSWORD=somepassword docker stack deploy -c docker-compose.yml mon
+    # ADMIN_PASSWORD=somepassword docker stack deploy -c swarmstack/docker-compose.yml swarmstack
 
 If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
 
@@ -94,7 +94,7 @@ You'll need to similarly protect each node in the swarm, as Docker swarm will ac
 ## DOCKER NODE DISK CLEANUP
 You'll also want to add something to each host to keep the local filesystem clear of unneeded containers, local volumes, and images:
 
-    sudo cat <<EOF >>/etc/cron.daily/clean-docker
+    # cat <<EOF >>/etc/cron.daily/clean-docker
     #!/bin/bash
 
     /bin/docker container prune -f > /dev/null 2>&1
@@ -105,7 +105,31 @@ You'll also want to add something to each host to keep the local filesystem clea
     EOF
 ---
 
-Be sure also take a look at [swarmpit](https://github.com/swarmpit/swarmpit/blob/master/README.md), which provides a lightweight UI that can help you manage your Docker swarms.
+Be sure to also take a look at [swarmpit](https://github.com/swarmpit/swarmpit/blob/master/README.md), which provides a lightweight UI that can help you manage your Docker swarms
+
+```
+# cd /usr/local/src
+# git clone https://github.com/swarmpit/swarmpit
+# vi swarmpit/docker-compose.yml
+```
+You can remove the contraint:
+```
+      placement:
+        constraints:
+          - node.role == manager
+```
+And change the db-data volume to use a persistent volume via Portworx:
+```
+volumes:
+  db-data:
+    driver: pxd
+    driver_opts:
+      repl: 2
+      size: 10
+```
+Finally deploy swarmpit:
+
+    # docker stack deploy -c swarmpit/docker-compose.yml swarmpit
 
 ## NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
@@ -172,6 +196,7 @@ Pushgateway   | 9091:/metrics        | prom/pushgateway
  ---
  
 ## CLUSTER INSTALLATION: (not yet available)
+    # cd /usr/local/src
     # git clone https://github.com/swarmstack/swarmstack.git
 
 Edit these files: | |
