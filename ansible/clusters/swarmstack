@@ -1,7 +1,7 @@
 # Main example swarmstack ansible cluster file in INI format
 
-[another-cluster:vars]
-CLUSTER=another-cluster
+[swarmstack:vars]
+CLUSTER=swarmstack
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 
@@ -47,5 +47,4 @@ swarm03.ex.com  DOCKER_LABEL='RED'  ROLE='manager'
 
 [swarm:vars]
 JOIN=swarm01.ex.com
-ROLE=worker
 

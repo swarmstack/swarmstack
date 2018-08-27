@@ -1,4 +1,5 @@
 # An ansible cluster file in YAML format
+# You would use this to manage a different Docker swarm cluster
 all:
   vars:
     CLUSTER: another-example-cluster
@@ -17,16 +18,16 @@ all:
 
             swarm-managers-RED:
               hosts:
-                swarm01.ex.com:
-                swarm02.ex.com:
-                swarm03.ex.com:
+                other-swarm-host1.ex.com:
+                other-swarm-host2.ex.com:
+                other-swarm-host3.ex.com:
               vars:
                 DOCKER_LABEL: RED
 
             swarm-managers-BLUE:
               hosts:
-                #swarm04.ex.com:
-                #swarm05.ex.com:
+                #other-swarm-host4.ex.com:
+                #other-swarm-host5.ex.com:
               vars:
                 DOCKER_LABEL: BLUE
           vars:
@@ -37,24 +38,25 @@ all:
 
             swarm-workers-BLUE:
               hosts:
-                #swarm06.ex.com:
+                #other-swarm-host6.ex.com:
               vars:
                 DOCKER_LABEL: BLUE
 
             swarm-workers-GREEN:
               hosts:
-                #swarm07.ex.com:
-                #swarm08.ex.com:
-                #swarm09.ex.com:
+                #other-swarm-host7.ex.com:
+                #other-swarm-host8.ex.com:
+                #other-swarm-host9.ex.com:
               vars:
                 DOCKER_LABEL: GREEN
           vars:
             ROLE: worker 
       vars:
-        JOIN: swarm01.ex.com        
+        JOIN: other-swarm-host1.ex.com        
 
     etcd:
-      hosts:
+      eosts:
+        # You can use an existing etcd cluster, Portworx storage metadata is keyed by CLUSTERID 
         swarm01.ex.com:
         swarm02.ex.com:
         swarm03.ex.com:
@@ -64,19 +66,19 @@ all:
 
         portworx-RED:
           hosts:
-            swarm01.ex.com:
+            other-swarm-host1.ex.com:
               vars:
                 #DEVICES: '["/dev/sdc"]'  # You can override the devices and interfaces per-host
-            swarm02.ex.com:
-            swarm03.ex.com:
+            other-swarm-host2.ex.com:
+            other-swarm-host3.ex.com:
           vars:
             CLUSTERID: portworx-RED
 
         portworx-BLUE:
           hosts:
-            #swarm04.ex.com:
-            #swarm05.ex.com:
-            #swarm06.ex.com:
+            #other-swarm-host4.ex.com:
+            #other-swarm-host5.ex.com:
+            #other-swarm-host6.ex.com:
           vars:
             CLUSTERID: portworx-BLUE
       vars:
