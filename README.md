@@ -112,12 +112,6 @@ Be sure to also take a look at [swarmpit](https://github.com/swarmpit/swarmpit/b
 # git clone https://github.com/swarmpit/swarmpit
 # vi swarmpit/docker-compose.yml
 ```
-You can remove the contraint:
-```
-      placement:
-        constraints:
-          - node.role == manager
-```
 And change the db-data volume to use a persistent volume via Portworx:
 ```
 volumes:
