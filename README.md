@@ -121,7 +121,7 @@ volumes:
       repl: 2
       size: 10
 ```
-Finally deploy swarmpit:
+Finally deploy swarmpit (it should be available on port 888 on a Docker swarm node):
 
     # docker stack deploy -c swarmpit/docker-compose.yml swarmpit
 
