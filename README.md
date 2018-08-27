@@ -105,7 +105,7 @@ You'll also want to add something to each host to keep the local filesystem clea
     EOF
 ---
 
-Be sure to take a look at another tool that can help you manage your Docker swarm clusters: [Swarmpit](https://github.com/swarmpit/swarmpit/README.md)
+Be sure also take a look at [swarmpit](https://github.com/swarmpit/swarmpit/blob/master/README.md), which provides a lightweight UI that can help you manage your Docker swarms.
 
 ## NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
