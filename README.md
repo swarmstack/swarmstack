@@ -56,7 +56,7 @@ Download the git archive below onto a Docker manager node and deploy swarmstack 
 
     # ADMIN_USER=admin ADMIN_PASSWORD=admin \
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
-    docker stack deploy -c docker-compose.yml mon
+    docker stack deploy -c docker-compose.yml swarmstack
 
 Or just take most of the defaults above:
 
@@ -105,10 +105,12 @@ You'll also want to add something to each host to keep the local filesystem clea
     EOF
 ---
 
+Be sure to take a look at another tool that can help you manage your Docker swarm clusters: [Swarmpit](https://github.com/swarmpit/swarmpit/README.md)
+
 ## NETWORK URLs:
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
-Alertmanager     | 9093,9095 (->mon_net:9093) | prom/alertmanager
+Alertmanager     | 9093,9095 (->swarmstack_net:9093) | prom/alertmanager
 Docker Swarm     | 9323:/metrics              | ansible->yum docker
 Grafana          | 3000 (/metrics)            | grafana:latest
 Portworx storage | 9001:/metrics              | ansible->portworx/px-dev
@@ -126,9 +128,9 @@ caddy reverse proxy	| 3000,9090-9091,9093-9095 | stefanprodan/caddy:latest
 
 Telemetry: | | | 
 --------- | - | -
-cAdvisor      | mon_net:8080/metrics | google/cadvisor
+cAdvisor      | swarmstack_net:8080/metrics | google/cadvisor
 Etcd3         | 2379:/metrics        | ansible->git clone coreos/etcdv3.3.9
-Node-exporter | mon_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
+Node-exporter | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
 Pushgateway   | 9091:/metrics        | prom/pushgateway
 
 ---
