@@ -55,7 +55,7 @@ all:
         JOIN: other-swarm-host1.ex.com        
 
     etcd:
-      eosts:
+      hosts:
         # You can use an existing etcd cluster, Portworx storage metadata is keyed by CLUSTERID 
         swarm01.ex.com:
         swarm02.ex.com:
