@@ -107,7 +107,7 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
-Connect to port 80 on any Docker swarm host and authenticate with your ADMIN_PASSWORD to to see this set of links:
+Connect to http://host:80 on any of your Docker swarm nodes and authenticate with your ADMIN_PASSWORD to see these links:
 
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
@@ -125,6 +125,7 @@ Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
 caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
+
 Telemetry: | | |
 cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
 Docker Swarm     | host:9323/metrics | ansible->yum docker
