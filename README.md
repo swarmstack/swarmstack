@@ -127,6 +127,7 @@ Firewall management | iptables | ansible->/etc/swarmstack_fw
 caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
 
 Telemetry: | | |
+--------- | - | -
 cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
 Docker Swarm     | host:9323/metrics | ansible->yum docker
 etcd3            | host:2379/metrics | ansible->git clone coreos/etcdv3.3.9
