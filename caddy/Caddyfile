@@ -1,3 +1,18 @@
+:80 {
+    basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+    root /www
+}
+
+:3000 {
+    proxy / grafana:3000 {
+            transparent
+            websocket
+        }
+
+    errors stderr
+    tls off
+}
+
 :9090 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
     proxy / prometheus:9090 {
@@ -22,6 +37,17 @@
     errors stderr
     tls off
 }
+
+:9092 {
+    proxy / swarmpit-app:8080 {
+            transparent
+            websocket
+        }
+
+    errors stderr
+    tls off
+}
+
 
 :9093 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -52,14 +78,3 @@
     errors stderr
     tls off
 }
-
-:3000 {
-    proxy / grafana:3000 {
-            transparent
-            websocket
-        }
-
-    errors stderr
-    tls off
-}
-

@@ -105,51 +105,35 @@ You'll also want to add something to each host to keep the local filesystem clea
     EOF
 ---
 
-Be sure to also take a look at [swarmpit](https://github.com/swarmpit/swarmpit/blob/master/README.md), which provides a lightweight UI that can help you manage your Docker swarms
-
-```
-# cd /usr/local/src
-# git clone https://github.com/swarmpit/swarmpit
-# vi swarmpit/docker-compose.yml
-```
-And change the db-data volume to use a persistent volume via Portworx:
-```
-volumes:
-  db-data:
-    driver: pxd
-    driver_opts:
-      repl: 2
-      size: 10
-```
-Finally deploy swarmpit (it should be available on port 888 on a Docker swarm node):
-
-    # docker stack deploy -c swarmpit/docker-compose.yml swarmpit
-
 ## NETWORK URLs:
+
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
-Alertmanager     | 9093,9095 (->swarmstack_net:9093) | prom/alertmanager
-Docker Swarm     | 9323:/metrics              | ansible->yum docker
-Grafana          | 3000 (/metrics)            | grafana:latest
-Portworx storage | 9001:/metrics              | ansible->portworx/px-dev
-Prometheus       | 9090 (/metrics)            | prom/prometheus
-Unsee            | 9094                       | cloudflare/unsee::v0.8.0
+Alertmanager     | host:9093 | prom/alertmanager:latest
+AlertmanagerB    | host:9095 | prom/alertmanager:latest
+Grafana          | host:3000 | grafana:latest
+Prometheus       | host:9090 | prom/prometheus:latest
+Prometheus Pushgateway | host:9091 | prom/prometheus:latest
+Swarmpit         | host:9092 | swarmpit/swarmpit:latest
+Swarmstack links | host:80   | stefanprodan/caddy:latest
+Unsee            | host:9094 | cloudflare/unsee:v0.8.0
 
 ---
 
-Security: | | |
+Security: | | 
 --------- | - | -
-Firewall management | iptables                 | ansible->/etc/swarmstack_fw
-caddy reverse proxy	| 3000,9090-9091,9093-9095 | stefanprodan/caddy:latest
-
----
-
-Telemetry: | | | 
+Firewall management | iptables | ansible->/etc/swarmstack_fw
+caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
+Telemetry: | |  
 --------- | - | -
-cAdvisor      | swarmstack_net:8080/metrics | google/cadvisor
-Etcd3         | 2379:/metrics        | ansible->git clone coreos/etcdv3.3.9
-Node-exporter | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
-Pushgateway   | 9091:/metrics        | prom/pushgateway
+cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
+Docker Swarm     | host:9323/metrics | ansible->yum docker
+etcd3            | host:2379/metrics | ansible->git clone coreos/etcdv3.3.9
+Grafana          | swarmstack_net:3000/metrics | grafana:latest
+Node-exporter    | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
+Portworx storage | host:9001:/metrics | ansible->portworx/px-dev
+Prometheus       | host:9090:/metrics | prom/prometheus
+Pushgateway      | host:9091:/metrics | prom/pushgateway
 
 ---
 

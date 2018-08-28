@@ -26,10 +26,16 @@ volumes:
       driver_opts:
         repl: 2
         size: 10
+    swarmpit-data:
+      driver: pxd
+      driver_opts:
+        repl: 2
 
 configs:
   caddy_config:
     file: ./caddy/Caddyfile
+  caddy_www:
+    file: ./caddy/index.html
   node_rules:
     file: ./prometheus/rules/swarm_node.rules.yml
   task_rules:
@@ -54,68 +60,6 @@ configs:
     file: ./grafana/dashboards/etcd-dash.json
 
 services:
-  cadvisor:
-    image: google/cadvisor
-    networks:
-      - net
-    command: -logtostderr -docker_only
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /:/rootfs:ro
-      - /var/run:/var/run
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    deploy:
-      mode: global
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
-
-  grafana:
-    image: grafana/grafana:latest
-    networks:
-      - net
-    environment:
-      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - GF_USERS_ALLOW_SIGN_UP=false
-      #- GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
-      #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL:-localhost}
-      #- GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
-      #- GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS:-grafana@test.com}
-      #- GF_SMTP_FROM_NAME=${GF_SMTP_FROM_NAME:-Grafana}
-      #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
-      #- GF_SMTP_USER=${GF_SMTP_USER}
-      #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
-    volumes:
-      - grafana:/var/lib/grafana
-    configs:
-      - source: grafana_dashboard_etcd-dash
-        target: /etc/grafana/dashboards/etcd-dash.json
-      - source: grafana_dashboard_docker-swarm-nodes
-        target: /etc/grafana/dashboards/docker-swarm-nodes.json
-      - source: grafana_dashboard_docker-swarm-services
-        target: /etc/grafana/dashboards/docker-swarm-services.json
-      - source: grafana_dashboard_portworx-cluster-dash
-        target: /etc/grafana/dashboards/portworx-cluster-dash.json
-      - source: grafana_dashboard_portworx-volumes-dash
-        target: /etc/grafana/dashboards/portworx-volumes-dash.json
-      - source: grafana_dashboard_prometheus-2-stats
-        target: /etc/grafana/dashboards/prometheus-2-stats.json
-      - source: grafana_provisioning_dashboards
-        target: /etc/grafana/provisioning/dashboards/dashboards.yml
-      - source: grafana_provisioning_datasources
-        target: /etc/grafana/provisioning/datasources/prometheus.yaml
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
 
   alertmanager:
     image: prom/alertmanager
@@ -159,15 +103,109 @@ services:
         reservations:
           memory: 64M
 
-  unsee:
-    image: cloudflare/unsee:v0.8.0
+
+  caddy:
+    image: stefanprodan/caddy
+    ports:
+      - "80:80"
+      - "3000:3000"
+      - "9090:9090"
+      - "9091:9091"
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+      - "9095:9093"
     networks:
       - net
     environment:
-      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - PUSH_USER=${PUSH_USER:-pushuser}
+      - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
+    configs:
+      - source: caddy_config
+        target: /etc/caddy/Caddyfile
+      - source: caddy_www
+        target: /www/index.html
     deploy:
       mode: replicated
       replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+  cadvisor:
+    image: google/cadvisor
+    networks:
+      - net
+    command: -logtostderr -docker_only
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  grafana:
+    image: grafana/grafana:latest
+    networks:
+      - net
+    environment:
+      #- http_proxy=http://proxy.example.com:80
+      #- https_proxy=https://proxy.example.com:443
+      #- no_proxy=10.0.0.0/8,.example.com
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      #- GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+      #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL:-localhost}
+      #- GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
+      #- GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS:-grafana@test.com}
+      #- GF_SMTP_FROM_NAME=${GF_SMTP_FROM_NAME:-Grafana}
+      #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
+      #- GF_SMTP_USER=${GF_SMTP_USER}
+      #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+    volumes:
+      - grafana:/var/lib/grafana
+    configs:
+      - source: grafana_dashboard_etcd-dash
+        target: /etc/grafana/dashboards/etcd-dash.json
+      - source: grafana_dashboard_docker-swarm-nodes
+        target: /etc/grafana/dashboards/docker-swarm-nodes.json
+      - source: grafana_dashboard_docker-swarm-services
+        target: /etc/grafana/dashboards/docker-swarm-services.json
+      - source: grafana_dashboard_portworx-cluster-dash
+        target: /etc/grafana/dashboards/portworx-cluster-dash.json
+      - source: grafana_dashboard_portworx-volumes-dash
+        target: /etc/grafana/dashboards/portworx-volumes-dash.json
+      - source: grafana_dashboard_prometheus-2-stats
+        target: /etc/grafana/dashboards/prometheus-2-stats.json
+      - source: grafana_provisioning_dashboards
+        target: /etc/grafana/provisioning/dashboards/dashboards.yml
+      - source: grafana_provisioning_datasources
+        target: /etc/grafana/provisioning/datasources/prometheus.yaml
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
 
   node-exporter:
     image: stefanprodan/swarmprom-node-exporter:v0.15.2
@@ -238,35 +276,65 @@ services:
         reservations:
           memory: 128M
 
-  caddy:
-    image: stefanprodan/caddy
-    ports:
-      - "3000:3000"
-      - "9090:9090"
-      - "9091:9091"
-      - "9093:9093"
-      - "9094:9094"
-      - "9095:9093"
+  swarmpit-agent:
+    image: swarmpit/agent:latest
+    environment:
+      - DOCKER_API_VERSION=1.35
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - net
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 64M
+        reservations:
+          cpus: '0.05'
+          memory: 32M
+
+  swarmpit-app:
+    image: swarmpit/swarmpit:latest
+    environment:
+      - SWARMPIT_DB=http://swarmpit-db:5984
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      placement:
+        constraints:
+          - node.role == manager
+
+  swarmpit-db:
+    image: klaemo/couchdb:2.0.0
+    volumes:
+      - swarmpit-data:/opt/couchdb/data
+    networks:
+      - net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 512M
+        reservations:
+          cpus: '0.15'
+          memory: 256M
+
+  unsee:
+    image: cloudflare/unsee:v0.8.0
     networks:
       - net
     environment:
-      - ADMIN_USER=${ADMIN_USER:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - PUSH_USER=${PUSH_USER:-pushuser}
-      - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
-    configs:
-      - source: caddy_config
-        target: /etc/caddy/Caddyfile
+      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
     deploy:
       mode: replicated
       replicas: 1
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 5s
-      timeout: 1s
-      retries: 5
