@@ -107,6 +107,8 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
+Connect to port 80 on any Docker swarm host and authenticate with your ADMIN_PASSWORD to to see this set of links:
+
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
 Alertmanager     | host:9093 | prom/alertmanager:latest
@@ -115,17 +117,15 @@ Grafana          | host:3000 | grafana:latest
 Prometheus       | host:9090 | prom/prometheus:latest
 Prometheus Pushgateway | host:9091 | prom/prometheus:latest
 Swarmpit         | host:9092 | swarmpit/swarmpit:latest
-Swarmstack links | host:80   | stefanprodan/caddy:latest
 Unsee            | host:9094 | cloudflare/unsee:v0.8.0
 
 ---
 
-Security: | | 
+Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
 caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
-Telemetry: | |  
---------- | - | -
+Telemetry: | | |
 cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
 Docker Swarm     | host:9323/metrics | ansible->yum docker
 etcd3            | host:2379/metrics | ansible->git clone coreos/etcdv3.3.9
