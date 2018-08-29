@@ -113,7 +113,7 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
-Connect to https://swarmhost:443 on any of your Docker swarm nodes and authenticate with your ADMIN_PASSWORD to see these links:
+Connect to https://<swarmhost>:443 of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
 
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------

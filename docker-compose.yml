@@ -6,22 +6,27 @@ networks:
     attachable: true
 
 volumes:
-    prometheus:
+    alertmanager:
       driver: pxd
       driver_opts:
         repl: 2
-        size: 10
+        size: 2
+    alertmanagerB:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 2 
+    caddy:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 2
     grafana:
       driver: pxd
       driver_opts:
         repl: 2
         size: 10
-    alertmanager:
-      driver: pxd
-      driver_opts:
-        repl: 2
-        size: 10
-    alertmanagerB:
+    prometheus:
       driver: pxd
       driver_opts:
         repl: 2
@@ -30,18 +35,13 @@ volumes:
       driver: pxd
       driver_opts:
         repl: 2
+        size: 10
 
 configs:
   caddy_config:
     file: ./caddy/Caddyfile
   caddy_www:
     file: ./caddy/index.html
-  node_rules:
-    file: ./prometheus/rules/swarm_node.rules.yml
-  task_rules:
-    file: ./prometheus/rules/swarm_task.rules.yml
-  prometheus_conf:
-    file: ./prometheus/conf/prometheus.yml
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
@@ -58,6 +58,12 @@ configs:
     file: ./grafana/dashboards/portworx-volumes-dash.json
   grafana_dashboard_etcd-dash:
     file: ./grafana/dashboards/etcd-dash.json
+  node_rules:
+    file: ./prometheus/rules/swarm_node.rules.yml
+  task_rules:
+    file: ./prometheus/rules/swarm_task.rules.yml
+  prometheus_conf:
+    file: ./prometheus/conf/prometheus.yml
 
 services:
 
@@ -107,6 +113,7 @@ services:
   caddy:
     image: stefanprodan/caddy
     ports:
+      - "80:80"
       - "443:443"
       - "3000:3000"
       - "9090:9090"
@@ -127,6 +134,8 @@ services:
         target: /etc/caddy/Caddyfile
       - source: caddy_www
         target: /www/index.html
+    volumes:
+      - caddy:/.caddy
     deploy:
       mode: replicated
       replicas: 1
