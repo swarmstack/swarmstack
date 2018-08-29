@@ -113,17 +113,17 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
-Connect to http://host:80 on any of your Docker swarm nodes and authenticate with your ADMIN_PASSWORD to see these links:
+Connect to https://swarmhost:443 on any of your Docker swarm nodes and authenticate with your ADMIN_PASSWORD to see these links:
 
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
-Alertmanager     | host:9093 | prom/alertmanager:latest
-AlertmanagerB    | host:9095 | prom/alertmanager:latest
-Grafana          | host:3000 | grafana:latest
-Prometheus       | host:9090 | prom/prometheus:latest
-Prometheus Pushgateway | host:9091 | prom/pushgateway:latest
-[Swarmpit](https://github.com/swarmpit/swarmpit) | host:9092 | swarmpit/swarmpit:latest
-Unsee            | host:9094 | cloudflare/unsee:v0.8.0
+Alertmanager     | swarmhost:9093 | prom/alertmanager:latest
+AlertmanagerB    | swarmhost:9095 | prom/alertmanager:latest
+Grafana          | swarmhost:3000 | grafana:latest
+Prometheus       | swarmhost:9090 | prom/prometheus:latest
+Prometheus Pushgateway | swarmhost:9091 | prom/pushgateway:latest
+[Swarmpit](https://github.com/swarmpit/swarmpit) | swarmhost:9092 | swarmpit/swarmpit:latest
+Unsee            | swarmhost:9094 | cloudflare/unsee:v0.8.0
 
 ---
 
@@ -135,13 +135,13 @@ caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
 Telemetry: | | |
 --------- | - | -
 cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
-Docker Swarm     | host:9323/metrics | ansible->yum docker
-etcd3            | host:2379/metrics | ansible->git clone coreos/etcdv3.3.9
+Docker Swarm     | swarmhost:9323/metrics | ansible->yum docker
+etcd3            | swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
 Grafana          | swarmstack_net:3000/metrics | grafana:latest
 Node-exporter    | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
-Portworx storage | host:9001:/metrics | ansible->portworx/px-dev
-Prometheus       | host:9090:/metrics | prom/prometheus
-Pushgateway      | host:9091:/metrics | prom/pushgateway
+Portworx storage | swarmhost:9001:/metrics | ansible->portworx/px-dev
+Prometheus       | swarmhost:9090:/metrics | prom/prometheus
+Pushgateway      | swarmhost:9091:/metrics | prom/pushgateway
 
 ---
 

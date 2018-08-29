@@ -107,7 +107,7 @@ services:
   caddy:
     image: stefanprodan/caddy
     ports:
-      - "80:80"
+      - "443:443"
       - "3000:3000"
       - "9090:9090"
       - "9091:9091"

@@ -1,5 +1,6 @@
-:80 {
+:443 {
     basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+    tls self_signed
     root /www
 }
 
@@ -10,7 +11,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 :9090 {
@@ -20,7 +21,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 :9091 {
@@ -35,7 +36,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 :9092 {
@@ -45,7 +46,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 
@@ -56,7 +57,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 :9094 {
@@ -66,7 +67,7 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
 
 :9095 {
@@ -76,5 +77,5 @@
         }
 
     errors stderr
-    tls off
+    tls self_signed
 }
