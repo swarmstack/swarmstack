@@ -1278,7 +1278,7 @@
       ],
       "targets": [
         {
-          "expr": "sum(engine_daemon_engine_info * on(instance) group_left(node_id) swarm_node_info) by (kernel, os, graphdriver, version, node_id)",
+          "expr": "sum(engine_daemon_engine_info * on(instance) group_left(node_id) swarm_node_info) by (kernel, os, instance, version, node_id)",
           "format": "table",
           "intervalFactor": 2,
           "legendFormat": "",
