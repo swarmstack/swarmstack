@@ -3,9 +3,11 @@
 
 Easily deploy and update Docker swarm nodes as you scale up from at least (3) baremetal servers, ec2 instances, or virtual machines, which will host and monitor your highly-available containerized applications using a modern DevOps workflow and toolset.
 
-Manage one or more Docker clusters via simple ansible playbooks that can _(optionally)_ help you install Docker swarm, [Portworx](https://portworx.com) persistent storage for container volumes between Docker swarm nodes, and update firewall rules between the nodes as well as Docker service ports exposed by your applications.
+Manage one or more Docker clusters via ansible playbooks that can _(optionally)_ help you install Docker swarm, [Portworx](https://portworx.com) persistent storage for container volumes between Docker swarm nodes, and update firewall rules between the nodes as well as Docker service ports exposed by your applications.
 
-Swarmstack provides a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray)). The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Prometheus can optionally replicate metrics stored within it's internal own time-series database (tsdb) out to one or more external tsdb such as InfluxDB for analysis or longer-term storage, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
+Swarmstack provides a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to docker-compose.yml) 
+
+The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Prometheus can optionally replicate metrics stored within it's internal own time-series database (tsdb) out to one or more external tsdb such as InfluxDB for analysis or longer-term storage, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
 
 For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards while using the Prometheus time-series database as a datasource, watch [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk), and take a look at [Prometheus: Monitoring at SoundCloud](https://developers.soundcloud.com/blog/prometheus-monitoring-at-soundcloud)
 
@@ -48,8 +50,8 @@ _Hint_: While you can follow the instructions at [Portworx PX-Developer](https:/
 
 _Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
-## INSTALLING SWARMSTACK TO AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
-Download the git archive below onto a Docker manager node and deploy swarmstack services as a Docker stack using the docker-compose.yml file:
+## INSTALL OR UPDATING SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
+Download the git archive below onto a Docker manager node and deploy swarmstack as a Docker stack using the docker-compose.yml file:
 
     # cd /usr/local/src
     # git clone https://github.com/swarmstack/swarmstack.git
@@ -62,7 +64,11 @@ Or just take most of the defaults above:
 
     # ADMIN_PASSWORD=somepassword docker stack deploy -c swarmstack/docker-compose.yml swarmstack
 
-If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
+If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running. If you make changes to the Alertmanager rules, you can run the command above again and Docker will refresh the affected containers. If you need to make larger changes to the stack, you can:
+
+    # docker stack rm swarmstack
+
+And then deploy the stack again as above. Persistent volumes, or containers you've created local volumes and placement constraints for, will be reattached as new containers are deployed and should pick up right where you left off.
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
@@ -115,8 +121,8 @@ Alertmanager     | host:9093 | prom/alertmanager:latest
 AlertmanagerB    | host:9095 | prom/alertmanager:latest
 Grafana          | host:3000 | grafana:latest
 Prometheus       | host:9090 | prom/prometheus:latest
-Prometheus Pushgateway | host:9091 | prom/prometheus:latest
-Swarmpit         | host:9092 | swarmpit/swarmpit:latest
+Prometheus Pushgateway | host:9091 | prom/pushgateway:latest
+[Swarmpit](https://github.com/swarmpit/swarmpit) | host:9092 | swarmpit/swarmpit:latest
 Unsee            | host:9094 | cloudflare/unsee:v0.8.0
 
 ---
@@ -175,7 +181,7 @@ Pushgateway      | host:9091:/metrics | prom/pushgateway
 
  ---
  
-## CLUSTER INSTALLATION: (not yet available)
+## ANSIBLE CLUSTER INSTALLATION: (not yet available)
     # cd /usr/local/src
     # git clone https://github.com/swarmstack/swarmstack.git
 
