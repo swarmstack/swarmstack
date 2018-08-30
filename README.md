@@ -72,11 +72,11 @@ And then deploy the stack again as above. Persistent volumes, or containers you'
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
-    */1 * * * * curl http://127.0.0.1:9001/metrics > /tmp/portworx.metrics 2>/dev/null && sed '/go_/d' /tmp/portworx.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/portworx/instance/`hostname -a` >/dev/null 2>&1
+    */1 * * * * curl http://127.0.0.1:9001/metrics > /tmp/portworx.metrics 2>/dev/null && sed '/go_/d' /tmp/portworx.metrics | curl -k -u pushuser:pushpass --data-binary @- https://127.0.0.1:9091/metrics/job/portworx/instance/`hostname -a` >/dev/null 2>&1
 
-    */1 * * * * sleep 2 && curl http://127.0.0.1:9323/metrics > /tmp/dockerd.metrics 2>/dev/null && sed '/go_/d' /tmp/dockerd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
+    */1 * * * * sleep 2 && curl http://127.0.0.1:9323/metrics > /tmp/dockerd.metrics 2>/dev/null && sed '/go_/d' /tmp/dockerd.metrics | curl -k -u pushuser:pushpass --data-binary @- https://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
-    */1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -u pushuser:pushpass --data-binary @- http://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
+    */1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -k -u pushuser:pushpass --data-binary @- https://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
 ---
 
@@ -113,7 +113,7 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
-Connect to https://<swarmhost>:443 of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
+Connect to https://swarmhost:443 of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
 
 DevOps Tools:     | Port(s):                  | Distribution/Installation
 ---------------- | -------------------------- | ---------------
