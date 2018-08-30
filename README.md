@@ -5,7 +5,7 @@ Easily deploy and update Docker swarm nodes as you scale up from at least (3) ba
 
 Manage one or more Docker clusters via ansible playbooks that can _(optionally)_ help you install Docker swarm, [Portworx](https://portworx.com) persistent storage for container volumes between Docker swarm nodes, and update firewall rules between the nodes as well as Docker service ports exposed by your applications.
 
-Swarmstack provides a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to docker-compose.yml) 
+swarmstack includes a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to docker-compose.yml) 
 
 The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Prometheus can optionally replicate metrics stored within it's internal own time-series database (tsdb) out to one or more external tsdb such as InfluxDB for analysis or longer-term storage, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
 
@@ -115,33 +115,34 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 Connect to https://swarmhost:443 of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
 
-DevOps Tools:     | Port(s):                  | Distribution/Installation
+DevOps Tools:     | Port(s):                  | Current Distribution / Installation
 ---------------- | -------------------------- | ---------------
-Alertmanager     | swarmhost:9093 | prom/alertmanager:latest
-AlertmanagerB    | swarmhost:9095 | prom/alertmanager:latest
-Grafana          | swarmhost:3000 | grafana:latest
-Prometheus       | swarmhost:9090 | prom/prometheus:latest
-Prometheus Pushgateway | swarmhost:9091 | prom/pushgateway:latest
+[Alertmanager](https://github.com/prometheus/alertmanager) | swarmhost:9093 | prom/alertmanager:latest
+AlertmanagerB    | swarmhost:9095->swarmstack_net:9093 | prom/alertmanager:latest
+[Grafana](https://github.com/grafana/grafana) | swarmhost:3000 | grafana/grafana:latest
+[Prometheus](https://github.com/prometheus/prometheus) | swarmhost:9090 | prom/prometheus:latest
+[Pushgateway])https:/github.com/prometheus/pushgateway) | swarmhost:9091 | prom/pushgateway:latest
 [Swarmpit](https://github.com/swarmpit/swarmpit) | swarmhost:9092 | swarmpit/swarmpit:latest
-Unsee            | swarmhost:9094 | cloudflare/unsee:v0.8.0
+[Unsee](https://github.com/cloudflare/unsee) | swarmhost:9094 | cloudflare/unsee:v0.9.2
 
 ---
 
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-caddy | 80,3000,9090-9095 | stefanprodan/caddy:latest
+[caddy](https://hub.docker.com/r/stefanprodan/caddy/) | 80,3000,9090-9095 | stefanprodan/caddy:latest
 
 Telemetry: | | |
 --------- | - | -
-cAdvisor         | swarmstack_net:8080/metrics | google/cadvisor
+[cAdvisor](https://github.com/google/cadvisor) | swarmstack_net:8080/metrics | google/cadvisor:latest
+CouchDB          | swarmstack_net:5984 | klaemo/couchdb:2.0.0
 Docker Swarm     | swarmhost:9323/metrics | ansible->yum docker
 etcd3            | swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
-Grafana          | swarmstack_net:3000/metrics | grafana:latest
-Node-exporter    | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
-Portworx storage | swarmhost:9001:/metrics | ansible->portworx/px-dev
-Prometheus       | swarmhost:9090:/metrics | prom/prometheus
-Pushgateway      | swarmhost:9091:/metrics | prom/pushgateway
+[Grafana](https://github.com/grafana/grafana) | swarmstack_net:3000/metrics | grafana:latest
+[Node-exporter](https://github.com/stefanprodan/swarmprom) | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
+[Portworx](https://portworx.com) | swarmhost:9001:/metrics | ansible->portworx/px-dev
+[Prometheus](https://github.com/prometheus/prometheus) | swarmhost:9090:/metrics | prom/prometheus
+[Pushgateway](https://github.com/prometheus/pushgateway) | swarmhost:9091:/metrics | prom/pushgateway
 
 ---
 

@@ -339,7 +339,7 @@ services:
           memory: 256M
 
   unsee:
-    image: cloudflare/unsee:v0.8.0
+    image: cloudflare/unsee:v0.9.2
     networks:
       - net
     environment:
