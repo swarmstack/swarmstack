@@ -117,13 +117,13 @@ Connect to https://swarmhost of any Docker swarm node and authenticate with your
 
 DevOps Tools:     | Port(s):                  | Current Distribution / Installation
 ---------------- | -------------------------- | ---------------
-[Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093 _caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
-AlertmanagerB    | https://swarmhost:9095 _caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
-[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000 _caddy:swarmstack_net:grafana:3000_ | grafana/grafana:latest
-[Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090 _caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
-[Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091 _caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
-[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092 _caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
-[Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094 _caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
+[Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093<br>_caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
+AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
+[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:latest
+[Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090<br>_caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
+[Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091<br>_caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
+[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092<br>_caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
+[Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094<br>_caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
 
 ---
 
@@ -135,14 +135,14 @@ Firewall management | iptables | ansible->/etc/swarmstack_fw
 Telemetry: | | |
 --------- | - | -
 [cAdvisor](https://github.com/google/cadvisor) | _swarmstack_net:http://cadvisor:8080/metrics_ | google/cadvisor:latest
-[CouchDB](https://hub.docker.com/_/couchdb/) | _swarmstack_net:5984_ | couchdb:latest
+[CouchDB](https://hub.docker.com/_/couchdb/) | _swarmstack_net:couchdb:5984_ | couchdb:latest
 [Docker](https://docs.docker.com/engine/swarm/) | http://swarmhost:9323/metrics | ansible->yum docker
 [etcd3](https://github.com/etcd-io/etcd) | http://swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
 [Grafana](https://github.com/grafana/grafana) | _swarmstack_net:http://grafana:3000/metrics_ | grafana/grafana:latest
-[Node-exporter](https://github.com/stefanprodan/swarmprom) | _swarmstack_net:http://node-exporter:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
+[Node-exporter](https://github.com/stefanprodan/swarmprom) | _swarmstack_net:http://node-exporter:9100/metrics_ | stefanprodan/swarmprom-node-exporter:v0.15.2
 [Portworx](https://portworx.com) | http://swarmhost:9001:/metrics | ansible->portworx/px-dev
 [Prometheus](https://github.com/prometheus/prometheus) | _swarmstack_net:http://prometheus:9090/metrics_ | prom/prometheus
-[Pushgateway](https://github.com/prometheus/pushgateway) | https://swarmhost:9091/metrics _swarmstack_net:http://pushgateway:9091/metrics | prom/pushgateway
+[Pushgateway](https://github.com/prometheus/pushgateway) | https://swarmhost:9091/metrics<br>_swarmstack_net:http://pushgateway:9091/metrics_ | prom/pushgateway
 
 ---
 
