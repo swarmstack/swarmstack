@@ -324,7 +324,7 @@ services:
           - node.role == manager
 
   swarmpit-db:
-    image: klaemo/couchdb:2.0.0
+    image: couchdb:latest
     volumes:
       - swarmpit-data:/opt/couchdb/data
     networks:

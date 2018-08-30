@@ -135,10 +135,10 @@ Firewall management | iptables | ansible->/etc/swarmstack_fw
 Telemetry: | | |
 --------- | - | -
 [cAdvisor](https://github.com/google/cadvisor) | swarmstack_net:8080/metrics | google/cadvisor:latest
-CouchDB          | swarmstack_net:5984 | klaemo/couchdb:2.0.0
-Docker Swarm     | swarmhost:9323/metrics | ansible->yum docker
-etcd3            | swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
-[Grafana](https://github.com/grafana/grafana) | swarmstack_net:3000/metrics | grafana:latest
+[CouchDB](https://hub.docker.com/_/couchdb/) | swarmstack_net:5984 | couchdb:latest
+[Docker](https://docs.docker.com/engine/swarm/) | swarmhost:9323/metrics | ansible->yum docker
+[etcd3](https://github.com/etcd-io/etcd) | swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
+[Grafana](https://github.com/grafana/grafana) | swarmstack_net:3000/metrics | grafana/grafana:latest
 [Node-exporter](https://github.com/stefanprodan/swarmprom) | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
 [Portworx](https://portworx.com) | swarmhost:9001:/metrics | ansible->portworx/px-dev
 [Prometheus](https://github.com/prometheus/prometheus) | swarmhost:9090:/metrics | prom/prometheus
