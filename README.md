@@ -113,36 +113,36 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 ## NETWORK URLs:
 
-Connect to https://swarmhost:443 of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
+Connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view these links:
 
 DevOps Tools:     | Port(s):                  | Current Distribution / Installation
 ---------------- | -------------------------- | ---------------
-[Alertmanager](https://github.com/prometheus/alertmanager) | swarmhost:9093 | prom/alertmanager:latest
-AlertmanagerB    | swarmhost:9095->swarmstack_net:9093 | prom/alertmanager:latest
-[Grafana](https://github.com/grafana/grafana) | swarmhost:3000 | grafana/grafana:latest
-[Prometheus](https://github.com/prometheus/prometheus) | swarmhost:9090 | prom/prometheus:latest
-[Pushgateway])https:/github.com/prometheus/pushgateway) | swarmhost:9091 | prom/pushgateway:latest
-[Swarmpit](https://github.com/swarmpit/swarmpit) | swarmhost:9092 | swarmpit/swarmpit:latest
-[Unsee](https://github.com/cloudflare/unsee) | swarmhost:9094 | cloudflare/unsee:v0.9.2
+[Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093 _caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
+AlertmanagerB    | https://swarmhost:9095 _caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
+[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000 _caddy:swarmstack_net:grafana:3000_ | grafana/grafana:latest
+[Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090 _caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
+[Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091 _caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
+[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092 _caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
+[Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094 _caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
 
 ---
 
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-[caddy](https://hub.docker.com/r/stefanprodan/caddy/) | 80,3000,9090-9095 | stefanprodan/caddy:latest
+[caddy](https://hub.docker.com/r/stefanprodan/caddy/) | 80->443, 3000, 9090-9095 | stefanprodan/caddy:latest
 
 Telemetry: | | |
 --------- | - | -
-[cAdvisor](https://github.com/google/cadvisor) | swarmstack_net:8080/metrics | google/cadvisor:latest
-[CouchDB](https://hub.docker.com/_/couchdb/) | swarmstack_net:5984 | couchdb:latest
-[Docker](https://docs.docker.com/engine/swarm/) | swarmhost:9323/metrics | ansible->yum docker
-[etcd3](https://github.com/etcd-io/etcd) | swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
-[Grafana](https://github.com/grafana/grafana) | swarmstack_net:3000/metrics | grafana/grafana:latest
-[Node-exporter](https://github.com/stefanprodan/swarmprom) | swarmstack_net:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
-[Portworx](https://portworx.com) | swarmhost:9001:/metrics | ansible->portworx/px-dev
-[Prometheus](https://github.com/prometheus/prometheus) | swarmhost:9090:/metrics | prom/prometheus
-[Pushgateway](https://github.com/prometheus/pushgateway) | swarmhost:9091:/metrics | prom/pushgateway
+[cAdvisor](https://github.com/google/cadvisor) | _swarmstack_net:http://cadvisor:8080/metrics_ | google/cadvisor:latest
+[CouchDB](https://hub.docker.com/_/couchdb/) | _swarmstack_net:5984_ | couchdb:latest
+[Docker](https://docs.docker.com/engine/swarm/) | http://swarmhost:9323/metrics | ansible->yum docker
+[etcd3](https://github.com/etcd-io/etcd) | http://swarmhost:2379/metrics | ansible->git clone coreos/etcdv3.3.9
+[Grafana](https://github.com/grafana/grafana) | _swarmstack_net:http://grafana:3000/metrics_ | grafana/grafana:latest
+[Node-exporter](https://github.com/stefanprodan/swarmprom) | _swarmstack_net:http://node-exporter:9100/metrics | stefanprodan/swarmprom-node-exporter:v0.15.2
+[Portworx](https://portworx.com) | http://swarmhost:9001:/metrics | ansible->portworx/px-dev
+[Prometheus](https://github.com/prometheus/prometheus) | _swarmstack_net:http://prometheus:9090/metrics_ | prom/prometheus
+[Pushgateway](https://github.com/prometheus/pushgateway) | https://swarmhost:9091/metrics _swarmstack_net:http://pushgateway:9091/metrics | prom/pushgateway
 
 ---
 
