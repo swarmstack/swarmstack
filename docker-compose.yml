@@ -31,7 +31,7 @@ volumes:
       driver_opts:
         repl: 2
         size: 10
-    swarmpit-data:
+    swarmpit-couchdb:
       driver: pxd
       driver_opts:
         repl: 2
@@ -306,7 +306,7 @@ services:
   swarmpit-app:
     image: swarmpit/swarmpit:latest
     environment:
-      - SWARMPIT_DB=http://swarmpit-db:5984
+      - SWARMPIT_DB=http://swarmpit-couchdb:5984
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -323,10 +323,10 @@ services:
         constraints:
           - node.role == manager
 
-  swarmpit-db:
+  swarmpit-couchdb:
     image: couchdb:latest
     volumes:
-      - swarmpit-data:/opt/couchdb/data
+      - swarmpit-couchdb:/opt/couchdb/data
     networks:
       - net
     deploy:
@@ -337,6 +337,9 @@ services:
         reservations:
           cpus: '0.15'
           memory: 256M
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
 
   unsee:
     image: cloudflare/unsee:v0.9.2

@@ -50,7 +50,7 @@ _Hint_: While you can follow the instructions at [Portworx PX-Developer](https:/
 
 _Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
-## INSTALL OR UPDATING SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
+## INSTALL OR UPDATE SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
 Download the git archive below onto a Docker manager node and deploy swarmstack as a Docker stack using the docker-compose.yml file:
 
     # cd /usr/local/src
@@ -64,11 +64,20 @@ Or just take most of the defaults above:
 
     # ADMIN_PASSWORD=somepassword docker stack deploy -c swarmstack/docker-compose.yml swarmstack
 
-If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running. If you make changes to the Alertmanager rules, you can run the command above again and Docker will refresh the affected containers. If you need to make larger changes to the stack, you can:
+If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
+
+### UPDATING SWARMSTACK
 
     # docker stack rm swarmstack
+    # cd /usr/local/src/swarmstack
+    # git pull https://github.com/swarmstack/swarmstack.git
 
-And then deploy the stack again as above. Persistent volumes, or containers you've created local volumes and placement constraints for, will be reattached as new containers are deployed and should pick up right where you left off.
+And then deploy the stack again as above. Persistent volumes, or containers you've created local volumes and placement constraints for, will be reattached as the newest containers are deployed and should pick up right where they left off. If you wish to initialize (lose all data) one or more swarmstack services (such as Prometheus or Swarmpit's CouchDB), before re-deploying the stack:
+
+    # docker volume rm swarmstack_prometheus
+    # docker volume rm swarmstack_swarmpit-couchdb
+
+### CRON JOBS
 
 You can add some cron entries to each node to forward dockerd/portworx/etcd metrics into the Pushgateway so that Prometheus can scrape them too (`crontab -e`):
 
@@ -97,7 +106,7 @@ _The default action of the chain should just return, so that the FORWARD chain c
 
 You'll need to similarly protect each node in the swarm, as Docker swarm will accept traffic to service ports on all nodes and forward to the correct node.
 
-## DOCKER NODE DISK CLEANUP
+### DOCKER NODE DISK CLEANUP
 You'll also want to add something to each host to keep the local filesystem clear of unneeded containers, local volumes, and images:
 
     # cat <<EOF >>/etc/cron.daily/clean-docker
