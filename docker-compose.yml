@@ -16,7 +16,7 @@ volumes:
       driver_opts:
         repl: 2
         size: 2 
-    caddy:
+    caddycerts:
       driver: pxd
       driver_opts:
         repl: 2
@@ -109,9 +109,8 @@ services:
         reservations:
           memory: 64M
 
-
   caddy:
-    image: stefanprodan/caddy
+    image: swarmstack/caddy:no-stats
     ports:
       - "80:80"
       - "443:443"
@@ -129,13 +128,14 @@ services:
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - PUSH_USER=${PUSH_USER:-pushuser}
       - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
+      - CADDYPATH=/etc/caddycerts
     configs:
       - source: caddy_config
         target: /etc/caddy/Caddyfile
       - source: caddy_www
         target: /www/index.html
     volumes:
-      - caddy:/.caddy
+      - caddycerts:/etc/caddycerts
     deploy:
       mode: replicated
       replicas: 1
@@ -144,11 +144,6 @@ services:
           memory: 128M
         reservations:
           memory: 64M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 5s
-      timeout: 1s
-      retries: 5
 
   cadvisor:
     image: google/cadvisor
@@ -303,7 +298,7 @@ services:
           cpus: '0.05'
           memory: 32M
 
-  swarmpit-app:
+  swarmpit:
     image: swarmpit/swarmpit:latest
     environment:
       - SWARMPIT_DB=http://swarmpit-couchdb:5984

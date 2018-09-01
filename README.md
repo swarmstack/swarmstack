@@ -87,8 +87,6 @@ You can add some cron entries to each node to forward dockerd/portworx/etcd metr
 
     */1 * * * * sleep 4 && curl http://127.0.0.1:2379/metrics > /tmp/etcd.metrics 2>/dev/null && cat /tmp/etcd.metrics | curl -k -u pushuser:pushpass --data-binary @- https://127.0.0.1:9091/metrics/job/dockerd/instance/`hostname -a` >/dev/null 2>&1
 
----
-
 ### FIREWALL MANAGEMENT USING ANSIBLE:
 You should consider using the ansible playbook in the [ansible](https://github.com/swarmstack/swarmstack/blob/master/ansible/README.md) folder to manage the firewalls on your EL7 Docker swarm cluster. For other distributions, see the manual method below for now.
 
@@ -139,7 +137,7 @@ AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-[caddy](https://hub.docker.com/r/stefanprodan/caddy/) | 80->443, 3000, 9090-9095 | stefanprodan/caddy:latest
+[caddy](https://hub.docker.com/r/swarmstack/caddy/) | 80->443, 3000, 9090-9095 | swarmstack/caddy:no-stats
 
 Telemetry: | | |
 --------- | - | -
