@@ -21,7 +21,7 @@ swarm03.ex.com
 
 [portworx:children]
 portworx-RED
-portworx-BLUE
+#portworx-BLUE
 
 [portworx-RED]
 swarm01.ex.com CLUSTERID='portworx-RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
