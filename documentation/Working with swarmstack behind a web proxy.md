@@ -1,5 +1,7 @@
 # Working with swarmstack behind a web proxy
 
+_Hint:_ You may find that varying applications within containers parse their environment variables for proxies using differing names and syntax requirements, such as http_proxy=proxy.example.com:80 or http_proxy=http://proxy.example.com:80. Some applications might look for HTTPS_PROXY instead. Consult application documentation in these cases, and add the appropriate environent variables to the specific services which requires internet access via web proxy. Your web proxy administrator should be able to provide the correct hostname and port to use for HTTP traffic, and perhaps a different host:port for HTTPS traffic. Some web proxies are configured to handle both at the same port.
+
 For Docker to retrieve images from the internet, you'll need to add the following file on each Docker node:
 
 * /etc/systemd/system/docker.service.d/http-proxy.conf
@@ -18,7 +20,7 @@ Then update systemd and restart Docker on each node:
 
 ## Caddy
 
-If you want to have Caddy register automatic SSL certificates for you while behind a web proxy, you'll need to add the https_proxy and no_proxy directives to the swarmstack _docker-compose.yml_:
+If you want to have Caddy register automatic SSL certificates for you while behind a web proxy, you'll need to add the https_proxy and no_proxy directives to the swarmstack _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_:
 
 ```
       - CADDYPATH=/etc/caddycerts
@@ -40,9 +42,7 @@ From [Caddy - Automatic HTTPS](https://caddyserver.com/docs/automatic-https): "C
 
 ## Grafana (and other containers)
 
-_Hint:_ You may find that varying applications within containers parse their environment for proxies with differing requirements, such as requiring leading URI:// _(e.g. http_proxy=proxy.example.com:80 or http_proxy=http://proxy.example.com:80)_. Some applications might want to see HTTPS_PROXY instead. Consult application documentation in these cases, and add the appropriate environent statements to the individual container that requires internet access via proxy.
-
-If you plan to install plugins using internet sources, you'll need add your https_proxy to to containers within the docker-compose.yml:
+If you plan to install plugins using internet sources, you'll need add your https_proxy to to containers within the _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_:
 
 ```
   grafana:
