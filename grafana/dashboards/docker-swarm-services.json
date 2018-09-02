@@ -1,10 +1,20 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.2.2"
+      "version": "5.2.3"
     },
     {
       "type": "panel",
@@ -49,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1534520607016,
+  "iteration": 1535929983641,
   "links": [],
   "panels": [
     {
@@ -393,7 +403,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
@@ -407,21 +417,21 @@
       },
       "id": 12,
       "legend": {
-        "alignAsTable": true,
+        "alignAsTable": false,
         "avg": false,
         "current": true,
         "hideEmpty": true,
         "hideZero": true,
         "max": false,
         "min": false,
-        "rightSide": true,
+        "rightSide": false,
         "show": true,
         "sort": "current",
         "sortDesc": true,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
@@ -475,7 +485,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -970,187 +980,6 @@
         "x": 0,
         "y": 23
       },
-      "id": 17,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": false,
-        "max": true,
-        "min": true,
-        "rightSide": true,
-        "show": false,
-        "sort": "avg",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_node_id=~\"$node_id\"}[$interval])) by (container_label_com_docker_swarm_service_name)",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Network received by Service",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "Bps",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "fill": 3,
-      "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 12,
-        "y": 23
-      },
-      "id": 36,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": false,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(container_last_seen{container_label_com_docker_swarm_node_id=~\"$node_id\"}[5m])) by (container_label_com_docker_swarm_service_name)",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{ container_label_com_docker_swarm_service_name }}",
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Running Containers by Service",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 1,
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 30
-      },
       "id": 25,
       "legend": {
         "alignAsTable": true,
@@ -1229,6 +1058,95 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 17,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": true,
+        "rightSide": true,
+        "show": false,
+        "sort": "avg",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_node_id=~\"$node_id\"}[$interval])) by (container_label_com_docker_swarm_service_name)",
+          "format": "time_series",
+          "intervalFactor": 2,
+          "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Network received by Service",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "columns": [
         {
           "text": "Avg",
@@ -1241,7 +1159,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 30
       },
       "hideTimeOverride": true,
       "id": 28,
@@ -1316,9 +1234,9 @@
         "sort": 0,
         "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
         "tags": [
-          "caa-scale1.cisco.com",
-          "caa-scale2.cisco.com",
-          "caa-scale3.cisco.com"
+          "dna-dev-swarm03.cisco.com",
+          "dna-dev-swarm01.cisco.com",
+          "dna-dev-swarm02.cisco.com"
         ],
         "tagsQuery": "label_values(node_meta, node_name)",
         "type": "query",
@@ -1430,5 +1348,5 @@
   "timezone": "",
   "title": "Docker Swarm Services",
   "uid": "zr_baSRmk",
-  "version": 1
+  "version": 2
 }

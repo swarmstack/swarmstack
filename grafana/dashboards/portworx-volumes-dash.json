@@ -52,7 +52,7 @@
       "id": 12,
       "links": [],
       "pageSize": null,
-      "scroll": false,
+      "scroll": true,
       "showHeader": true,
       "sort": {
         "col": 0,
@@ -151,7 +151,7 @@
       "id": 23,
       "links": [],
       "pageSize": null,
-      "scroll": false,
+      "scroll": true,
       "showHeader": true,
       "sort": {
         "col": 0,
