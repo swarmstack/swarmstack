@@ -5,7 +5,7 @@ Easily deploy and update Docker swarm nodes as you scale up from at least (3) ba
 
 Manage one or more Docker clusters via ansible playbooks that can _(optionally)_ help you install Docker swarm, [Portworx](https://portworx.com) persistent storage for container volumes between Docker swarm nodes, and update firewall rules between the nodes as well as Docker service ports exposed by your applications.
 
-swarmstack includes a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to docker-compose.yml) 
+swarmstack includes a modern DevOps stack of tools for operating Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. Swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). Provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_) 
 
 The built-in Grafana dashboards will help you stay aware of the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications. Prometheus can optionally replicate metrics stored within it's internal own time-series database (tsdb) out to one or more external tsdb such as InfluxDB for analysis or longer-term storage, or to cloud services such as [Weave Cloud](https://www.weave.works/product/cloud/) or the like. 
 
@@ -39,7 +39,7 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 While the firewall management ansible playbook and the DevOps tool Docker stack has been released, you'll need to wait a bit for the full ansible playbook release that will optionally install the cluster for you, including Docker swarm, etcd, and Portworx. Use of these playbooks to install and maintain your clusters isn't required in order to deploy the DevOps tool stack, but makes deployment from minimal OS installations much simpler. The DevOps tool chain was initially based on work by [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). 
 
-You'll need to bring your own 3+ node cluster of physical or virtual machines or ec2 instances, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in docker-compose.yml to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
+You'll need to bring your own 3+ node cluster of physical or virtual machines or ec2 instances, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
 
 Before proceeding, make sure your hosts have their time in sync via NTP
 
@@ -53,7 +53,7 @@ _Hint_: While you can follow the instructions at [Portworx PX-Developer](https:/
 _Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
 ## INSTALL OR UPDATE SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
-Download the git archive below onto a Docker manager node and deploy swarmstack as a Docker stack using the docker-compose.yml file:
+Download the git archive below onto a Docker manager node and deploy swarmstack as a Docker stack using the _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ file:
 
     # cd /usr/local/src
     # git clone https://github.com/swarmstack/swarmstack.git
@@ -132,7 +132,7 @@ However, it's better if your application can be made to serve it's metrics direc
 --name my-web \
 nginx
 ```
-or better, as a Docker stack (see docker-compose.yml, also [Use a pre-existing network](https://docs.docker.com/compose/networking/#configure-the-default-network)):
+or better, as a Docker stack (see _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_, also [Use a pre-existing network](https://docs.docker.com/compose/networking/#configure-the-default-network)):
 
 ```
     networks:
@@ -150,7 +150,7 @@ You'll need to add a scrape config to prometheus/conf/prometheus.yml:
       port: 9180
 ```
 ### USE CADDY TO HANDLE HTTP/S FOR YOUR SERVICES
-While your own applications can expose HTTP/S directly on swarm node ports if needed, you could also instead choose to configure Caddy to proxy your HTTP/S traffic to your application, and optionally handle automatic HTTPS certificates and/or basic authentication for you. Your application's security may be enhanced by adding the indirection, and adding HTTPS to a non-HTTPS application becomes a breeze. To accomplish this, after adding the _swarmstack_net_ network to your service you can update the swarmstack docker-compose.yml to expose your own application port via Caddy, and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
+While your own applications can expose HTTP/S directly on swarm node ports if needed, you could also instead choose to configure Caddy to proxy your HTTP/S traffic to your application, and optionally handle automatic HTTPS certificates and/or basic authentication for you. Your application's security may be enhanced by adding the indirection, and adding HTTPS to a non-HTTPS application becomes a breeze. To accomplish this, after adding the _swarmstack_net_ network to your service you can update the swarmstack _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ to expose your own application port via Caddy, and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
 ```
   caddy:
     image: swarmstack/caddy:no-stats
@@ -159,7 +159,7 @@ While your own applications can expose HTTP/S directly on swarm node ports if ne
 ```
 Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service ports. You can choose to use either a self_signed certificate (default, stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates, or bring your own certificatess (you'll need to vi/copy/curl them directly into a running Caddy container into it's _/etc/caddycerts/_ folder). All certificates will be stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
 
-Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove the both :80 and :443 stanzas in _caddy/Caddyfile_, and replace simply with:
+Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove both the :80 and :443 stanzas in _caddy/Caddyfile_, and replace with:
 ```
 *.example.com {
     tls email@example.com
@@ -263,7 +263,7 @@ roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Doc
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/portworx.yml -k
 ```
-* optional, if you are instead bringing your own persistent storage be sure to update the pxd driver in docker-compose.yml
+* optional, if you are instead bringing your own persistent storage be sure to update the pxd driver in _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ 
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
