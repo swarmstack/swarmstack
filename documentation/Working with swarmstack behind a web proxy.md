@@ -16,6 +16,28 @@ Then update systemd and restart Docker on each node:
     # systemctl daemon-reload
     # systemctl restart docker
 
+## Caddy
+
+If you want to have Caddy register automatic SSL certificates for you while behind a web proxy, you'll need to add the https_proxy and no_proxy directives to the swarmstack _docker-compose.yml_:
+
+```
+      - CADDYPATH=/etc/caddycerts
+      - https_proxy=https://proxy.example.com:443
+      - no_proxy=10.0.0.0/8,.example.com
+```
+You can then remove the :80 and :443 stanzas in _caddy/Caddyfile_, and replace them with:
+```
+*.example.com:443 {
+    tls email@example.com
+    tls {
+      max_certs 10
+    }
+    basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+    root /www
+}
+```
+From [Caddy - Automatic HTTPS](https://caddyserver.com/docs/automatic-https): "Caddy will also redirect all HTTP requests to their HTTPS equivalent if the plaintext variant of the hostname is not defined in the Caddyfile."
+
 ## Grafana (and other containers)
 
 _Hint:_ You may find that varying applications within containers parse their environment for proxies with differing requirements, such as requiring leading URI:// _(e.g. http_proxy=proxy.example.com:80 or http_proxy=http://proxy.example.com:80)_. Some applications might want to see HTTPS_PROXY instead. Consult application documentation in these cases, and add the appropriate environent statements to the individual container that requires internet access via proxy.

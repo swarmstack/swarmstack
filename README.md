@@ -156,7 +156,20 @@ If you'd like Caddy to proxy traffic to your application and also optionally han
     ports:
       - "9180:9180"
 ```
-Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service. You can choose to use either a self_signed certificate (stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates. You can also bring your own certificates and install them directly into a running Caddy container in it's _/etc/caddycerts/_ folder, they will stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
+Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service. You can choose to use either a self_signed certificate (default, stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates, or bring your own certificatess (you'll need to vi/copy/curl them directly into a running Caddy container into it's _/etc/caddycerts/_ folder). All certificates will be stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
+
+Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove the both :80 and :443 stanzas in _caddy/Caddyfile_, and replace simply with:
+```
+*.example.com {
+    tls email@example.com
+    tls {
+      max_certs 10
+    }
+    basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+    root /www
+}
+```
+From [Caddy - Automatic HTTPS](https://caddyserver.com/docs/automatic-https): "Caddy will also redirect all HTTP requests to their HTTPS equivalent if the plaintext variant of the hostname is not defined in the Caddyfile."
 
 ## NETWORK URLs:
 
