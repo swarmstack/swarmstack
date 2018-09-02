@@ -149,14 +149,15 @@ You'll need to add a scrape config to prometheus/conf/prometheus.yml:
       type: 'A'
       port: 9180
 ```
-If you'd like Caddy to proxy traffic to your application and also optionally handle automatic HTTPS certificates and/or basic auth for your applications, after adding the _swarmstack_net_ network to your service you can update the swarmstack docker-compose.yml to expose your via Caddy and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
+### USE CADDY TO HANDLE HTTP/S FOR YOUR SERVICES
+While your own applications can expose HTTP/S directly on swarm node ports if needed, you could also instead choose to configure Caddy to proxy your HTTP/S traffic to your application, and optionally handle automatic HTTPS certificates and/or basic authentication for you. Your application's security may be enhanced by adding the indirection, and adding HTTPS to a non-HTTPS application becomes a breeze. To accomplish this, after adding the _swarmstack_net_ network to your service you can update the swarmstack docker-compose.yml to expose your own application port via Caddy, and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
 ```
   caddy:
     image: swarmstack/caddy:no-stats
     ports:
       - "9180:9180"
 ```
-Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service. You can choose to use either a self_signed certificate (default, stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates, or bring your own certificatess (you'll need to vi/copy/curl them directly into a running Caddy container into it's _/etc/caddycerts/_ folder). All certificates will be stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
+Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service ports. You can choose to use either a self_signed certificate (default, stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates, or bring your own certificatess (you'll need to vi/copy/curl them directly into a running Caddy container into it's _/etc/caddycerts/_ folder). All certificates will be stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
 
 Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove the both :80 and :443 stanzas in _caddy/Caddyfile_, and replace simply with:
 ```
