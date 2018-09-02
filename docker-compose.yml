@@ -3,6 +3,8 @@ version: "3.3"
 networks:
   net:
     driver: overlay
+    driver_opts:
+      encrypted: "true"
     attachable: true
 
 volumes:
@@ -129,6 +131,9 @@ services:
       - PUSH_USER=${PUSH_USER:-pushuser}
       - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
       - CADDYPATH=/etc/caddycerts
+      #- http_proxy=http://proxy.example.com:80
+      #- https_proxy=https://proxy.example.com:443
+      #- no_proxy=10.0.0.0/8,.example.com
     configs:
       - source: caddy_config
         target: /etc/caddy/Caddyfile
@@ -169,9 +174,6 @@ services:
     networks:
       - net
     environment:
-      #- http_proxy=http://proxy.example.com:80
-      #- https_proxy=https://proxy.example.com:443
-      #- no_proxy=10.0.0.0/8,.example.com
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -183,6 +185,9 @@ services:
       #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
       #- GF_SMTP_USER=${GF_SMTP_USER}
       #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+      #- http_proxy=http://proxy.example.com:80
+      #- https_proxy=https://proxy.example.com:443
+      #- no_proxy=10.0.0.0/8,.example.com
     volumes:
       - grafana:/var/lib/grafana
     configs:
