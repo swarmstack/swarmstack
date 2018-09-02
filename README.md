@@ -118,7 +118,45 @@ You'll also want to add something to each host to keep the local filesystem clea
     sleep 10
     /bin/docker image prune -a -f > /dev/null 2>&1
     EOF
----
+
+## ADD YOUR APPLICATION CONTAINERS AND MONITOR THEM
+
+You can see from the section CRON JOBS (above) one way to push metrics into Prometheus, using the externally exposed Pushgateway on port 9091 of any Docker swarm node. This would allow you to run a simple container on any docker node in the fleet and publish metrics into Prometheus, or to publish metrics into Prometheus from anywhere really (if your firewall is configured to expose port 9100 to other hosts outside the swarm).
+
+However, it's better if your application can be made to serve it's metrics directly on a non-exposed port (e.g. 9180:/metrics) with access to the _swarmstack_net_ (you can also add _swarmstack_net_ as an additional network to your service if needed). If your container application can already serve HTTP or HTTPS, you can either have it serve it's metrics at it's own port:/metrics, or via a second port altogether. In some cases you might even need to create a helper container that has access in some way to the stats of another application container or data-source and can publish them in Prometheus format, Prometheus calls this an "exporter". You can deploy your containers as services, or preferably as a stack of services (so that they can be started and stopped together), and add the external _swarmstack_net_ network to your service so that Prometheus can scrape it directly:
+
+```
+# docker service create \
+--replicas 3 \
+--network swarmstack_net \
+--name my-web \
+nginx
+```
+or better, as a Docker stack (see docker-compose.yml, also [Use a pre-existing network](https://docs.docker.com/compose/networking/#configure-the-default-network)):
+
+```
+    networks:
+      default:
+        external:
+          name: swarmstack_net
+```
+You'll need to add a scrape config to prometheus/conf/prometheus.yml:
+```
+  - job_name: 'myapp'
+    dns_sd_configs:
+    - names:
+      - 'tasks.myapp'
+      type: 'A'
+      port: 9180
+```
+If you'd like Caddy to proxy traffic to your application and also optionally handle automatic HTTPS certificates and/or basic auth for your applications, after adding the _swarmstack_net_ network to your service you can update the swarmstack docker-compose.yml to expose your via Caddy and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
+```
+  caddy:
+    image: swarmstack/caddy:no-stats
+    ports:
+      - "9180:9180"
+```
+Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service. You can choose to use either a self_signed certificate (stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates. You can also bring your own certificates and install them directly into a running Caddy container in it's _/etc/caddycerts/_ folder, they will stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
 
 ## NETWORK URLs:
 
@@ -139,7 +177,7 @@ AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-[caddy](https://hub.docker.com/r/swarmstack/caddy/) | 80->443, 3000, 9090-9095 | swarmstack/caddy:no-stats
+[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | 80->443, 3000, 9090-9095 | swarmstack/caddy:no-stats
 
 Telemetry: | | |
 --------- | - | -
