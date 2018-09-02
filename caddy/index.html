@@ -1,5 +1,6 @@
-<HTML>
-<HEAD>
+<html>
+<head>
+
 <script>
 function setHref() {
 document.getElementById('grafana').href = window.location.protocol + "//" + window.location.hostname + ":3000";
@@ -11,15 +12,83 @@ document.getElementById('unsee').href = window.location.protocol + "//" + window
 document.getElementById('alertmanagerB').href = window.location.protocol + "//" + window.location.hostname + ":9095";
 }
 </script>
+
+<style>
+
+body {
+    background-color: black;
+}
+
+table.GeneratedTable {
+  width: 100%;
+  background-color: #000000;
+  border-collapse: collapse;
+  border-width: 0px;
+  border-color: #ffcc00;
+  border-style: solid;
+  color: #37c311;
+  text-align:left;
+}
+
+table.GeneratedTable td, table.GeneratedTable th {
+  border-width: 0px;
+  border-color: #ffcc00;
+  border-style: solid;
+  padding: 3px;
+}
+
+table.GeneratedTable thead {
+  background-color: #2a662b;
+}
+
+a:link, a:visited, a:hover, a:active {
+    color: #57e331;
+}
+</style>
+
+
+
 </HEAD>
 <BODY onload="setHref()">
-<h2>swarmstack links:</h2>
-<a target="_blank" href="" id="alertmanager">Alertmanager</a><br>
-<a target="_blank" href="" id="alertmanagerB">AlertmanagerB</a><br>
-<a target="_blank" href="" id="grafana">Grafana</a><br>
-<a target="_blank" href="" id="prometheus">Prometheus</a><br>
-<a target="_blank" href="" id="pushgateway">Prometheus Pushgateway</a><br>
-<a target="_blank" href="" id="swarmpit">Swarmpit</a><br>
-<a target="_blank" href="" id="unsee">Unsee</a><br>
-</BODY>
-</HTML>
+
+<table class="GeneratedTable">
+  <thead>
+    <tr>
+      <th>Links</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a target="_blank" href="" id="alertmanager">Alertmanager</a></td>
+      <td>Receives alerts from Prometheus and relays them to slack, email, etc</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="alertmanagerB">AlertmanagerB</a></td>
+      <td>Redundant Alertmanager, uses gossip protocol to de-dupe alerts</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="grafana">Grafana</a></td>
+      <td>Query, visualize, alert on and understand your metrics no matter where they are stored</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="prometheus">Prometheus</a></td>
+      <td>Open source monitoring solution</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="pushgateway">Prometheus Pushgateway</a></td>
+      <td>Push acceptor for ephemeral and batch jobs metrics to be scraped by Prometheus</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="swarmpit">Swarmpit</a></td>
+      <td>Lightweight Docker Swarm management UI</td>
+    </tr>
+    <tr>
+      <td><a target="_blank" href="" id="unsee">Unsee</a></td>
+      <td>Alert dashboard for Prometheus Alertmanager(s)</td>
+    </tr>
+  </tbody>
+</table>
+<!-- Codes by Quackit.com -->
+</body>
+</html>
