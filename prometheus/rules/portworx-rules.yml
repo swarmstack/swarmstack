@@ -1,0 +1,102 @@
+- name: portworx.rules
+  rules:
+  - alert: PortworxVolumeUsageCritical
+    expr: 100 * (px_volume_usage_bytes / px_volume_capacity_bytes) > 80
+    for: 5m
+    labels:
+      issue: Portworx volume {{$labels.volumeid}} usage on {{$labels.host}} is high.
+      severity: critical
+    annotations:
+      description: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is over
+        80% used for more than 10 minutes.
+      summary: Portworx volume capacity is at {{$value}}% used.
+  - alert: PortworxVolumeUsage
+    expr: 100 * (px_volume_usage_bytes / px_volume_capacity_bytes) > 70
+    for: 5m
+    labels:
+      issue: Portworx volume {{$labels.volumeid}} usage on {{$labels.host}} is critical.
+      severity: warning
+    annotations:
+      description: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is over
+        70% used for more than 10 minutes.
+      summary: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is at {{$value}}%
+        used.
+  - alert: PortworxVolumeWillFill
+    expr: (px_volume_usage_bytes / px_volume_capacity_bytes) > 0.7 and predict_linear(px_cluster_disk_available_bytes[1h],
+      14 * 86400) < 0
+    for: 10m
+    labels:
+      issue: Disk volume {{$labels.volumeid}} on {{$labels.host}} is predicted to
+        fill within 2 weeks.
+      severity: warning
+    annotations:
+      description: Disk volume {{$labels.volumeid}} on {{$labels.host}} is over 70%
+        full and has been predicted to fill within 2 weeks for more than 10 minutes.
+      summary: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is over 70%
+        full and is predicted to fill within 2 weeks.
+  - alert: PortworxStorageUsageCritical
+    expr: 100 * (1 - px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes)
+      < 20
+    for: 5m
+    labels:
+      issue: Portworx storage {{$labels.volumeid}} usage on {{$labels.host}} is high.
+      severity: critical
+    annotations:
+      description: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over
+        80% used for more than 10 minutes.
+      summary: Portworx storage capacity is at {{$value}}% used.
+  - alert: PortworxStorageUsage
+    expr: 100 * (1 - (px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes))
+      < 30
+    for: 5m
+    labels:
+      issue: Portworx storage {{$labels.volumeid}} usage on {{$labels.host}} is critical.
+      severity: warning
+    annotations:
+      description: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over
+        70% used for more than 10 minutes.
+      summary: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is at {{$value}}%
+        used.
+  - alert: PortworxStorageWillFill
+    expr: (100 * (1 - (px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes)))
+      < 30 and predict_linear(px_cluster_disk_available_bytes[1h], 14 * 86400) < 0
+    for: 10m
+    labels:
+      issue: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is predicted
+        to fill within 2 weeks.
+      severity: warning
+    annotations:
+      description: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over
+        70% full and has been predicted to fill within 2 weeks for more than 10 minutes.
+      summary: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over 70%
+        full and is predicted to fill within 2 weeks.
+  - alert: PortworxStorageNodeDown
+    expr: max(px_cluster_status_nodes_storage_down) > 0
+    for: 5m
+    labels:
+      issue: Portworx Storage Node is Offline.
+      severity: critical
+    annotations:
+      description: Portworx Storage Node has been offline for more than 5 minutes.
+      summary: Portworx Storage Node is Offline.
+  - alert: PortworxQuorumUnhealthy
+    expr: max(px_cluster_status_cluster_quorum) > 1
+    for: 5m
+    labels:
+      issue: Portworx Quorum Unhealthy.
+      severity: critical
+    annotations:
+      description: Portworx cluster Quorum Unhealthy for more than 5 minutes.
+      summary: Portworx Quorum Unhealthy.
+  - alert: PortworxMemberDown
+    expr: (max(px_cluster_status_cluster_size) - count(px_cluster_status_cluster_size))
+      > 0
+    for: 5m
+    labels:
+      issue: Portworx cluster member(s) is(are) down.
+      severity: critical
+    annotations:
+      description: '{{$value}} Portworx cluster member(s) has(have) been down for
+        more than 5 minutes.'
+      summary: Portworx cluster member(s) is(are) down.
+

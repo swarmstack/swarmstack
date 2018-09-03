@@ -60,11 +60,13 @@ configs:
     file: ./grafana/dashboards/portworx-volumes-dash.json
   grafana_dashboard_etcd-dash:
     file: ./grafana/dashboards/etcd-dash.json
-  node_rules:
-    file: ./prometheus/rules/swarm_node.rules.yml
-  task_rules:
-    file: ./prometheus/rules/swarm_task.rules.yml
-  prometheus_conf:
+  prometheus-docker_swarm_nodes-rules:
+    file: ./prometheus/rules/docker_swarm_nodes-rules.yml
+  prometheus-docker_swarm_services-rules:
+    file: ./prometheus/rules/docker_swarm_services-rules.yml
+  prometheus-portworx-rules:
+    file: ./prometheus/rules/portworx-rules.yml
+  prometheus-conf:
     file: ./prometheus/conf/prometheus.yml
 
 services:
@@ -257,12 +259,14 @@ services:
     volumes:
       - prometheus:/prometheus
     configs:
-      - source: prometheus_conf
+      - source: prometheus-conf
         target: /etc/prometheus/prometheus.yml
-      - source: node_rules
-        target: /etc/prometheus/swarm_node.rules.yml
-      - source: task_rules
-        target: /etc/prometheus/swarm_task.rules.yml
+      - source: prometheus-docker_swarm_nodes-rules
+        target: /etc/prometheus/docker_swarm_nodes-rules.yml
+      - source: prometheus-docker_swarm_services-rules
+        target: /etc/prometheus/docker_swarm_services-rules.yml
+      - source: prometheus-portworx-rules
+        target: /etc/prometheus/portworx-rules.yml
     deploy:
       mode: replicated
       replicas: 1

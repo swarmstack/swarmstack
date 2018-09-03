@@ -6,8 +6,9 @@ global:
     monitor: 'promswarm'
 
 rule_files:
-  - "swarm_node.rules.yml"
-  - "swarm_task.rules.yml"
+  - "docker_swarm_nodes-rules.yml"
+  - "docker_swarm_services-rules.yml"
+  - "portworx-rules.yml"
 
 alerting:
   alertmanagers:

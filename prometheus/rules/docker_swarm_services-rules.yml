@@ -1,5 +1,5 @@
 groups:
-- name: /1/store/projects/vagrant/docker-swarm-vagrant/apps/swarmprom/prometheus/rules/swarm_task.rules.yml
+- name: docker_swarm_services
   rules:
   - alert: task_high_cpu_usage_50
     expr: sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_swarm_task_name=~".+"}[1m]))
