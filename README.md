@@ -207,7 +207,7 @@ Telemetry: | | |
 
 ---
 
-## Metrics Dashboards
+## DASHBOARDS
 
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen1.png)
 
