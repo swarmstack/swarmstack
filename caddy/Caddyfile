@@ -45,7 +45,7 @@
 }
 
 :9092 {
-    proxy / swarmpit-app:8080 {
+    proxy / swarmpit:8080 {
             transparent
             websocket
         }
