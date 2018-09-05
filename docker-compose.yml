@@ -172,7 +172,7 @@ services:
           memory: 64M
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:master
     networks:
       - net
     environment:

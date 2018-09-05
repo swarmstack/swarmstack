@@ -50,14 +50,11 @@ If you plan to install plugins using internet sources, you'll need add your http
     networks:
       - net
     environment:
-      - http_proxy=http://proxy.example.com:80
       - https_proxy=https://proxy.example.com:443
-      - no_proxy=.mydomain.com
+      - no_proxy=10.0.0.0/8,.mydomain.com
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
 ```
 
-While this will work for many containers, Grafana has been waiting on [this commit](https://github.com/golang/net/commit/c21de06aaf072cea07f3a65d6970e5c7d8b6cd6d) to trickle through to the Grafana build using a newer version of the Go language compiler, which currently lacks sufficient no_proxy support to prevent the external internet proxy from being used for Graphite datasources. This means that Grafana won't be able to talk to Prometheus without traversing the proxy, which may likely be configured not to allow proxying traffic back to internal destinations. Currently you'll break Grafana's access to Prometheus if you enable the above. Grafana will work for you in the stack as-is, but trying to install Grafana plugins (such as worldPing) that require internet access while behind a required web proxy may be difficult at present.
-
-UPDATE: [Go 1.11](https://github.com/golang/go/releases) which includes proper NO_PROXY support for Go binaries was released August 24 2018, hopefully Grafana will soon update their Docker image using this Go build soon - [https://github.com/grafana/grafana/issues/13030](https://github.com/grafana/grafana/issues/13030)
+Grafana just merged [this commit](https://github.com/golang/net/commit/c21de06aaf072cea07f3a65d6970e5c7d8b6cd6d) to the grafana :master build, which is being considered for inclusion in the beta for their next release (5.3.0). This build uses Go 1.11, which now provides sufficient "no_proxy" support to prevent the external internet proxy from being used for datasources. Once 5.3.0 is released, swarmstack will move back to using the [latest](https://hub.docker.com/grafana/grafana) build.
