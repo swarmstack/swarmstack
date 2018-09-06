@@ -228,7 +228,7 @@ Telemetry: | | |
 ### Prometheus - Graphs:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen10.png)
 ### Prometheus - Alerts:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen11.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_alerts.png)
 ### Prometheus - Targets:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen12.png)
 ### Swarmpit:
