@@ -213,17 +213,17 @@ Telemetry: | | |
 
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen2.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen3.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_nodes.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen4.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_services.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen5.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/etcd.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen6.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_cluster_status.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen7.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_volumes.png)
 
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen8.png)
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
 
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
 
