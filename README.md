@@ -207,33 +207,34 @@ Telemetry: | | |
 
 ---
 
-## DASHBOARDS
-
+### Caddy Link Dashboard:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen1.png)
-
+### Grafana Dashboards List:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen2.png)
-
+### Grafana - Docker Swarm Nodes:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_nodes.png)
-
+### Grafana - Docker Swarm Services:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_services.png)
-
+### Grafana - etcd:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/etcd.png)
-
+### Grafana - Portworx Cluster Status:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_cluster_status.png)
-
+### Grafana - Portworx Volume Status:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_volumes.png)
-
+### Grafana - Prometheus Stats:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
-
+### Alertmanager:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
-
+### Prometheus - Graphs:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen10.png)
-
+### Prometheus - Alerts:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen11.png)
-
+### Prometheus - Targets:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen12.png)
-
+### Swarmpit:
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen13.png)
+
+--- 
 
 # (please ignore everything below for now, but this is what's coming):
 
