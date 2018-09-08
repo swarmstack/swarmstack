@@ -182,7 +182,7 @@ DevOps Tools:     | Port(s):                  | Current Distribution / Installat
 ---------------- | -------------------------- | ---------------
 [Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093<br>_caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
 AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
-[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:latest
+[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:5.2.4
 [Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090<br>_caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
 [Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091<br>_caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
 [Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092<br>_caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
