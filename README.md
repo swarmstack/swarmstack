@@ -193,7 +193,7 @@ AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | Exposed(80->443, 3000, 9090-9095) _swarmstack_net:http://caddy:9180/metrics_ | swarmstack/caddy:no-stats
+[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | https://swarmhost (80->443, 3000, 9090-9095) _swarmstack_net:http://caddy:9180/metrics_ | swarmstack/caddy:no-stats
 
 Telemetry: | | |
 --------- | - | -
