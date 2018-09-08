@@ -11,7 +11,7 @@ The built-in Grafana dashboards will help you stay aware of the health of the cl
 
 For an overview of the flow of metrics into Prometheus, exploring metrics using the meager PromQL interface Prometheus provides, and ultimately using Grafana and other visualizers to create dashboards while using the Prometheus time-series database as a datasource, watch [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk), and take a look at [Prometheus: Monitoring at SoundCloud](https://developers.soundcloud.com/blog/prometheus-monitoring-at-soundcloud)
 
-![](https://developers.soundcloud.com/assets/posts/prometheus_architecture-4b9254066c366c0a3f2b96d20730a4e3.svg "Prometheus architecture")
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/swarmstack-diagram.png "swarmstack architecture")
 
 ## WHY? 
 
