@@ -36,7 +36,7 @@ and under later in the file:
         target: /etc/grafana/ldap.toml
 
 ```
-The supplied _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/grafana/grafani.ini)_ changes only:
+The supplied _[grafana/grafana.ini](https://github.com/swarmstack/swarmstack/blob/master/grafana/grafana.ini)_ changes just:
 ```
 #################################### Auth LDAP ##########################
 [auth.ldap]
@@ -44,4 +44,4 @@ enabled = true
 allow_sign_up = true
 ;config_file = /etc/grafana/ldap.toml  # Default location Grafana will look for LDAP settings
 ```
-Feel free to edit ldap.toml, at the bottom of the file you will see that authenticated users are registered upon first LDAP login as a Viewer. There are commented sections above that provide examples for setting users as 'Editor' or even 'Admin'.
+You'll need to edit _[grafana/ldap.toml](https://github.com/swarmstack/swarmstack/blob/master/grafana/ldap.toml)_ and configure your LDAP settings. At the bottom of the file you'll see that authenticated users are registered upon first LDAP login as a _Viewer_. There are commented sections above that that provide examples for creating users as 'Editor' or even as 'Admin'.
