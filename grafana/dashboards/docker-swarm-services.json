@@ -1234,9 +1234,6 @@
         "sort": 0,
         "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
         "tags": [
-          "dna-dev-swarm03.cisco.com",
-          "dna-dev-swarm01.cisco.com",
-          "dna-dev-swarm02.cisco.com"
         ],
         "tagsQuery": "label_values(node_meta, node_name)",
         "type": "query",

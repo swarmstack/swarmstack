@@ -1917,9 +1917,6 @@
         "sort": 0,
         "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
         "tags": [
-          "caa-scale1.cisco.com",
-          "caa-scale2.cisco.com",
-          "caa-scale3.cisco.com"
         ],
         "tagsQuery": "label_values(node_meta, node_name)",
         "type": "query",
