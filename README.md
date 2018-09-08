@@ -73,7 +73,7 @@ _Hint_: For documentation on using LDAP for authentication with swarmstack, see 
 ### UPDATING SWARMSTACK
 
     # docker stack rm swarmstack
-    # cd /usr/local/src/swarmstack
+    # cd /usr/local/src/
     # git pull https://github.com/swarmstack/swarmstack.git
 
 And then deploy the stack again as above. Persistent volumes, or containers you've created local volumes and placement constraints for, will be reattached as the newest containers are deployed and should pick up right where they left off. If you wish to initialize (lose all data) one or more swarmstack services (such as Prometheus or Swarmpit's CouchDB), before re-deploying the stack:
@@ -261,7 +261,7 @@ Telemetry: | | |
  ---
  
 ## ANSIBLE CLUSTER INSTALLATION: (not yet available)
-    # cd /usr/local/src
+    # cd /usr/local/src/
     # git clone https://github.com/swarmstack/swarmstack.git
 
 Edit these files: | |
