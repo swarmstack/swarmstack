@@ -1,4 +1,4 @@
-# swarmstack Maintenance
+# swarmstack CLI notes
 
     # /opt/pwx/bin/pxctl status
     # /opt/pwx/bin/pxctl volume list
@@ -10,5 +10,5 @@
     # docker config ls
     # docker stack ls
     # docker stack rm mon
-    # ADMIN_USER=admin ADMIN_PASSWORD=somepassword PUSH_USER=pushuser PUSH_PASSWORD=pushpass sudo docker stack deploy -c docker-compose.yml mon
+    # ADMIN_USER=admin ADMIN_PASSWORD=somepassword PUSH_USER=pushuser PUSH_PASSWORD=pushpass docker stack deploy -c docker-compose.yml mon
 

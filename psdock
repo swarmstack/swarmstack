@@ -1,2 +1,0 @@
-#!/bin/sh
-docker ps --format "{{.ID}}\t{{.Status}}\t{{ printf \"%.40s\" .Names}}\t{{.Ports}}"

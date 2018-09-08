@@ -84,3 +84,11 @@
     errors stderr
     tls self_signed
 }
+
+:9180 {
+    prometheus {
+      use_caddy_addr
+    }
+    errors stderr
+    tls off
+}

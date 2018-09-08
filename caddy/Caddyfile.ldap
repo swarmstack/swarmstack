@@ -1,0 +1,105 @@
+:80 {
+    redir https://{hostonly}{uri}
+    errors stderr
+    tls off
+}
+
+:443 {
+    root /www
+    errors stderr
+    tls self_signed
+}
+
+:3000 {
+    proxy / grafana:3000 {
+      transparent
+      websocket
+    }
+    errors stderr
+    tls self_signed
+}
+
+:9090 {
+    reauth {
+      path /
+      ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
+    }
+    proxy / prometheus:9090 {
+      transparent
+    }
+    errors stderr
+    tls self_signed
+}
+
+:9091 {
+    reauth {
+      path /
+      except /metrics/job/
+      ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
+    }
+    proxy / pushgateway:9091 {
+      transparent
+    }
+
+    basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
+    proxy /metrics/job/ pushgateway:9091 {
+      transparent
+    }
+    errors stderr
+    tls self_signed
+}
+
+:9092 {
+    proxy / swarmpit:8080 {
+            transparent
+            websocket
+        }
+
+    errors stderr
+    tls self_signed
+}
+
+
+:9093 {
+    reauth {
+      path /
+      ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
+    }
+    proxy / alertmanager:9093 {
+            transparent
+        }
+    errors stderr
+    tls self_signed
+}
+
+:9094 {
+    reauth {
+      path /
+      ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
+    }
+    proxy / unsee:8080 {
+            transparent
+        }
+    errors stderr
+    tls self_signed
+}
+
+:9095 {
+    reauth {
+      path /
+      ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
+    }
+    proxy / alertmanagerB:9093 {
+            transparent
+        }
+    errors stderr
+    tls self_signed
+}
+
+:9180 {
+    prometheus {
+      use_caddy_addr
+    }
+    errors stderr
+    tls off
+}

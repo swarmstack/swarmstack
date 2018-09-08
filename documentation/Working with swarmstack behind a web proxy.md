@@ -27,9 +27,9 @@ If you want to have Caddy register automatic SSL certificates for you while behi
       - https_proxy=https://proxy.example.com:443
       - no_proxy=10.0.0.0/8,.example.com
 ```
-You can then remove the :80 and :443 stanzas in _caddy/Caddyfile_, and replace them with:
+You can then remove the (2) stanzas :80 and :443 in _caddy/Caddyfile_, and replace with just:
 ```
-*.example.com:443 {
+*.example.com {
     tls email@example.com
     tls {
       max_certs 10

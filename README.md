@@ -35,9 +35,8 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ---
 
-## THIS IS A WORK-IN-PROGRESS (WIP) - Full ansible release soon
-
-While the firewall management ansible playbook and the DevOps tool Docker stack has been released, you'll need to wait a bit for the full ansible playbook release that will optionally install the cluster for you, including Docker swarm, etcd, and Portworx. Use of these playbooks to install and maintain your clusters isn't required in order to deploy the DevOps tool stack, but makes deployment from minimal OS installations much simpler. The DevOps tool chain was initially based on work by [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). 
+### CURRENT STATUS OF SWARMSTACK
+While the firewall management ansible playbook and the DevOps tool Docker stack have been released, you'll need to wait a bit for some additional ansible playbooks that will optionally install the cluster for you, including Docker swarm, etcd, and Portworx. Use of these playbooks to install and maintain your clusters isn't required in order to deploy the DevOps tool stack, but makes deployment from minimal OS installations much simpler. The DevOps tool chain was initially based on work by [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom). Manual installation of the Docker cluster and swarmstack is documented below.
 
 You'll need to bring your own 3+ node cluster of physical or virtual machines or ec2 instances, each running Docker configured as a swarm with 1 or more managers, plus [etcd](https://docs.portworx.com/maintain/etcd.html) and [Portworx PX-Developer](https://docs.portworx.com/developer/) or PX-Enterprise _(or change pxd in _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ to your persistent storage layer of choice)_. The instuctions below were tested on EL7 (RHEL/CentOS), but can be adapted to your linux distribution of choice. The inital release of ansible installation playbooks will focus on EL7, but support for CoreOS and ubuntu hosts will be added over time to the same playbooks.
 
@@ -50,7 +49,6 @@ _Hint_: While you can follow the instructions at [Portworx PX-Developer](https:/
     -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx \
     portworx/px-dev
 
-_Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
 
 ## INSTALL OR UPDATE SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
 Download the git archive below onto a Docker manager node and deploy swarmstack as a Docker stack using the _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ file:
@@ -67,6 +65,10 @@ Or just take most of the defaults above:
     # ADMIN_PASSWORD=somepassword docker stack deploy -c swarmstack/docker-compose.yml swarmstack
 
 If everything works out you can explore the ports listed lower on this page to access the DevOps tools, which should now be running.
+
+_Hint_: If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)
+
+_Hint_: For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)
 
 ### UPDATING SWARMSTACK
 
@@ -123,7 +125,7 @@ You'll also want to add something to each host to keep the local filesystem clea
 
 You can see from the section CRON JOBS (above) one way to push metrics into Prometheus, using the externally exposed Pushgateway on port 9091 of any Docker swarm node. This would allow you to run a simple container on any docker node in the fleet and publish metrics into Prometheus, or to publish metrics into Prometheus from anywhere really if your firewall is configured to expose port 9091 to other hosts outside the swarm.
 
-However, it's better if your application can be made to serve it's metrics directly on a non-exposed port (e.g. 9180:/metrics) with access to the _swarmstack_net_ (you can also add _swarmstack_net_ as an additional network to your service if needed). If your container application can already serve HTTP or HTTPS, you can either have it serve it's metrics at it's own port:/metrics, or via a second port altogether. In some cases you might even need to create a helper container that has access in some way to the stats of another application container or data-source and can publish them in Prometheus format, Prometheus calls this an "exporter". You can deploy your containers as services, or preferably as a stack of services (so that they can be started and stopped together), and add the external _swarmstack_net_ network to your service so that Prometheus can scrape it directly:
+However, it's better if your application can be made to serve it's metrics directly on a non-exposed port (e.g. 9080:/metrics) with access to the _swarmstack_net_ (you can also add _swarmstack_net_ as an additional network to your service if needed). If your container application can already serve HTTP or HTTPS, you can either have it serve it's metrics at it's own port:/metrics, or via a second port altogether. In some cases you might even need to create a helper container that has access in some way to the stats of another application container or data-source and can publish them in Prometheus format, Prometheus calls this an "exporter". You can deploy your containers as services, or preferably as a stack of services (so that they can be started and stopped together), and add the external _swarmstack_net_ network to your service so that Prometheus can scrape it directly:
 
 ```
 # docker service create \
@@ -147,7 +149,7 @@ You'll need to add a scrape config to prometheus/conf/prometheus.yml:
     - names:
       - 'tasks.myapp'
       type: 'A'
-      port: 9180
+      port: 9080
 ```
 ### USE CADDY TO HANDLE HTTP/S FOR YOUR SERVICES
 While your own applications can expose HTTP/S directly on swarm node ports if needed, you could also instead choose to configure Caddy to proxy your HTTP/S traffic to your application, and optionally handle automatic HTTPS certificates and/or basic authentication for you. Your application's security may be enhanced by adding the indirection, and adding HTTPS to a non-HTTPS application becomes a breeze. To accomplish this, after adding the _swarmstack_net_ network to your service you can update the swarmstack _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_ to expose your own application port via Caddy, and proxy the traffic to your service listening on a non-exposed port within the _swarmstack_net_:
@@ -155,11 +157,11 @@ While your own applications can expose HTTP/S directly on swarm node ports if ne
   caddy:
     image: swarmstack/caddy:no-stats
     ports:
-      - "9180:9180"
+      - "9080:9080"
 ```
 Then update caddy/Caddyfile to terminate HTTPS traffic and reverse proxy it to your service ports. You can choose to use either a self_signed certificate (default, stored in-memory within Caddy and rotated each week) and accept the occasional browser warnings, or see [Automatic HTTPS](https://caddyserver.com/docs/automatic-https) within Caddy documentation for various ways to have Caddy automatically create signed certificates, or bring your own certificatess (you'll need to vi/copy/curl them directly into a running Caddy container into it's _/etc/caddycerts/_ folder). All certificates will be stored in a persistent container volume and used for the named host in caddy/Caddyfile the next time swarmstack is redeployed.
 
-Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove both the :80 and :443 stanzas in _caddy/Caddyfile_, and replace with:
+Caddy has a featured called On-Demand TLS, where it can register a free Let's Encrypt account for you and can manage the generation and update of CA-signed certificates automatically. You can then remove the (2) stanzas :80 and :443 in _caddy/Caddyfile_, and replace with just:
 ```
 *.example.com {
     tls email@example.com
@@ -191,7 +193,7 @@ AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB
 Security: | | |
 --------- | - | -
 Firewall management | iptables | ansible->/etc/swarmstack_fw
-[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | 80->443, 3000, 9090-9095 | swarmstack/caddy:no-stats
+[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | Exposed(80->443, 3000, 9090-9095) _swarmstack_net:http://caddy:9180/metrics_ | swarmstack/caddy:no-stats
 
 Telemetry: | | |
 --------- | - | -

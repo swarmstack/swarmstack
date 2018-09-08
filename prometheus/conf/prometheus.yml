@@ -48,3 +48,10 @@ scrape_configs:
       - 'tasks.grafana'
       type: 'A'
       port: 3000
+
+  - job_name: 'caddy'
+    dns_sd_configs:
+    - names:
+      - 'tasks.caddy'
+      type: 'A'
+      port: 9180

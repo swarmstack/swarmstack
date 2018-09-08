@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "$#" == "1" ]; then
+  docker exec -it $1 /bin/sh
+else
+  echo
+  echo "requires container id as argument"
+fi

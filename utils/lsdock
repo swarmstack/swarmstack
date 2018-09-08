@@ -1,2 +1,3 @@
 #!/bin/sh
+
 docker service ls --format "{{.ID}} {{.Replicas}} {{.Mode}}    \t{{.Name}} {{.Ports}}"
