@@ -3,92 +3,105 @@
 
 <script>
 function setHref() {
-document.getElementById('grafana').href = window.location.protocol + "//" + window.location.hostname + ":3000";
-document.getElementById('prometheus').href = window.location.protocol + "//" + window.location.hostname + ":9090";
-document.getElementById('pushgateway').href = window.location.protocol + "//" + window.location.hostname + ":9091";
-document.getElementById('swarmpit').href = window.location.protocol + "//" + window.location.hostname + ":9092";
-document.getElementById('alertmanager').href = window.location.protocol + "//" + window.location.hostname + ":9093";
-document.getElementById('unsee').href = window.location.protocol + "//" + window.location.hostname + ":9094";
-document.getElementById('alertmanagerB').href = window.location.protocol + "//" + window.location.hostname + ":9095";
+  document.getElementById('alertmanager').href = window.location.protocol + "//" + window.location.hostname + ":9093";
+  document.getElementById('alertmanagerB').href = window.location.protocol + "//" + window.location.hostname + ":9095";
+  document.getElementById('grafana').href = window.location.protocol + "//" + window.location.hostname + ":3000";
+  document.getElementById('prometheus').href = window.location.protocol + "//" + window.location.hostname + ":9090";
+  document.getElementById('pushgateway').href = window.location.protocol + "//" + window.location.hostname + ":9091";
+  document.getElementById('swarmpit').href = window.location.protocol + "//" + window.location.hostname + ":9092";
+  document.getElementById('unsee').href = window.location.protocol + "//" + window.location.hostname + ":9094";
 }
 </script>
-
 <style>
 
-body {
-    background-color: black;
+@media only screen and (max-width: 900px) {
+    .linkbox {
+       width: 100%;
+    }
+    .box {
+       margin-bottom: 1em;
+    }
 }
 
-table.GeneratedTable {
+* { margin:0; padding:0;}
+
+html, body {
+  background-color: black;
+  height: 100%;
+  display: block;
+}
+
+.tablehead {
+  background-color: #2a662b;
+}
+
+a:link, a:visited, a:hover, a:active {
+    color: #57e331;
+    text-decoration: none;
+}
+
+.boxes {
   width: 100%;
-  background-color: #000000;
-  border-collapse: collapse;
+}
+
+.linkbox {
+  min-width: 15em;
+  color: #17a301;
+  display: inline-block;
+  text-align: left;
+  vertical-align:middle;
   border-width: 0px;
   border-color: #ffcc00;
   border-style: solid;
-  color: #37c311;
-  text-align:left;
+  padding: 3px;
+  white-space: nowrap;
 }
 
-table.GeneratedTable td, table.GeneratedTable th {
+.box {
+  color: #17a301;
+  display: inline-block;
+  text-align: left;
+  vertical-align:middle;
   border-width: 0px;
   border-color: #ffcc00;
   border-style: solid;
   padding: 3px;
 }
 
-table.GeneratedTable thead {
-  background-color: #2a662b;
-}
-
-a:link, a:visited, a:hover, a:active {
-    color: #57e331;
-}
 </style>
+</head>
+<body onload="setHref()">
 
+<div class="tablehead">swarmstack</div>
+<br>
+<div class="boxes">
+<div class="linkbox"><a target="_blank" href="" id="alertmanager"><h3>Alertmanager</h3></a></div>
+   <div class="box">Receives alerts from Prometheus and relays them to slack, email, etc</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="alertmanagerB"><h3>AlertmanagerB</h3></a></div>
+   <div class="box">Redundant Alertmanager, uses gossip protocol to de-dupe alerts</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="grafana"><h3>Grafana</h3></a></div>
+   <div class="box">Query, visualize, alert on and understand your metrics no matter where they are stored</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="prometheus"><h3>Prometheus</h3></a></div>
+   <div class="box">Open source monitoring solution</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="pushgateway"><h3>Prometheus Pushgateway</h3></a></div>
+   <div class="box">Push acceptor for ephemeral and batch jobs metrics to be scraped by Prometheus</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="swarmpit"><h3>Swarmpit</h3></a></div>
+   <div class="box">Lightweight Docker Swarm management UI</div>
+</div>
+<div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="unsee"><h3>Unsee</h3></a></div>
+   <div class="box">Alert dashboard for Prometheus Alertmanager(s)<div>
+</div>
 
-
-</HEAD>
-<BODY onload="setHref()">
-
-<table class="GeneratedTable">
-  <thead>
-    <tr>
-      <th>Links</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a target="_blank" href="" id="alertmanager">Alertmanager</a></td>
-      <td>Receives alerts from Prometheus and relays them to slack, email, etc</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="alertmanagerB">AlertmanagerB</a></td>
-      <td>Redundant Alertmanager, uses gossip protocol to de-dupe alerts</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="grafana">Grafana</a></td>
-      <td>Query, visualize, alert on and understand your metrics no matter where they are stored</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="prometheus">Prometheus</a></td>
-      <td>Open source monitoring solution</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="pushgateway">Prometheus Pushgateway</a></td>
-      <td>Push acceptor for ephemeral and batch jobs metrics to be scraped by Prometheus</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="swarmpit">Swarmpit</a></td>
-      <td>Lightweight Docker Swarm management UI</td>
-    </tr>
-    <tr>
-      <td><a target="_blank" href="" id="unsee">Unsee</a></td>
-      <td>Alert dashboard for Prometheus Alertmanager(s)</td>
-    </tr>
-  </tbody>
-</table>
-<!-- Codes by Quackit.com -->
 </body>
 </html>
