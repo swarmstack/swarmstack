@@ -1,6 +1,6 @@
 :80 {
-  redir https://{hostonly}{uri}
   tls off
+  redir https://{hostonly}{uri}
 }
 
 :443 {
