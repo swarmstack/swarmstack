@@ -19,4 +19,4 @@ services:
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      swarmstack_net: {aliases: [swarmhost1]}
+      swarmstack_net: {aliases: [swarmhostX]}
