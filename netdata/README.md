@@ -1,4 +1,4 @@
-# Installing netdata on your nodes
+# Installing NetData on your nodes
 
 swarmstack is in the process of moving from Google's cAdvisor and the Prometheus node-exporter to NetData, which provides many more system metrics and allows for much higher resolution capture and averaging of samples. Currently NetData must be installed separately on each host as a Docker container rather than as a Docker swarm service, this is because swarm doesn't yet provide access to entitled service capabilites that are a requirement of using NetData. When this capability gets added to Moby upstream, we'll move NetData installation into the main swarmstack docker-compose.yml.
 
