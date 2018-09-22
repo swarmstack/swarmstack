@@ -82,17 +82,17 @@
     file:
       path: /etc/systemd/system/docker.service.d
       state: directory
-    notify: systemctl-restart-docker
+    notify: systemctl-docker
     when: "'swarm' in group_names"
 
   - name: configure docker.service.d
     copy: src=../roles/common/files/etc/systemd/system/docker.service.d/docker.conf dest=/etc/systemd/system/docker.service.d/docker.conf owner=root group=root mode="u=rw,g=r,o=r"
-    notify: systemctl-restart-docker
+    notify: systemctl-docker
     when: "'swarm' in group_names"
 
   - name: configure Docker systemd proxy.conf
     copy: src=../roles/{{CLUSTER}}/files/etc/systemd/system/docker.service.d/proxy.conf dest=/etc/systemd/system/docker.service.d/proxy.conf owner=root group=root mode="u=rw,g=r,o=r"
-    notify: systemctl-restart-docker
+    notify: systemctl-docker
     when: "'swarm' in group_names"
 
   - name: process systemd changes immediately
@@ -224,11 +224,11 @@
 
   handlers:
 
-  - name: systemctl-restart-docker
+  - name: systemctl-docker
     systemd: 
-      state: restarted
+      state: stopped
       daemon_reload: yes
-      enabled: yes
+      enabled: no
       masked: no
       name: docker
 
