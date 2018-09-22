@@ -1,3 +1,13 @@
 #!/bin/sh
 
-docker service logs -f $1
+if [ "$#" == "1" ]; then
+  docker ps --format "{{.ID}}" | grep $1 >/dev/null 2>&1
+  if [ "$?" == "0" ]; then
+    docker logs -f $1
+  else
+    docker service logs -f $1
+  fi
+else
+  echo
+  echo "requires container or service id as argument"
+fi

@@ -1,0 +1,235 @@
+---
+- hosts: all
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - import_tasks: includes/tasks/sysctl_el7.yml
+
+  - name: add /etc/udev/rules.d/59-custom-txqueuelen.rules
+    copy: src=../roles/common/files/etc/udev/rules.d/59-custom-txqueuelen.rules dest=/etc/udev/rules.d/59-custom-txqueuelen.rules owner=root group=root mode="u=rw,g=r,o=r"
+
+  - import_tasks: includes/tasks/update_rsyslog.yml
+
+  - name: remove old docker stuff
+    yum: name=docker-engine,docker-ce-selinux state=absent
+
+  - name: add docker-stable.repo
+    copy: src=../roles/common/files/etc/yum.repos.d/docker-stable.repo dest=/etc/yum.repos.d/docker-stable.repo owner=root group=root mode="u=rw,g=r,o=r"
+    when: "'swarm' in group_names"
+#  - name: remove docker-stable.repo
+#    file:
+#      path: /etc/yum.repos.d/docker-stable.repo
+#      state: absent
+
+#  - name: add docker-edge.repo
+#    copy: src=../roles/common/files/etc/yum.repos.d/docker-edge.repo dest=/etc/yum.repos.d/docker-edge.repo owner=root group=root mode="u=rw,g=r,o=r"
+#    when: "'swarm' in group_names"
+  - name: remove docker-edge.repo
+    file:
+      path: /etc/yum.repos.d/docker-edge.repo
+      state: absent
+
+#  - name: add docker-test.repo
+#    copy: src=../roles/common/files/etc/yum.repos.d/docker-test.repo dest=/etc/yum.repos.d/docker-test.repo owner=root group=root mode="u=rw,g=r,o=r"
+#    when: "'swarm' in group_names"
+  - name: remove docker-test.repo
+    file:
+      path: /etc/yum.repos.d/docker-test.repo
+      state: absent
+
+  - name: yum clean all
+    command: yum clean all
+    args:
+      warn: no
+    changed_when: false
+
+
+### INSTALL DOCKER
+  - name: install docker if not already installed
+    yum: name=docker-ce state=present
+    when: "'swarm' in group_names"
+
+  - name: check if docker-ce update is available
+    shell: yum check-update docker-ce; if [ $? -eq 100 ]; then echo 'upgrade'; else echo 'no'; fi
+    args:
+      warn: no
+    register: DockerUpdateAvailable
+    changed_when: false
+
+  - name: check if kernel update is available
+    shell: yum check-update kernel; if [ $? -eq 100 ]; then echo 'upgrade'; else echo 'no'; fi
+    args:
+      warn: no
+    register: KernelUpdateAvailable
+    changed_when: false
+
+  - name: ensure docker service is disabled and stopped if rebooting due to kernel upgrade
+    systemd: name=docker state=stopped enabled=no masked=no
+    when: "'swarm' in group_names and KernelUpdateAvailable.stdout.find('upgrade') != -1"
+
+  - name: ensure docker service is disabled and stopped if upgrading
+    systemd: name=docker state=stopped enabled=no masked=no
+    when: "'swarm' in group_names and DockerUpdateAvailable.stdout.find('upgrade') != -1"
+
+  - name: upgrade docker if update available
+    yum: name=docker-ce state=latest
+    when: "'swarm' in group_names and DockerUpdateAvailable.stdout.find('upgrade') != -1"
+
+  - name: mkdir /etc/systemd/system/docker.service.d
+    file:
+      path: /etc/systemd/system/docker.service.d
+      state: directory
+    notify: systemctl-restart-docker
+    when: "'swarm' in group_names"
+
+  - name: configure docker.service.d
+    copy: src=../roles/common/files/etc/systemd/system/docker.service.d/docker.conf dest=/etc/systemd/system/docker.service.d/docker.conf owner=root group=root mode="u=rw,g=r,o=r"
+    notify: systemctl-restart-docker
+    when: "'swarm' in group_names"
+
+  - name: configure Docker systemd proxy.conf
+    copy: src=../roles/{{CLUSTER}}/files/etc/systemd/system/docker.service.d/proxy.conf dest=/etc/systemd/system/docker.service.d/proxy.conf owner=root group=root mode="u=rw,g=r,o=r"
+    notify: systemctl-restart-docker
+    when: "'swarm' in group_names"
+
+  - name: process systemd changes immediately
+    meta: flush_handlers
+
+### DOCKER CLEANUP
+  - name: install clean-docker cron.daily job
+    copy:
+      src=../roles/common/files/etc/cron.daily/clean-docker
+      dest=/etc/cron.daily/ owner=root group=root mode="u=rx,g=r,o=r"
+    when: "'swarm' in group_names"
+
+  - name: ensure overlay version 1 filesystems are removed from /var/lib/docker
+    file:
+      path: /var/lib/docker/overlay
+      state: absent
+    when: "'swarm' in group_names"
+
+### YUM UPGRADE EVERYTHING
+  - name: upgrade all packages
+    yum: name=* state=latest
+    register: yumupdate
+
+  - name: yum output
+    debug:
+      msg={{ yumupdate.results[0].split('\n') }}
+    when: yumupdate.changed == True
+    changed_when: False
+
+  - name: Check for reboot hint
+    shell: LAST_KERNEL=$(rpm -q --last kernel | perl -pe 's/^kernel-(\S+).*/$1/' | head -1); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
+    ignore_errors: true
+    register: reboot_hint
+    changed_when: false
+
+  - name: reboot if kernel was updated
+    shell: sleep 5 && /usr/sbin/reboot
+    async: 1
+    poll: 0
+    ignore_errors: true
+    when: reboot_hint.stdout.find("reboot") != -1
+
+  - name: Wait for the host to go offline
+    pause:
+     seconds: 30
+    when: reboot_hint.stdout.find("reboot") != -1
+
+  - name: Wait for host to boot
+    become: false
+    local_action: wait_for
+    args:
+      host: "{{ inventory_hostname }}"
+      port: 22
+      state: started
+      delay: "{{ REBOOT_DELAY }}"
+      timeout: "{{ REBOOT_TIMEOUT }}"
+    when: reboot_hint.stdout.find("reboot") != -1
+
+  - name: ensure docker service is enabled and started
+    systemd: name=docker state=started masked=no enabled=yes
+    register: DockerStarted
+    when: "'swarm' in group_names"
+
+  - name: pause while docker loads
+    pause: seconds=20
+    when: "'swarm' in group_names and DockerStarted.changed == True"
+
+  - name: determine if swarm has been initialized
+    command: docker node ls
+    register: swarm_initialized
+    ignore_errors: true
+    changed_when: False
+    run_once: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: initialize swarm
+    command: "docker swarm init --advertise-addr {{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
+    run_once: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and swarm_initialized is failed"
+
+  - name: determine this swarm ClusterID
+    shell: "docker info | awk '/ClusterID:/{print $NF}'"
+    register: swarm_cluster_id
+    changed_when: False
+    run_once: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: retrieve swarm join-token manager
+    command: docker swarm join-token manager --quiet
+    register: swarm_token_manager
+    changed_when: False
+    run_once: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: retrieve swarm join-token worker
+    command: docker swarm join-token worker --quiet
+    register: swarm_token_worker
+    changed_when: False
+    run_once: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: determine if node is in the same swarm ClusterID
+    shell: "docker info | awk '/ClusterID:/{print $NF}'"
+    register: node_swarm_cluster_id
+    changed_when: False
+    when: "'swarm' in group_names and inventory_hostname != SWARMJOIN"
+
+  - name: leave an old swarm if in a different swarm ClusterID
+    command: docker swarm leave -f
+    ignore_errors: true
+    when: "'swarm' in group_names and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
+
+  - name: join manager nodes to swarm
+    command: "docker swarm join --token {{swarm_token_manager.stdout}} {{SWARMJOIN}}:2377"
+    ignore_errors: true
+    register: join_manager_node
+    when: "'swarm' in group_names and ROLE is defined and ROLE == 'manager' and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
+
+  - name: join worker nodes to swarm
+    command: "docker swarm join --token {{swarm_token_worker.stdout}} {{SWARMJOIN}}:2377"
+    ignore_errors: true
+    when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
+
+  - name: add node.label.storagegroup to swarm nodes on SWARMJOIN host
+    command: "docker node update --label-add storagegroup={{hostvars[item]['STORAGEGROUP']}} {{item}}"
+    ignore_errors: true
+    with_items: "{{ groups['swarm'] }}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  handlers:
+
+  - name: systemctl-restart-docker
+    systemd: 
+      state: restarted
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      name: docker
+
+...

@@ -4,16 +4,22 @@
 CLUSTER=swarmstack
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
+SWARMJOIN=swarm01.example.com
 
+[dna-prd-swarm:children]
+etcd
+portworx
+swarm
+memory-32GB
 
 [etcd]
-swarm01.ex.com
-swarm02.ex.com
-swarm03.ex.com
+swarm01.example.com
+swarm02.example.com
+swarm03.example.com
 
 
 # When using Portworx PX-Developer version, use groups of 3 nodes per CLUSTERID and apply
-#  a single DOCKER_LABEL to the same 3 swarm hosts below. You can use this label as a constraint
+#  a single STORAGEGROUP to the same 3 swarm hosts below. You can use this label as a constraint
 #  when creating docker services that require persistent volumes. This will cause these 
 #  containers to be scheduled onto one of the 3 nodes whose storage is replicated by Portworx.
 #
@@ -24,27 +30,37 @@ portworx-RED
 #portworx-BLUE
 
 [portworx-RED]
-swarm01.ex.com CLUSTERID='portworx-RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-swarm02.ex.com CLUSTERID='portworx-RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-swarm03.ex.com CLUSTERID='portworx-RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+swarm01.example.com CLUSTERID='RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+swarm02.example.com CLUSTERID='RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+swarm03.example.com CLUSTERID='RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
 
 #[portworx-BLUE]
-#swarm04.ex.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-#swarm05.ex.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-#swarm06.ex.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+#swarm04.example.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+#swarm05.example.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+#swarm06.example.com CLUSTERID='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
 
 
 # Docker recommends no more than 7 manager nodes in a cluster.
 # 5 or 3 managers are warranted for smaller clusters.
 
 [swarm]
-swarm01.ex.com  DOCKER_LABEL='RED'  ROLE='manager'
-swarm02.ex.com  DOCKER_LABEL='RED'  ROLE='manager'
-swarm03.ex.com  DOCKER_LABEL='RED'  ROLE='manager'
-#swarm04.ex.com DOCKER_LABEL='BLUE' ROLE='manager'
-#swarm05.ex.com DOCKER_LABEL='BLUE' ROLE='manager'
-#swarm06.ex.com DOCKER_LABEL='BLUE'
+swarm01.example.com  STORAGEGROUP='RED'  ROLE='manager'
+swarm02.example.com  STORAGEGROUP='RED'  ROLE='manager'
+swarm03.example.com  STORAGEGROUP='RED'  ROLE='manager'
+#swarm04.example.com STORAGEGROUP='BLUE' ROLE='manager'
+#swarm05.example.com STORAGEGROUP='BLUE' ROLE='manager'
+#swarm06.example.com STORAGEGROUP='BLUE'
 
-[swarm:vars]
-JOIN=swarm01.ex.com
+# see playbooks/includes/tasks/sysctl_el7.yml to add other memory configurations
+[memory-2GB]
+[memory-4GB]
+[memory-8GB]
+[memory-16GB]
 
+[memory-32GB]
+swarm01.example.com
+swarm02.example.com
+swarm03.example.com
+
+[memory-64GB]
+[memory-96GB]
