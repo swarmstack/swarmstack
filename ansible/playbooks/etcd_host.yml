@@ -1,0 +1,59 @@
+---
+- hosts: all
+  remote_user: ansible
+  become: true
+  become_user: root
+  become_method: sudo
+
+  vars:
+    - ansible_ssh_private_key_file: roles/common/files/keys/ansible/ansible.pri
+    - HTTPS_PROXY: https://proxy.esl.cisco.com:80
+
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - name: install or update etcd
+    yum: name=etcd state=latest
+
+  - name: enable etcd service to create systemd file
+    systemd: name=etcd enabled=yes 
+
+  - name: remove default ExecStart from systemd
+    lineinfile:
+      path: /etc/systemd/system/multi-user.target.wants/etcd.service
+      regexp: '^ExecStart=.*ETCD_NAME'
+      line: '#EXECSTART'
+      backrefs: yes
+    notify: systemctl-etcd
+
+  - name: update /etc/systemd/system/multi-user.target.wants/etcd.service
+    blockinfile:
+      insertafter: '^#EXECSTART$'
+      path: /etc/systemd/system/multi-user.target.wants/etcd.service
+      block: |
+        ExecStart=/usr/bin/etcd --name etcd-{{ hostvars[inventory_hostname]['inventory_hostname'] }} \
+          --data-dir /var/lib/etcd \
+          --quota-backend-bytes 8589934592 \
+          --auto-compaction-retention 3 \
+          --listen-client-urls http://0.0.0.0:2379 \
+          --advertise-client-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 \
+          --listen-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
+          --initial-advertise-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
+          --initial-cluster {% for host in groups['etcd'] %}etcd-{{ hostvars[host].inventory_hostname}}=http://{{ lookup('dig', hostvars[host].inventory_hostname) }}:2380{{ '' if loop.last else ','}}{% endfor %} \
+          --initial-cluster-token etcd-token \
+          --initial-cluster-state new
+    notify: systemctl-etcd
+
+  handlers:
+
+  - name: systemctl-etcd
+    systemd: 
+      state: restarted
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      name: etcd
+
+...
