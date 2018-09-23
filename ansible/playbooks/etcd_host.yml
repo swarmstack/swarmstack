@@ -1,14 +1,6 @@
 ---
 - hosts: all
-  remote_user: ansible
-  become: true
-  become_user: root
-  become_method: sudo
-
-  vars:
-    - ansible_ssh_private_key_file: roles/common/files/keys/ansible/ansible.pri
-    - HTTPS_PROXY: https://proxy.esl.cisco.com:80
-
+  remote_user: root
   roles:
   - ../roles/common
 
