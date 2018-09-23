@@ -1,0 +1,46 @@
+---
+- hosts: all
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - name: mkdir /etc/pwx
+    file:
+      path: /etc/pwx
+      state: directory
+    when: "'portworx' in group_names"
+
+  - name: check if Portworx OCI bundle already installed
+    stat: path=/opt/pwx/bin/pxctl
+    register: pxctl_installed
+    when: "'portworx' in group_names"
+
+  - name: install Portworx OCI bundle
+    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/px-dev
+    args:
+      warn: no
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == False"
+
+  - name: check if Portworx has been configured
+    stat: path=/etc/pwx/config.json
+    register: pxctl_configured
+    when: "'portworx' in group_names"
+
+  - name: configure Portworx OCI bundle
+    shell: /opt/pwx/bin/px-runc install -c {{ hostvars[inventory_hostname]['PWX_STORAGE_GROUP'] }} -k {% for host in groups['etcd'] %}etcd:http://{{ lookup('dig', hostvars[host].inventory_hostname) }}:2379{{ '' if loop.last else ','}}{% endfor %}{% for device in hostvars[inventory_hostname]['DEVICES'] %} -s {{ device }}{% endfor %} -d {{ hostvars[inventory_hostname]['DATAIFACE'] }} -m {{ hostvars[inventory_hostname]['MGTIFACE'] }}
+    args:
+      warn: no
+    when: "'portworx' in group_names and pxctl_configured.stat.exists == False"
+    notify: systemctl-restart-portworx
+
+  handlers:
+
+  - name: systemctl-restart-portworx
+    systemd: 
+      state: restarted
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      name: portworx
