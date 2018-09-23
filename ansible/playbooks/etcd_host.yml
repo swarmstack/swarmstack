@@ -10,7 +10,7 @@
     yum: name=etcd state=latest
 
   - name: enable etcd service to create systemd file
-    systemd: name=etcd enabled=yes 
+    systemd: name=etcd enabled=yes masked=no
 
   - name: remove default ExecStart from systemd
     lineinfile:
