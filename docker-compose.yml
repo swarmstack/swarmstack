@@ -125,7 +125,7 @@ services:
       - "9093:9093"
       - "9094:9094"
       - "9095:9093"
-      # "19999:19999"
+      - "19998:19999"
     networks:
       - net
     environment:
@@ -139,7 +139,7 @@ services:
       #- no_proxy=10.0.0.0/8,.example.com
     configs:
       - source: caddy_config
-        target: /etc/caddy/Caddyfile
+        target: /etc/Caddyfile
       - source: caddy_www
         target: /www/index.html
     volumes:

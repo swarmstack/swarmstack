@@ -16,6 +16,14 @@ alerting:
     - targets: [ 'alertmanager:9093', 'alertmanagerB:9093' ]
 
 scrape_configs:
+
+  - job_name: 'node-exporter'
+    dns_sd_configs:
+    - names:
+      - 'tasks.node-exporter'
+      type: 'A'
+      port: 9100
+
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
@@ -26,13 +34,6 @@ scrape_configs:
       - 'tasks.cadvisor'
       type: 'A'
       port: 8080
-
-  - job_name: 'node-exporter'
-    dns_sd_configs:
-    - names:
-      - 'tasks.node-exporter'
-      type: 'A'
-      port: 9100
 
   - job_name: 'pushgateway'
     honor_labels: true
