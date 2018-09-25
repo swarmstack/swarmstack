@@ -1,5 +1,16 @@
 # swarmstack CHANGELOG
 
+* 2018/9/24 - 0.5.0
+
+    Major version bump, new core features
+
+    Removed node-exporter in favor of NetData
+
+    Ansible playbooks allowing easy turn-up of docker/etcd/portworx/swarmstack cluster
+
+    Refactored new Grafana dashboard "Cluster Nodes" based on NetData
+
+
 * 2018/9/7 - 0.2.0
 
     Added swarmstack CHANGELOG

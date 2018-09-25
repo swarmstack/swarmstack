@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  order: sorted
   remote_user: root
   roles:
   - ../roles/common

@@ -1,6 +1,6 @@
 # ansible playbooks for swarmstack
 
-### Please note that the ansible playbooks in this folder are WORK-IN-PROGRESS. Currently the firewall playbook is available and supports only EL7 (RHEL/CentOS) targets at the present time. It will remove firewalld if present and install iptables to manage kernel iptables chains.
+### Please note that the ansible playbooks in this folder are WORK-IN-PROGRESS. Currently the playbooks only supports EL7 (RHEL/CentOS) target hosts. It will remove firewalld if present and install iptables to manage kernel iptables chains.
 
 From any host on your network that can route to your Docker hosts, including any of the hosts in your Docker swarm:
 
@@ -10,7 +10,8 @@ From any host on your network that can route to your Docker hosts, including any
 # yum install git
 # cd /usr/local/src
 # git clone https://github.com/swarmstack/swarmstack.git
-
+# rsync -aq swarmstack/ localswarmstack/
+# cd localswarmstack/
 ```
 
 Edit these files in the swarmstack/ansible folder: 
@@ -39,3 +40,5 @@ You can create and manage separate clusters by cloning the existing swarmstack c
 # cp ansible/clusters/swarmstack ansible/clusters/cluster2
 # rsync -aq ansible/roles/swarmstack/ ansible/roles/cluster2
 ```
+
+### The remaining playbooks in the playbooks/ directory work similarly. Please see the main swarmstack README.md for usage instructions.

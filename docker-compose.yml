@@ -48,8 +48,8 @@ configs:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
     file: ./grafana/dashboards.yml
-  grafana_dashboard_docker-swarm-nodes:
-    file: ./grafana/dashboards/docker-swarm-nodes.json
+  grafana_dashboard-cluster-nodes:
+    file: ./grafana/dashboards/cluster-nodes.json
   grafana_dashboard_prometheus-2-stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
   grafana_dashboard_docker-swarm-services:
@@ -196,8 +196,8 @@ services:
     configs:
       - source: grafana_dashboard_etcd-dash
         target: /etc/grafana/dashboards/etcd-dash.json
-      - source: grafana_dashboard_docker-swarm-nodes
-        target: /etc/grafana/dashboards/docker-swarm-nodes.json
+      - source: grafana_dashboard-cluster-nodes
+        target: /etc/grafana/dashboards/cluster-nodes.json
       - source: grafana_dashboard_docker-swarm-services
         target: /etc/grafana/dashboards/docker-swarm-services.json
       - source: grafana_dashboard_portworx-cluster-dash

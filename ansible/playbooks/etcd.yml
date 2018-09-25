@@ -1,16 +1,17 @@
 ---
 - hosts: all
   remote_user: root
+
   roles:
   - ../roles/common
 
   tasks:
 
   - name: install or update etcd
-    yum: name=etcd state=latest
+    yum: name=etcd state=latest masked=no
 
   - name: enable etcd service to create systemd file
-    systemd: name=etcd enabled=yes masked=no
+    systemd: name=etcd enabled=yes 
 
   - name: remove default ExecStart from systemd
     lineinfile:

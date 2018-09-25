@@ -1,6 +1,6 @@
 ---
 
-# Use this playbook to change the prompts and colors on your hosts
+# Use this playbook to change the prompts and colors on your hosts, or test ansible plays
 
 - hosts: all
   remote_user: root

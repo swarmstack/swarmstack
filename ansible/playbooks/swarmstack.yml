@@ -1,0 +1,179 @@
+---
+- hosts: all
+  order: sorted
+  remote_user: root 
+
+  roles:
+  - ../roles/common
+
+  tasks:
+
+### INSTALL NETDATA ON ALL HOSTS
+  - name: Install ansible and git
+    yum: name=ansible,git state=latest
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: Check if NetData already installed
+    shell: which netdata ; if [ $? -eq 1 ]; then echo 'notinstalled'; else echo 'installed'; fi
+    changed_when: false
+    register: netdatainstalled
+
+  - name: Install NetData
+    shell: bash <(curl -Ss https://my-netdata.io/kickstart.sh) all --dont-wait
+    args:
+      warn: no
+      executable: /bin/bash
+    ignore_errors: true
+    changed_when: False
+    when: "netdatainstalled.stdout.find('notinstalled') != -1"
+
+  - name: Ensure NetData is enabled and started
+    systemd: name=netdata state=started enabled=yes masked=no
+
+
+### DOWNLOAD SWARMSTACK
+  - name: Download latest swarmstack for comparison
+    git:
+      repo: https://github.com/swarmstack/swarmstack.git
+      dest: /usr/local/src/swarmstack
+    ignore_errors: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: Check if local copy of swarmstack exists
+    stat: path=/usr/local/src/localswarmstack
+    changed_when: false
+    register: localswarmstack
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
+  - name: Create a local copy of swarmstack for editing
+    shell: rsync -aq --exclude=.git /usr/local/src/swarmstack/ /usr/local/src/localswarmstack/
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+
+
+# doctor any proxy settings in swarmstack
+
+
+### ADD PROMETHEUS SCRAPE CONFIGS FOR HOSTS
+  - name: Add NetData to local Prometheus scrapes
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
+      marker_end: "SWARMSTACK_BEGIN NetData {{item}}"
+      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      block: |2
+          - job_name: 'netdata-{{item}}'
+            metrics_path: '/api/v1/allmetrics'
+            params:
+              format: [prometheus_all_hosts]
+            honor_labels: true
+            static_configs:
+              - targets: ['{{item}}:19999']
+    with_items: "{{groups['all']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add docker to local Prometheus scrapes
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN docker {{item}}"
+      marker_end: "SWARMSTACK_END docker {{item}}"
+      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      block: |2
+          - job_name: 'dockerd-{{item}}'
+            metrics_path: '/metrics'
+            honor_labels: true
+            static_configs:
+              - targets: ['{{item}}:9323']
+    with_items: "{{groups['swarm']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add etcd to local Prometheus scrapes
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN etcd {{item}}"
+      marker_end: "SWARMSTACK_END etcd {{item}}"
+      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      block: |2
+          - job_name: 'etcd-{{item}}'
+            metrics_path: '/metrics'
+            honor_labels: true
+            static_configs:
+              - targets: ['{{item}}:2379']
+    with_items: "{{groups['etcd']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add Portworx to local Prometheus scrapes
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Portworx {{item}}"
+      marker_end: "SWARMSTACK_END Portworx {{item}}"
+      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      block: |2
+          - job_name: 'portworx-{{item}}'
+            metrics_path: '/metrics'
+            honor_labels: true
+            static_configs:
+              - targets: ['{{item}}:9001']
+    with_items: "{{groups['portworx']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+
+### MODIFY CADDY CONFIGS
+  - name: Add all hosts to javascript 
+    lineinfile:
+      insertbefore: 'SWARMSTACK JS MARKER'
+      path: /usr/local/src/localswarmstack/caddy/index.html
+      line: "document.getElementById('{{hostvars[item]['inventory_hostname_short']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname_short']}}/';"
+    with_items: "{{groups['all']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add all hosts to HTML
+    blockinfile:
+      insertbefore: 'SWARMSTACK HTML MARKER'
+      marker: "<!-- {{item}} ANSIBLE MANAGED BLOCK -->"
+      path: /usr/local/src/localswarmstack/caddy/index.html
+      block: |
+        <div class="boxes">
+          <div class="linkbox"><a target="_blank" href="" id="{{hostvars[item]['inventory_hostname_short']}}"><h3>NetData - {{hostvars[item]['inventory_hostname_short']}}</h3></a></div>
+          <div class="box">Everything happening on your systems and applications</div>
+        </div>
+    with_items: "{{groups['all']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add NetData proxy for all hosts to Caddyfile
+    blockinfile:
+      insertbefore: 'SWARMSTACK MARKER'
+      marker: "# {{item}} ANSIBLE MANAGED BLOCK"
+      path: /usr/local/src/localswarmstack/caddy/Caddyfile
+      block: |2
+          proxy /{{hostvars[item]['inventory_hostname_short']}} http://{{item}}:19999/ {
+            without /{{hostvars[item]['inventory_hostname_short']}}
+            transparent
+          }
+    with_items: "{{groups['all']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Add NetData proxy for all hosts to Caddyfile.ldap example
+    blockinfile:
+      insertbefore: 'SWARMSTACK MARKER'
+      marker: "# {{item}} ANSIBLE MANAGED BLOCK"
+      path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
+      block: |2
+          proxy /{{hostvars[item]['inventory_hostname_short']}} http://{{item}}:19999/ {
+            without /{{hostvars[item]['inventory_hostname_short']}}
+            transparent
+          }
+    with_items: "{{groups['all']}}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+
+### BRING UP SWARMSTACK IF NOT ALREADY RUNNING
+  - name: Check if swarmstack is running
+    shell: docker service ls | grep swarmstack_caddy; if [ $? -eq 1 ]; then echo 'notrunning'; else echo 'running'; fi
+    ignore_errors: true
+    changed_when: false
+    register: swarmstackrunning
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+   
+  - name: Bring up swarmstack
+    shell: "ADMIN_PASSWORD={{ADMINPASSWORD}} docker stack deploy -c /usr/local/src/localswarmstack/docker-compose.yml swarmstack"
+    ignore_errors: true
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
+
+...
