@@ -118,7 +118,7 @@ Telemetry: | | |
 
  With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use node.label.storagegroup constraints within your Docker services to pin them to one particular grouping of 3 hosts within the larger cluster each running their own 3-node Portworx storage cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage, including swarmstack.
  
- When using [Portworx PX-Enterprise](https://portworx.com/), or bringing another storage solution, these limitations may no longer apply a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
+ When using [Portworx PX-Enterprise](https://portworx.com/), or bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
 
  ---
  
