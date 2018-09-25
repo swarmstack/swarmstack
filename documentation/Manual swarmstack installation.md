@@ -15,17 +15,17 @@ _Hint_: While you can follow the instructions at [Portworx PX-Developer](https:/
 
 ## INSTALL OR UPDATE SWARMSTACK ON AN EXISTING ETCD / PORTWORX / DOCKER SWARM CLUSTER:
 
-_If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
+- _If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
 
-_For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
+- _For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
 
-_Instructions for updating swarmstack are available at [documentation/Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
+- _Instructions for updating swarmstack are available at [documentation/Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
 
-_To deploy and monitor your own applications on the cluster, see [documentation/Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)
+- _To deploy and monitor your own applications on the cluster, see [documentation/Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)_
 
--To manually push ephemeral or batch metrics into Prometheus, see [documentation/Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)
+- _To manually push ephemeral or batch metrics into Prometheus, see [documentation/Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)_
 
-_Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)
+- _Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
 ---
 
@@ -35,6 +35,8 @@ Download the git archive below onto a Docker manager node and deploy swarmstack 
     # git clone https://github.com/swarmstack/swarmstack.git
     # rsync -aq --exclude=.git swarmstack/ localswarmstack/
     $ cd localswarmstack
+
+You'll need to edit prometheus/conf/prometheus.yml to add scrape configs for each of your nodes (see commented examples). You'll also want to edit the commented out examples in caddy/index.html and caddy/Caddyfile (or caddy/Caddyfile.ldap if using LDAP) to include your nodes.
 
     # ADMIN_USER=admin ADMIN_PASSWORD=admin \
     PUSH_USER=pushuser PUSH_PASSWORD=pushpass \
@@ -75,3 +77,9 @@ You'll also want to add something to each host to keep the local filesystem clea
     sleep 10
     /bin/docker image prune -a -f > /dev/null 2>&1
     EOF
+
+### NETDATA
+You will need to install NetData on each of your nodes in order for Prometheus to scrape their metrics. NetData provides most of the data to the Grafana Cluster and Docker Swarm Services dashboards, as well as some default Prometheus alert rules. See [https://my-netdata.io/](https://my-netdata.io/) for installation instructions, but it's usually enough to just do this on each node as root:
+```
+# bash <(curl -Ss https://my-netdata.io/kickstart.sh) all --dont-wait
+```

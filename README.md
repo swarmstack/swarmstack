@@ -173,4 +173,4 @@ roles/files/etc/swarmstack_fw/rules/docker.rules | _Used to limit access to Dock
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
-* _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster._
+* _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing NetData on each node in order for Prometheus to collect metrics from it._

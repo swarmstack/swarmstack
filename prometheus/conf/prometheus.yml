@@ -56,3 +56,34 @@ scrape_configs:
       - 'tasks.caddy'
       type: 'A'
       port: 9180
+
+# EXAMPLE MANUAL SCRAPE CONFIG, COPY EACH STANZA FOR EACH OF YOUR NODES
+#
+# The ansible swarmstack.yml playbook adds these automatically
+#
+#  - job_name: 'netdata-swarm01.example.com'
+#    metrics_path: '/api/v1/allmetrics'
+#    params:
+#      format: [prometheus_all_hosts]
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['swarm01.example.com:19999']
+
+#  - job_name: 'dockerd-swarm01.example.com'
+#    metrics_path: '/metrics'
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['swarm01.example.com:9323']
+
+#  - job_name: 'etcd-swarm01.example.com'
+#    metrics_path: '/metrics'
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['swarm01.example.com:2379']
+
+#  - job_name: 'portworx-swarm01.example.com'
+#    metrics_path: '/metrics'
+#    honor_labels: true
+#    static_configs:
+#      - targets: ['swarm01.example.com:9001']
+
