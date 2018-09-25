@@ -124,33 +124,36 @@ Telemetry: | | |
  
 ## SWARMSTACK INSTALLATION: 
 
-Before proceeding, make sure your hosts have their time in sync via NTP
+- _Before proceeding, make sure your hosts have their time in sync via NTP_
 
-_Hint_: Manual swarmstack installation instructions are available at [documentation/Manual swarmstack installation.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Manual%20swarmstack%20installation.md)
+- _Manual swarmstack installation instructions are available at [documentation/Manual swarmstack installation.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Manual%20swarmstack%20installation.md)_
 
-_If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
+- _If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
 
-_For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
+- _For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
 
-_Instructions for updating swarmstack are available at [documentation/Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
+- _Instructions for updating swarmstack are available at [documentation/Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
 
-_To deploy and monitor your own applications on the cluster, see [documentation/Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)
+- _To deploy and monitor your own applications on the cluster, see [documentation/Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)_
 
--To manually push ephemeral or batch metrics into Prometheus, see [documentation/Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)
+- _To manually push ephemeral or batch metrics into Prometheus, see [documentation/Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)_
 
-_Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)
+- _Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
-
-    # cd /usr/local/src/
-    # git clone https://github.com/swarmstack/swarmstack.git
-    # rsync -aq --exclude=.git swarmstack/ localswarmstack/
-    # cd localswarmstack
-
+```
+# yum install git ansible
+# cd /usr/local/src/
+# git clone https://github.com/swarmstack/swarmstack.git
+# rsync -aq --exclude=.git swarmstack/ localswarmstack/
+# cd localswarmstack/ansible
+```
 Edit these files: | |
 ---- | - |
-clusters/swarmstack | _Configure all of your cluster nodes and storage devices)_ |
-roles/files/etc/swarmstack_fw/rules/firewall.rules | _(used to permit traffic to the hosts themselves)_ |
-roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Docker service ports)_ |
+clusters/swarmstack | _Configure all of your cluster nodes and storage devices_ |
+roles/files/etc/swarmstack_fw/rules/firewall.rules | _Used to permit traffic to the hosts themselves_ |
+roles/files/etc/swarmstack_fw/rules/docker.rules | _Used to limit access to Docker service ports_ |
+
+### All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/firewall.yml -k
 ```
@@ -158,15 +161,15 @@ roles/files/etc/swarmstack_fw/rules/docker.rules | _(used to limit access to Doc
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/docker.yml -k
 ```
-* _optional, use this if you haven't already brought up a Docker swarm, can be re-run as nodes are added later._
+* _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host as kernels are updated._
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/etcd.yml -k
 ```
-* _optional: used by Portworx to store storage cluster metadata in a highly-available manner. Only 3 nodes need to be defined to run etcd._
+* _optional: used by Portworx to store storage cluster metadata in a highly-available manner. Only 3 nodes need to be defined to run etcd, and you'll probably just need to run this playbook once to establish the initial etcd cluster (which can be used by multiple Portworx clusters)._
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/portworx.yml -k
 ```
-* _optional, but if you are instead bringing your own persistent storage be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._ 
+* _optional, installs Portworx in groups of 3 nodes each. If you are instead bringing your own persistent storage, be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._ 
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
