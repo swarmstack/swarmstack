@@ -1,5 +1,30 @@
-# swarmstack
-## A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, and other high-availability features that your applications can take advantage of.
+swarmstack
+
+A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, and other high-availability features that your applications can take advantage of.
+
+<!-- TOC -->
+
+- [WHY?](#why)
+- [FEATURES](#features)
+- [REQUIREMENTS:](#requirements)
+- [SWARMSTACK INSTALLATION](#swarmstack-installation)
+- [NETWORK URLs](#network-urls)
+- [SCREENSHOTS](#screenshots)
+    - [Caddy Link Dashboard](#caddy-link-dashboard)
+    - [Grafana Dashboards List](#grafana-dashboards-list)
+    - [Grafana - Docker Swarm Nodes](#grafana---docker-swarm-nodes)
+    - [Grafana - Docker Swarm Services](#grafana---docker-swarm-services)
+    - [Grafana - etcd](#grafana---etcd)
+    - [Grafana - Portworx Cluster Status](#grafana---portworx-cluster-status)
+    - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
+    - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
+    - [Alertmanager](#alertmanager)
+    - [Prometheus - Graphs](#prometheus---graphs)
+    - [Prometheus - Alerts](#prometheus---alerts)
+    - [Prometheus - Targets](#prometheus---targets)
+    - [Swarmpit](#swarmpit)
+
+<!-- /TOC -->
 
 Easily deploy and update Docker swarm nodes as you scale up from at least (3) baremetal servers, ec2 instances, or virtual machines, which will host and monitor your highly-available containerized applications.
 
@@ -35,72 +60,7 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ---
 
-## NETWORK URLs:
-
-Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below, or see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)
-
-DevOps Tools:     | Port(s):                  | Current Distribution / Installation
----------------- | -------------------------- | ---------------
-[Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093<br>_caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
-AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
-[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:5.2.4
-[Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090<br>_caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
-[Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091<br>_caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
-[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092<br>_caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
-[Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094<br>_caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
-
----
-
-Security: | | |
---------- | - | -
-Firewall management | iptables | ansible/playbooks/firewall.yml
-[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | https://swarmhost:(80->443, 3000, 9090-9095, 19998) _swarmstack_net:http://caddy:9180/metrics_ | swarmstack/caddy:no-stats
-
-Telemetry: | | |
---------- | - | -
-[cAdvisor](https://github.com/google/cadvisor) | _swarmstack_net:http://cadvisor:8080/metrics_ | google/cadvisor:latest
-[CouchDB](https://hub.docker.com/_/couchdb/) | _swarmstack_net:couchdb:5984_ | couchdb:latest
-[Docker](https://docs.docker.com/engine/swarm/) | http://swarmhost:9323/metrics | ansible/playbooks/docker_host.yml
-[etcd3](https://github.com/etcd-io/etcd) | http://swarmhost:2379/metrics | ansible/playbooks/etcd_host.yml
-[Grafana](https://github.com/grafana/grafana) | _swarmstack_net:http://grafana:3000/metrics_ | grafana/grafana:latest
-[NetData](https://my-netdata.io/) | (firewalled)http://swarmhost:19999 (external)https://swarmhost:19998 | ansible/playbooks/swarmstack.yml
-[Portworx PX-Dev or PX-Enterprise](https://portworx.com) | http://swarmhost:9001/metrics | ansible/playbooks/portworx.yml
-[Prometheus](https://github.com/prometheus/prometheus) | _swarmstack_net:http://prometheus:9090/metrics_ | prom/prometheus
-[Pushgateway](https://github.com/prometheus/pushgateway) | https://swarmhost:9091/metrics<br>_swarmstack_net:http://pushgateway:9091/metrics_ | prom/pushgateway
-
----
-## SCREENSHOTS:
-
-### Caddy Link Dashboard:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen1.png)
-### Grafana Dashboards List:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen2.png)
-### Grafana - Docker Swarm Nodes:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_nodes.png)
-### Grafana - Docker Swarm Services:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_services.png)
-### Grafana - etcd:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/etcd.png)
-### Grafana - Portworx Cluster Status:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_cluster_status.png)
-### Grafana - Portworx Volume Status:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_volumes.png)
-### Grafana - Prometheus Stats:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
-### Alertmanager:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
-### Prometheus - Graphs:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen10.png)
-### Prometheus - Alerts:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_alerts.png)
-### Prometheus - Targets:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_targets.png)
-### Swarmpit:
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/swarmpit.png)
-
---- 
-
-## FEATURES:
+## FEATURES
 
 - A collection of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 sysctls for optimal network performance
@@ -122,7 +82,7 @@ Telemetry: | | |
 
  ---
  
-## SWARMSTACK INSTALLATION: 
+## SWARMSTACK INSTALLATION
 
 - _Before proceeding, make sure your hosts have their time in sync via NTP_
 
@@ -153,7 +113,7 @@ clusters/swarmstack | _Configure all of your cluster nodes and storage devices_ 
 roles/files/etc/swarmstack_fw/rules/firewall.rules | _Used to permit traffic to the hosts themselves_ |
 roles/files/etc/swarmstack_fw/rules/docker.rules | _Used to limit access to Docker service ports_ |
 
-### All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
+- All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/firewall.yml -k
 ```
@@ -174,3 +134,69 @@ roles/files/etc/swarmstack_fw/rules/docker.rules | _Used to limit access to Dock
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
 * _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing NetData on each node in order for Prometheus to collect metrics from it._
+
+---
+
+## NETWORK URLs
+
+Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below, or see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)
+
+DevOps Tools:     | Port orservice:             | Current Distribution / Installation
+---------------- | -------------------------- | ---------------
+[Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093<br>_caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
+AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
+[Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:5.2.4
+[Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090<br>_caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
+[Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091<br>_caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
+[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092<br>_caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
+[Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094<br>_caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
+
+---
+
+Security: | | |
+--------- | - | -
+Firewall management | iptables | ansible/playbooks/firewall.yml
+[Caddy](https://hub.docker.com/r/swarmstack/caddy/) | https://swarmhost:(80->443, 3000, 9090-9095, 19998) _swarmstack_net:http://caddy:9180/metrics_ | swarmstack/caddy:no-stats
+
+Telemetry: | | |
+--------- | - | -
+[cAdvisor](https://github.com/google/cadvisor) | _swarmstack_net:http://cadvisor:8080/metrics_ | google/cadvisor:latest
+[CouchDB](https://hub.docker.com/_/couchdb/) | _swarmstack_net:couchdb:5984_ | couchdb:latest
+[Docker](https://docs.docker.com/engine/swarm/) | http://swarmhost:9323/metrics | ansible/playbooks/docker_host.yml
+[etcd3](https://github.com/etcd-io/etcd) | http://swarmhost:2379/metrics | ansible/playbooks/etcd_host.yml
+[Grafana](https://github.com/grafana/grafana) | _swarmstack_net:http://grafana:3000/metrics_ | grafana/grafana:latest
+[NetData](https://my-netdata.io/) | (firewalled)http://swarmhost:19999 (external)https://swarmhost:19998 | ansible/playbooks/swarmstack.yml
+[Portworx PX-Dev or PX-Enterprise](https://portworx.com) | http://swarmhost:9001/metrics | ansible/playbooks/portworx.yml
+[Prometheus](https://github.com/prometheus/prometheus) | _swarmstack_net:http://prometheus:9090/metrics_ | prom/prometheus
+[Pushgateway](https://github.com/prometheus/pushgateway) | https://swarmhost:9091/metrics<br>_swarmstack_net:http://pushgateway:9091/metrics_ | prom/pushgateway
+
+---
+## SCREENSHOTS
+
+### Caddy Link Dashboard
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen1.png)
+### Grafana Dashboards List
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen2.png)
+### Grafana - Docker Swarm Nodes
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_nodes.png)
+### Grafana - Docker Swarm Services
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/docker_swarm_services.png)
+### Grafana - etcd
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/etcd.png)
+### Grafana - Portworx Cluster Status
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_cluster_status.png)
+### Grafana - Portworx Volume Status
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portworx_volumes.png)
+### Grafana - Prometheus Stats
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
+### Alertmanager
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
+### Prometheus - Graphs
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen10.png)
+### Prometheus - Alerts
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_alerts.png)
+### Prometheus - Targets
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_targets.png)
+### Swarmpit
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/swarmpit.png)
+
