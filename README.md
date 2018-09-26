@@ -1,6 +1,6 @@
-swarmstack
+__swarmstack__
 
-A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, and other high-availability features that your applications can take advantage of.
+__A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, and other high-availability features that your applications can take advantage of.__
 
 <!-- TOC -->
 
