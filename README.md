@@ -101,6 +101,8 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 - _Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
 ```
+# You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
+#
 # yum install git ansible
 # cd /usr/local/src/
 # git clone https://github.com/swarmstack/swarmstack.git
