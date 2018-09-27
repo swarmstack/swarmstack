@@ -1,5 +1,5 @@
 groups:
-- name: containers-nodes
+- name: container-nodes
 
   rules:
   - alert: node_high_cpu_usage_70
