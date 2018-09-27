@@ -40,10 +40,12 @@ volumes:
         size: 10
 
 configs:
+
   caddy_config:
     file: ./caddy/Caddyfile
   caddy_www:
     file: ./caddy/index.html
+
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
@@ -60,14 +62,15 @@ configs:
     file: ./grafana/dashboards/portworx-volumes-dash.json
   grafana_dashboard_etcd-dash:
     file: ./grafana/dashboards/etcd-dash.json
-  prometheus-docker_swarm_nodes-rules:
-    file: ./prometheus/rules/docker_swarm_nodes-rules.yml
-  prometheus-docker_swarm_services-rules:
-    file: ./prometheus/rules/docker_swarm_services-rules.yml
-  prometheus-portworx-rules:
-    file: ./prometheus/rules/portworx-rules.yml
+
   prometheus-conf:
     file: ./prometheus/conf/prometheus.yml
+  prometheus-container_nodes:
+    file: ./prometheus/rules/container_nodes.yml
+  prometheus-docker_containers:
+    file: ./prometheus/rules/docker_containers.yml
+  prometheus-portworx:
+    file: ./prometheus/rules/portworx.yml
 
 services:
 
@@ -234,12 +237,12 @@ services:
     configs:
       - source: prometheus-conf
         target: /etc/prometheus/prometheus.yml
-      - source: prometheus-docker_swarm_nodes-rules
-        target: /etc/prometheus/docker_swarm_nodes-rules.yml
-      - source: prometheus-docker_swarm_services-rules
-        target: /etc/prometheus/docker_swarm_services-rules.yml
-      - source: prometheus-portworx-rules
-        target: /etc/prometheus/portworx-rules.yml
+      - source: prometheus-container_nodes
+        target: /etc/prometheus/container_nodes.yml
+      - source: prometheus-docker_containers
+        target: /etc/prometheus/docker_containers.yml
+      - source: prometheus-portworx
+        target: /etc/prometheus/portworx.yml
     deploy:
       mode: replicated
       replicas: 1

@@ -1,5 +1,6 @@
 groups:
 - name: portworx.rules
+
   rules:
   - alert: PortworxVolumeUsageCritical
     expr: 100 * (px_volume_usage_bytes / px_volume_capacity_bytes) > 80
@@ -11,6 +12,7 @@ groups:
       description: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is over
         80% used for more than 10 minutes.
       summary: Portworx volume capacity is at {{$value}}% used.
+
   - alert: PortworxVolumeUsage
     expr: 100 * (px_volume_usage_bytes / px_volume_capacity_bytes) > 70
     for: 5m
@@ -22,6 +24,7 @@ groups:
         70% used for more than 10 minutes.
       summary: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is at {{$value}}%
         used.
+
   - alert: PortworxVolumeWillFill
     expr: (px_volume_usage_bytes / px_volume_capacity_bytes) > 0.7 and predict_linear(px_cluster_disk_available_bytes[1h],
       14 * 86400) < 0
@@ -35,6 +38,7 @@ groups:
         full and has been predicted to fill within 2 weeks for more than 10 minutes.
       summary: Portworx volume {{$labels.volumeid}} on {{$labels.host}} is over 70%
         full and is predicted to fill within 2 weeks.
+
   - alert: PortworxStorageUsageCritical
     expr: 100 * (1 - px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes)
       < 20
@@ -46,6 +50,7 @@ groups:
       description: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over
         80% used for more than 10 minutes.
       summary: Portworx storage capacity is at {{$value}}% used.
+
   - alert: PortworxStorageUsage
     expr: 100 * (1 - (px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes))
       < 30
@@ -58,6 +63,7 @@ groups:
         70% used for more than 10 minutes.
       summary: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is at {{$value}}%
         used.
+
   - alert: PortworxStorageWillFill
     expr: (100 * (1 - (px_cluster_disk_utilized_bytes / px_cluster_disk_total_bytes)))
       < 30 and predict_linear(px_cluster_disk_available_bytes[1h], 14 * 86400) < 0
@@ -71,6 +77,7 @@ groups:
         70% full and has been predicted to fill within 2 weeks for more than 10 minutes.
       summary: Portworx storage {{$labels.volumeid}} on {{$labels.host}} is over 70%
         full and is predicted to fill within 2 weeks.
+
   - alert: PortworxStorageNodeDown
     expr: max(px_cluster_status_nodes_storage_down) > 0
     for: 5m
@@ -80,6 +87,7 @@ groups:
     annotations:
       description: Portworx Storage Node has been offline for more than 5 minutes.
       summary: Portworx Storage Node is Offline.
+
   - alert: PortworxQuorumUnhealthy
     expr: max(px_cluster_status_cluster_quorum) > 1
     for: 5m
@@ -89,6 +97,7 @@ groups:
     annotations:
       description: Portworx cluster Quorum Unhealthy for more than 5 minutes.
       summary: Portworx Quorum Unhealthy.
+
   - alert: PortworxMemberDown
     expr: (max(px_cluster_status_cluster_size) - count(px_cluster_status_cluster_size))
       > 0
