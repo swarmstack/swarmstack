@@ -86,19 +86,19 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _Before proceeding, make sure your hosts have their time in sync via NTP_
 
-- _Manual swarmstack installation instructions are available at [documentation/Manual swarmstack installation.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Manual%20swarmstack%20installation.md)_
+- _Manual swarmstack installation instructions are available at [Manual swarmstack installation.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Manual%20swarmstack%20installation.md)_
 
-- _If installing behind a web proxy, see [documentation/Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
+- _If installing behind a web proxy, see [Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
 
-- _For documentation on using LDAP for authentication with swarmstack, see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
+- _For documentation on using LDAP for authentication with swarmstack, see [Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
 
-- _Instructions for updating swarmstack are available at [documentation/Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
+- _Instructions for updating swarmstack are available at [Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
 
-- _To deploy and monitor your own applications on the cluster, see [documentation/Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)_
+- _To deploy and monitor your own applications on the cluster, see [Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)_
 
-- _To manually push ephemeral or batch metrics into Prometheus, see [documentation/Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)_
+- _To manually push ephemeral or batch metrics into Prometheus, see [Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)_
 
-- _Some basic commands for working with swarmstack and Portworx storage are noted in [documentation/Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
+- _Some basic commands for working with swarmstack and Portworx storage are noted in [Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
 ```
 # You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
