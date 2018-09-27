@@ -111,9 +111,9 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 ```
 Edit these files: | |
 ---- | - |
-clusters/swarmstack | _Configure all of your cluster nodes and storage devices_ |
-roles/files/etc/swarmstack_fw/rules/firewall.rules | _Used to permit traffic to the hosts themselves_ |
-roles/files/etc/swarmstack_fw/rules/docker.rules | _Used to limit access to Docker service ports_ |
+[clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack) | _Configure all of your cluster nodes and storage devices_ |
+[roles/files/etc/swarmstack_fw/rules/firewall.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/files/etc/swarmstack_fw/rules/firewall.rules) | _Used to permit traffic to the hosts themselves_ |
+[roles/files/etc/swarmstack_fw/rules/docker.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/files/etc/swarmstack_fw/rules/docker.rules) | _Used to limit access to Docker service ports_ |
 
 - All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
 ```
