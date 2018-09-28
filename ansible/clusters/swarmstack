@@ -7,7 +7,7 @@ REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 SWARMJOIN=swarm01.example.com
 ADMINPASSWORD=changeme!42
 
-[dna-prd-swarm:children]
+[swarmstack:children]
 etcd
 portworx
 swarm
@@ -31,9 +31,9 @@ swarm01.example.com   PWX_STORAGE_GROUP='RED' DEVICES='["/dev/sdb"]' DATAIFACE=e
 swarm02.example.com   PWX_STORAGE_GROUP='RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
 swarm03.example.com   PWX_STORAGE_GROUP='RED' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
 
-# swarm04.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-# swarm05.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-# swarm06.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+# swarm04.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/sdb1","/dev/sdc"]' DATAIFACE=eth0 MGTIFACE=eth0
+# swarm05.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/xvda1"]' DATAIFACE=eth0 MGTIFACE=eth0
+# swarm06.example.com PWX_STORAGE_GROUP='portworx-BLUE' DEVICES='["/dev/nvme0","/dev/nvme1n1p1"]' DATAIFACE=eth0 MGTIFACE=eth0
 
 
 # Docker recommends no more than 7 manager nodes in a cluster.
