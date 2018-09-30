@@ -90,8 +90,6 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _When installing behind a required web proxy, see [Working with swarmstack behind a web proxy.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md)_
 
-- _For documentation on using LDAP for authentication with swarmstack, see [Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)_
-
 - _Instructions for updating swarmstack are available at [Updating swarmstack.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Updating%20swarmstack.md)_
 
 - _To deploy and monitor your own applications on the cluster, see [Adding your own applications to monitoring.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Adding%20your%20own%20applications%20to%20monitoring.md)_
@@ -141,7 +139,7 @@ Edit these files: | |
 
 ## NETWORK URLs
 
-Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below, or see [documentation/Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md)
+Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below
 
 DevOps Tools:     | Port orservice:             | Current Distribution / Installation
 ---------------- | -------------------------- | ---------------
