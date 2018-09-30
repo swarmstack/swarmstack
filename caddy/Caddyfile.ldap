@@ -115,7 +115,7 @@
   }
 }
 
-#:19999 {
+:19999 {
   tls self_signed
   errors stderr
 
