@@ -16,7 +16,7 @@ LDAP_ENABLED=false
 #LDAP_INSECURE=true
 #LDAP_BIND_DN=ldap_bind_user
 #LDAP_BIND_PASSWORD=ldap_bind_pw
-#LDAP_SEARCH_FILTER=(&(memberOf=CN=mygroup,OU=groups,O=example.com)(objectClass=user)(uid=%s))
+#LDAP_SEARCH_FILTER=(&(memberOf=CN=mygroup,OU=groups,O=example.com)(objectClass=user)(sAMAccountName=%s))
 #LDAP_SEARCH_BASE_DNS=o=example.com
 #LDAP_ATTRIBUTE_USERNAME=sAMAccountName
 #LDAP_GROUP_DN=CN=mygroup,OU=groups,O=example.com
