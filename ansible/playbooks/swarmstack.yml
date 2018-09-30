@@ -1,17 +1,24 @@
 ---
 - hosts: all
   order: sorted
-  remote_user: root 
+  remote_user: ansible
+  become: true
+  become_user: root
+  become_method: sudo
 
+  vars:
+    - ansible_ssh_private_key_file: roles/common/files/keys/ansible/ansible.pri
+    - HTTPS_PROXY: item
+      with_items: "{{HTTPSPROXY}}"
   roles:
   - ../roles/common
 
   tasks:
 
 ### INSTALL NETDATA ON ALL HOSTS
-  - name: Install ansible and git
+  - name: Install ansible and git on SWARMJOIN host
     yum: name=ansible,git state=latest
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+    when: "inventory_hostname == SWARMJOIN"
 
   - name: Check if NetData already installed
     shell: which netdata ; if [ $? -eq 1 ]; then echo 'notinstalled'; else echo 'installed'; fi
@@ -37,21 +44,96 @@
       repo: https://github.com/swarmstack/swarmstack.git
       dest: /usr/local/src/swarmstack
     ignore_errors: true
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+    when: "inventory_hostname == SWARMJOIN"
 
   - name: Check if local copy of swarmstack exists
     stat: path=/usr/local/src/localswarmstack
     changed_when: false
     register: localswarmstack
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+    when: "inventory_hostname == SWARMJOIN"
 
   - name: Create a local copy of swarmstack for editing
     shell: rsync -aq --exclude=.git /usr/local/src/swarmstack/ /usr/local/src/localswarmstack/
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
+### LDAP SETTINGS
+  - name: Add LDAP settings to new caddy/Caddyfile.ldap
+    replace:
+      path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
+      regexp: '^    ldap url=.*$'
+      replace: "    ldap url={{ (LDAP_USE_SSL == 'true') | ternary('ldaps','ldap') }}://{{LDAP_HOST}}:{{LDAP_PORT}},insecure={{LDAP_INSECURE}},timeout=5s,username={{LDAP_BIND_DN}},password={{LDAP_BIND_PASSWORD}},base=\"{{LDAP_SEARCH_BASE_DNS}}\",filter=\"{{LDAP_SEARCH_FILTER}}\""
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
 
+  - name: Add LDAP settings to grafana/ldap.toml
+    lineinfile:
+      path: /usr/local/src/localswarmstack/grafana/ldap.toml
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+      - { regexp: '^host =', line: "host = \"{{LDAP_HOST}}\"" }
+      - { regexp: '^port =', line: "port = {{LDAP_PORT}}" }
+      - { regexp: '^use_ssl =', line: "use_ssl = {{LDAP_USE_SSL}}" }
+      - { regexp: '^start_tls =', line: "start_tls = {{LDAP_START_TLS}}" }
+      - { regexp: '^bind_dn =', line: "bind_dn = \"{{LDAP_BIND_DN}}\"" }
+      - { regexp: '^bind_password =', line: "bind_password = \"\"\"{{LDAP_BIND_PASSWORD}}\"\"\"" }
+      - { regexp: '^search_filter =', line: "search_filter= \"{{LDAP_SEARCH_FILTER}}\"" }
+      - { regexp: '^search_base_dns =', line: "search_base_dns= [\"{{LDAP_SEARCH_BASE_DNS}}\"]" }
+      - { regexp: '^username =', line: "username = \"{{LDAP_ATTRIBUTE_USERNAME}}\"" }
+      - { regexp: '^group_dn =', line: "group_dn = \"{{LDAP_GROUP_DN}}\"" }
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
 
-# doctor any proxy settings in swarmstack
+  - name: Update docker-compose.yml with caddy settings
+    lineinfile:
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      regexp: "^    file: ./caddy/Caddyfile$"
+      line: "    file: ./caddy/Caddyfile.ldap"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
+
+  - name: Update docker-compose.yml with grafana LDAP settings 1 of 4
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 1 of 4"
+      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 1 of 4"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertbefore: '  grafana_provisioning_datasources:'
+      block: |2
+          grafana_configuration:
+            file: ./grafana/grafana.ini
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
+
+  - name: Update docker-compose.yml with grafana LDAP settings 2 of 4
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 2 of 4"
+      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 2 of 4"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertbefore: '  grafana_provisioning_datasources:'
+      block: |2
+          grafana_ldap:
+            file: ./grafana/ldap.toml
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
+
+  - name: Update docker-compose.yml with grafana LDAP settings 3 of 4
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
+      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertbefore: '      - source: grafana_dashboard_etcd-dash'
+      block: |2
+              - source: grafana_configuration
+                target: /etc/grafana/grafana.ini
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
+
+  - name: Update docker-compose.yml with grafana LDAP settings 4 of 4
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
+      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertbefore: '      - source: grafana_dashboard_etcd-dash'
+      block: |2
+              - source: grafana_ldap
+                target: /etc/grafana/ldap.toml
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
+
+### PROXY SETTINGS
 
 
 ### ADD PROMETHEUS SCRAPE CONFIGS FOR HOSTS
@@ -69,7 +151,7 @@
             static_configs:
               - targets: ['{{item}}:19999']
     with_items: "{{groups['all']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add docker to local Prometheus scrapes
     blockinfile:
@@ -83,7 +165,7 @@
             static_configs:
               - targets: ['{{item}}:9323']
     with_items: "{{groups['swarm']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add etcd to local Prometheus scrapes
     blockinfile:
@@ -97,7 +179,7 @@
             static_configs:
               - targets: ['{{item}}:2379']
     with_items: "{{groups['etcd']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add Portworx to local Prometheus scrapes
     blockinfile:
@@ -111,7 +193,7 @@
             static_configs:
               - targets: ['{{item}}:9001']
     with_items: "{{groups['portworx']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
 
 ### MODIFY CADDY CONFIGS
@@ -121,7 +203,7 @@
       path: /usr/local/src/localswarmstack/caddy/index.html
       line: "document.getElementById('{{hostvars[item]['inventory_hostname_short']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname_short']}}/';"
     with_items: "{{groups['all']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add all hosts to HTML
     blockinfile:
@@ -134,7 +216,7 @@
           <div class="box">Everything happening on your systems and applications</div>
         </div>
     with_items: "{{groups['all']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add NetData proxy for all hosts to Caddyfile
     blockinfile:
@@ -147,7 +229,7 @@
             transparent
           }
     with_items: "{{groups['all']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Add NetData proxy for all hosts to Caddyfile.ldap example
     blockinfile:
@@ -160,7 +242,7 @@
             transparent
           }
     with_items: "{{groups['all']}}"
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
 
 ### BRING UP SWARMSTACK IF NOT ALREADY RUNNING
@@ -169,11 +251,11 @@
     ignore_errors: true
     changed_when: false
     register: swarmstackrunning
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+    when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
     shell: "ADMIN_PASSWORD={{ADMINPASSWORD}} docker stack deploy -c /usr/local/src/localswarmstack/docker-compose.yml swarmstack"
     ignore_errors: true
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
+    when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 
 ...

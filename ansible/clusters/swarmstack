@@ -2,10 +2,25 @@
 
 [swarmstack:vars]
 CLUSTER=swarmstack
-REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
-REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 SWARMJOIN=swarm01.example.com
 ADMINPASSWORD=changeme!42
+REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
+REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
+
+LDAP_ENABLED=false
+#LDAP_GROUP=some_group_dn
+#LDAP_HOST=ldap.example.com
+#LDAP_PORT=636
+#LDAP_USE_SSL=true
+#LDAP_START_TLS=false
+#LDAP_INSECURE=true
+#LDAP_BIND_DN=ldap_bind_user
+#LDAP_BIND_PASSWORD=ldap_bind_pw
+#LDAP_SEARCH_FILTER=(&(memberOf=CN=mygroup,OU=groups,O=example.com)(objectClass=user)(uid=%s))
+#LDAP_SEARCH_BASE_DNS=o=example.com
+#LDAP_ATTRIBUTE_USERNAME=sAMAccountName
+#LDAP_GROUP_DN=CN=mygroup,OU=groups,O=example.com
+# See https://github.com/freman/caddy-reauth and http://docs.grafana.org/installation/ldap/
 
 [swarmstack:children]
 etcd
