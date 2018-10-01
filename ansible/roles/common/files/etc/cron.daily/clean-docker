@@ -1,7 +1,9 @@
 #!/bin/bash
 
 /bin/docker container prune -f > /dev/null 2>&1
-sleep 60
+sleep 10
 /bin/docker volume prune -f > /dev/null 2>&1
-sleep 60
+sleep 10
 /bin/docker image prune -a -f > /dev/null 2>&1
+sleep 10
+rm -f /var/lib/osd/log/px-trace >/dev/null 2>&1
