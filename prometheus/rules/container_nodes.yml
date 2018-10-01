@@ -10,9 +10,7 @@ groups:
       summary: CPU alert for container node '{{ $labels.job }}'
 
   - alert: node_high_memory_usage_70
-    expr: 100 / avg(rate(netdata_system_ram_MB_average[1m] )) by (job)
-      * avg(rate(netdata_system_ram_MB_average{dimension=~"free|cached"}[1m] ) ) by (job)
-      < 30 
+    expr: 100 / sum(netdata_system_ram_MB_average) by (job) * sum(netdata_system_ram_MB_average{dimension=~"free|cached"}) by (job) < 30
     for: 1m
     annotations:
       description: '{{ $labels.job }} memory usage is {{ humanize $value}}%.'
