@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1537915216820,
+  "iteration": 1537974858983,
   "links": [],
   "panels": [
     {
@@ -125,7 +125,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, netdata_system_uptime_seconds_average * on(job) group_left(instance) netdata_info{job=~\"netdata-$node_id\"} )",
+          "expr": "bottomk(1, netdata_system_uptime_seconds_average * on(job) group_left(instance) netdata_info{job=~\"netdata-($node_id)\"} )",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -211,7 +211,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_info{job=~\"netdata-$node_id\"})",
+          "expr": "count(netdata_info{job=~\"netdata-($node_id)\"})",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "",
@@ -296,7 +296,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_cpu_cpu_percentage_average{dimension=\"idle\"} * on(job) group_left(instance) netdata_info{job=~\"netdata-$node_id\"})",
+          "expr": "count(netdata_cpu_cpu_percentage_average{dimension=\"idle\"} * on(job) group_left(instance) netdata_info{job=~\"netdata-($node_id)\"})",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "",
@@ -383,7 +383,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "round(sum(netdata_system_ram_MB_average * on(instance) group_left(job) netdata_info{job=~\"netdata-$node_id\"}),1000)",
+          "expr": "round(sum(netdata_system_ram_MB_average * on(instance) group_left(job) netdata_info{job=~\"netdata-($node_id)\"}),1000)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "",
@@ -468,7 +468,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(sum(netdata_cgroup_cpu_percent_average{job=~\"netdata-$node_id\"}) by (chart, instance) )",
+          "expr": "count(sum(netdata_cgroup_cpu_percent_average{job=~\"netdata-($node_id)\"}) by (chart, instance) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -726,7 +726,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_load_load_average{dimension=\"load1\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_system_load_load_average{dimension=\"load1\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{job}}",
@@ -813,7 +813,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -924,7 +924,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-$node_id\"}) by (job) )",
+          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"}) by (job) )",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 10,
@@ -1010,7 +1010,7 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "bottomk(1, avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "bottomk(1, avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1096,7 +1096,7 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MB_average{job=~\"netdata-$node_id\"} ) by (job) * sum(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-$node_id\"} ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MB_average{job=~\"netdata-($node_id)\"} ) by (job) * sum(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-($node_id)\"} ) by (job) ) )",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -1181,7 +1181,7 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(label_replace(netdata_system_ram_MB_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") )by (job) * sum(label_replace(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(label_replace(netdata_system_ram_MB_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") )by (job) * sum(label_replace(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) ) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1263,7 +1263,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-$node_id\"}) by (job) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-$node_id\"} ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-($node_id)\"}) by (job) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-($node_id)\"} ) by (job) ) )",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 10,
@@ -1347,7 +1347,7 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(label_replace(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) * sum(label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "bottomk(1, 100 / sum(label_replace(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) * sum(label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1407,14 +1407,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"received\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"received\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Received: {{job}}",
           "refId": "A"
         },
         {
-          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Sent: {{job}}",
@@ -1503,7 +1503,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Reads {{job}}",
@@ -1511,7 +1511,7 @@
           "step": 2
         },
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Writes {{job}}",
@@ -1601,7 +1601,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "100 - (avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "100 - (avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{job}}",
@@ -1689,14 +1689,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Reads {{job}}",
           "refId": "A"
         },
         {
-          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Write {{job}}",
@@ -1785,7 +1785,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"used\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"used\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 4,
           "legendFormat": "{{job}}",
@@ -1877,7 +1877,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{job}}",
@@ -1966,7 +1966,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"cached\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
           "format": "time_series",
           "intervalFactor": 4,
           "legendFormat": "{{job}}",
@@ -2055,7 +2055,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_files_open_files_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_files_open_files_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_files_open_files_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_apps_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -2145,7 +2145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -2234,7 +2234,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_apps_pipes_open_pipes_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_pipes_open_pipes_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_pipes_open_pipes_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_apps_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -2341,11 +2341,121 @@
           "thresholds": [],
           "type": "number",
           "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "job",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "__name__",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Node Type",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #C",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short",
+          "valueMaps": [
+            {
+              "text": "Manager",
+              "value": "1"
+            },
+            {
+              "text": "Worker",
+              "value": ""
+            },
+            {
+              "text": "Worker",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "alias": "Docker Version",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "version",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "Kernel",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "kernel",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "OS",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "os",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
         }
       ],
       "targets": [
         {
-          "expr": "sum(label_replace(engine_daemon_engine_info{instance=~\"$node_id:9323\"},\"instance\",\"$1\",\"instance\",\"(.*):9323\")  ) by (instance, kernel, os, version)",
+          "expr": "sum(label_replace(engine_daemon_engine_info{instance=~\"($node_id):9323\"},\"instance\",\"$1\",\"instance\",\"(.*):9323\")  ) by (instance, kernel, os, version)",
           "format": "table",
           "instant": true,
           "intervalFactor": 10,
@@ -2354,11 +2464,18 @@
           "step": 2
         },
         {
-          "expr": "count(sum(netdata_cgroup_cpu_percent_average{job=~\"netdata-$node_id\"}) by (instance,chart)) by (instance)",
+          "expr": "count(sum(netdata_cgroup_cpu_percent_average{job=~\"netdata-($node_id)\"}) by (instance,chart)) by (instance)",
           "format": "table",
           "instant": true,
           "intervalFactor": 10,
           "refId": "B"
+        },
+        {
+          "expr": "label_replace(swarm_node_manager{instance=~\"($node_id):9323\"}, \"instance\", \"$1\", \"instance\", \"(.*):9323\")",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "C"
         }
       ],
       "timeFrom": "1s",
@@ -2408,7 +2525,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -2417,7 +2534,7 @@
           "step": 2
         },
         {
-          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2510,7 +2627,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Reads {{job}}",
@@ -2518,7 +2635,7 @@
           "step": 2
         },
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Writes {{job}}",
@@ -2605,7 +2722,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_cgroup_cpu_percent_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_cgroup_cpu_percent_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{job}}",
@@ -2691,14 +2808,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"reads\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Reads {{job}}",
           "refId": "A"
         },
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"writes\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Writes {{job}}",
@@ -2782,7 +2899,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_cgroup_mem_MB_average{job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_cgroup_mem_MB_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
@@ -2868,14 +2985,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"reads\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Reads {{job}}",
           "refId": "A"
         },
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"writes\",job=~\"netdata-$node_id\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Writes {{job}}",
@@ -2966,7 +3083,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(engine_daemon_network_actions_seconds_count{instance=~\"$node_id:9323\"}) by (action)",
+          "expr": "sum(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
@@ -3060,7 +3177,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(engine_daemon_container_actions_seconds_count{instance=~\"$node_id:9323\"}) by (action)",
+          "expr": "sum(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -3124,7 +3241,7 @@
         "hide": 0,
         "includeAll": true,
         "label": "Node",
-        "multi": false,
+        "multi": true,
         "name": "node_id",
         "options": [],
         "query": "netdata_info",
@@ -3172,5 +3289,5 @@
   "timezone": "",
   "title": "Cluster Nodes",
   "uid": "BPlb-Sgik",
-  "version": 2
+  "version": 3
 }

@@ -1,15 +1,8 @@
 ---
 - hosts: all
   order: sorted
-  remote_user: ansible
-  become: true
-  become_user: root
-  become_method: sudo
+  remote_user: root
 
-  vars:
-    - ansible_ssh_private_key_file: roles/common/files/keys/ansible/ansible.pri
-    - HTTPS_PROXY: item
-      with_items: "{{HTTPSPROXY}}"
   roles:
   - ../roles/common
 
