@@ -19,6 +19,8 @@ __A Docker swarm stack for operating highly-available containerized applications
     - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
     - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
     - [Alertmanager](#alertmanager)
+    - [Portainer - Dashboard](#prometheus---dashboard)
+    - [Portainer - Stacks](#prometheus---stacks)
     - [Prometheus - Graphs](#prometheus---graphs)
     - [Prometheus - Alerts](#prometheus---alerts)
     - [Prometheus - Targets](#prometheus---targets)
@@ -190,6 +192,10 @@ Telemetry: | | |
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
 ### Alertmanager
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
+### Portainer - Dashboard
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portainer-dashboard.png)
+### Portainer - Stacks
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portainer-stacks.png)
 ### Prometheus - Graphs
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen10.png)
 ### Prometheus - Alerts

@@ -1,5 +1,9 @@
 # swarmstack CHANGELOG
 
+* 2018/10/4 - 0.5.5
+
+    Replaced swarmpit with Portainer, webhooks now allow CI/CD container deployment
+
 * 2018/9/24 - 0.5.0
 
     Major version bump, new core features
