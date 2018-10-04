@@ -3,7 +3,11 @@
 [swarmstack:vars]
 CLUSTER=swarmstack
 SWARMJOIN=swarm01.example.com
-ADMINPASSWORD=changeme!42
+ADMIN_PASSWORD=changeme!42
+PUSH_USER=pushuser
+PUSH_PASSWORD=pushpass
+
+# Other swarmstack settings
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 

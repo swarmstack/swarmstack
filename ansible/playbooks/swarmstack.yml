@@ -9,8 +9,8 @@
   tasks:
 
 ### INSTALL NETDATA ON ALL HOSTS
-  - name: Install ansible and git on SWARMJOIN host
-    yum: name=ansible,git state=latest
+  - name: Install requisite packages on SWARMJOIN host
+    yum: name=ansible,git,httpd-tools state=latest
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Check if NetData already installed
@@ -48,6 +48,20 @@
   - name: Create a local copy of swarmstack for editing
     shell: rsync -aq --exclude=.git /usr/local/src/swarmstack/ /usr/local/src/localswarmstack/
     when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
+
+  - name: Generate admin password hash for portainer
+    shell: "htpasswd -nbB admin '{{ADMIN_PASSWORD}}' | cut -d ':' -f 2 | sed 's/\\$/$$/g'"
+    register: portaineradminpw
+    when: "inventory_hostname == SWARMJOIN"
+
+  - name: Update docker-compose.yml with portainer admin password hash
+    lineinfile:
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      regexp: "command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify"
+      line: "    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify --admin-password {{ item[0] }}"
+    with_items: "{{portaineradminpw.stdout_lines}}"
+    when: "inventory_hostname == SWARMJOIN"
+
 
 ### LDAP SETTINGS
   - name: Add LDAP settings to new caddy/Caddyfile.ldap
@@ -247,7 +261,7 @@
     when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
-    shell: "ADMIN_PASSWORD={{ADMINPASSWORD}} docker stack deploy -c /usr/local/src/localswarmstack/docker-compose.yml swarmstack"
+    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c /usr/local/src/localswarmstack/docker-compose.yml swarmstack"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 

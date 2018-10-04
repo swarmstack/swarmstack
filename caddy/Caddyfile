@@ -21,6 +21,17 @@
   }
 }
 
+:9000 {
+  tls self_signed
+  errors stderr
+
+  proxy / portainer:9000 {
+    transparent
+    websocket
+  }
+}
+
+
 :9090 {
   tls self_signed
   errors stderr

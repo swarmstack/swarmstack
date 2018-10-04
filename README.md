@@ -22,7 +22,6 @@ __A Docker swarm stack for operating highly-available containerized applications
     - [Prometheus - Graphs](#prometheus---graphs)
     - [Prometheus - Alerts](#prometheus---alerts)
     - [Prometheus - Targets](#prometheus---targets)
-    - [Swarmpit](#swarmpit)
 
 <!-- /TOC -->
 
@@ -146,9 +145,9 @@ DevOps Tools:     | Port orservice:             | Current Distribution / Install
 [Alertmanager](https://github.com/prometheus/alertmanager) | https://swarmhost:9093<br>_caddy:swarmstack_net:alertmanager:9093_ | prom/alertmanager:latest
 AlertmanagerB    | https://swarmhost:9095<br>_caddy:swarmstack_net:alertmanagerB:9093_ | prom/alertmanager:latest
 [Grafana](https://github.com/grafana/grafana) | https://swarmhost:3000<br>_caddy:swarmstack_net:grafana:3000_ | grafana/grafana:5.2.4
+[Portainer](https://github.com/portainer/portainer) | https://swarmhost:9000<br>_caddy:swarmstack_net:portainer:9000_ | portainer:latest
 [Prometheus](https://github.com/prometheus/prometheus) | https://swarmhost:9090<br>_caddy:swarmstack_net:prometheus:9090_ | prom/prometheus:latest
 [Pushgateway](https:/github.com/prometheus/pushgateway) | https://swarmhost:9091<br>_caddy:swarmstack_net:pushgateway:9091_ | prom/pushgateway:latest
-[Swarmpit](https://github.com/swarmpit/swarmpit) | https://swarmhost:9092<br>_caddy:swarmstack_net:swarmpit:8080_ | swarmpit/swarmpit:latest
 [Unsee](https://github.com/cloudflare/unsee) | https://swarmhost:9094<br>_caddy:swarmstack_net:unsee:8080_ | cloudflare/unsee:v0.9.2
 
 ---
@@ -197,6 +196,4 @@ Telemetry: | | |
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_alerts.png)
 ### Prometheus - Targets
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_targets.png)
-### Swarmpit
-![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/swarmpit.png)
 

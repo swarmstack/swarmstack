@@ -28,12 +28,17 @@ volumes:
       driver_opts:
         repl: 2
         size: 10
-    prometheus:
+    portainer_data:
       driver: pxd
       driver_opts:
         repl: 2
         size: 10
-    swarmpit-couchdb:
+    portainer_certs:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 1
+    prometheus:
       driver: pxd
       driver_opts:
         repl: 2
@@ -122,6 +127,7 @@ services:
       - "80:80"
       - "443:443"
       - "3000:3000"
+      - "9000:9000"
       - "9090:9090"
       - "9091:9091"
       - "9092:9092"
@@ -222,6 +228,36 @@ services:
         reservations:
           memory: 64M
 
+  portainer:
+    image: portainer/portainer
+    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
+    volumes:
+      - portainer_data:/data
+      - portainer_certs:/certs
+    networks:
+      - net
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+  portainer-agent:
+    image: portainer/agent
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.portainer-agent
+      # AGENT_PORT: 9001
+      LOG_LEVEL: warn
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - net
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+
   prometheus:
     image: prom/prometheus
     networks:
@@ -264,62 +300,6 @@ services:
           memory: 512M
         reservations:
           memory: 128M
-
-  swarmpit-agent:
-    image: swarmpit/agent:latest
-    environment:
-      - DOCKER_API_VERSION=1.35
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - net
-    deploy:
-      mode: global
-      resources:
-        limits:
-          cpus: '0.10'
-          memory: 64M
-        reservations:
-          cpus: '0.05'
-          memory: 32M
-
-  swarmpit:
-    image: swarmpit/swarmpit:latest
-    environment:
-      - SWARMPIT_DB=http://swarmpit-couchdb:5984
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - net
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 1024M
-        reservations:
-          cpus: '0.25'
-          memory: 512M
-      placement:
-        constraints:
-          - node.role == manager
-
-  swarmpit-couchdb:
-    image: couchdb:latest
-    volumes:
-      - swarmpit-couchdb:/opt/couchdb/data
-    networks:
-      - net
-    deploy:
-      resources:
-        limits:
-          cpus: '0.30'
-          memory: 512M
-        reservations:
-          cpus: '0.15'
-          memory: 256M
-      restart_policy:
-        condition: on-failure
-        max_attempts: 3
 
   unsee:
     image: cloudflare/unsee:v0.9.2
