@@ -6,7 +6,7 @@ __A Docker swarm stack for operating highly-available containerized applications
 
 - [WHY?](#why)
 - [FEATURES](#features)
-- [REQUIREMENTS:](#requirements)
+- [REQUIREMENTS](#requirements)
 - [SWARMSTACK INSTALLATION](#swarmstack-installation)
 - [NETWORK URLs](#network-urls)
 - [SCREENSHOTS](#screenshots)
@@ -19,8 +19,8 @@ __A Docker swarm stack for operating highly-available containerized applications
     - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
     - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
     - [Alertmanager](#alertmanager)
-    - [Portainer - Dashboard](#prometheus---dashboard)
-    - [Portainer - Stacks](#prometheus---stacks)
+    - [Portainer - Dashboard](#portainer---dashboard)
+    - [Portainer - Stacks](#portainer---stacks)
     - [Prometheus - Graphs](#prometheus---graphs)
     - [Prometheus - Alerts](#prometheus---alerts)
     - [Prometheus - Targets](#prometheus---targets)
@@ -73,7 +73,7 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ---
 
-## REQUIREMENTS:
+## REQUIREMENTS
 
 3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions into the storage cluster. _More devices usually equals better performance_.
 
