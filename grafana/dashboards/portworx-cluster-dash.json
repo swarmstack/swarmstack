@@ -378,17 +378,17 @@
       "rangeMaps": [
         {
           "from": "0",
-          "text": "Quorum Unhealthy",
-          "to": "0"
+          "text": "Awaiting Updated Metrics",
+          "to": "0.99"
         },
         {
           "from": "1",
-          "text": "Quorum Healthy",
+          "text": "Full Quorum",
           "to": "1"
         },
         {
-          "from": "2",
-          "text": "Quorum Unhealthy",
+          "from": "1.01",
+          "text": "Incomplete Quorum",
           "to": "1000"
         }
       ],
@@ -411,7 +411,7 @@
       "thresholds": "1.1,1.9",
       "timeFrom": "1m",
       "timeShift": null,
-      "title": "Quorum %",
+      "title": "Quorum Health",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -1144,5 +1144,5 @@
   "timezone": "browser",
   "title": "Portworx Cluster Status",
   "uid": "NynWmntmk",
-  "version": 1
+  "version": 2
 }

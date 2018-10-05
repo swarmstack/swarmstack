@@ -63,6 +63,36 @@
     when: "inventory_hostname == SWARMJOIN"
 
 
+### PROXY SETTINGS
+  - name: Update docker-compose.yml with proxy settings for Caddy
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Caddy PROXY"
+      marker_end: "SWARMSTACK_END Caddy PROXY"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertafter: '      - CADDYPATH='
+      block: |2
+              - http_proxy={{item.http_proxy}}
+              - https_proxy={{item.https_proxy}}
+              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ lookup('dig', hostvars[host].inventory_hostname) }}{{ '' if loop.last else ','}}{% endfor %}
+    with_items:
+      - { http_proxy: "{{PROXY_HTTP}}", https_proxy: "{{PROXY_HTTPS}}", no_proxy: "{{PROXY_NOPROXY}}" }
+    when: "inventory_hostname == SWARMJOIN and PROXY_ENABLED=='true'"
+
+  - name: Update docker-compose.yml with proxy settings for Grafana
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN Grafana PROXY"
+      marker_end: "SWARMSTACK_END Grafana PROXY"
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      insertbefore: '      - GF_SECURITY_ADMIN_USER='
+      block: |2
+              - http_proxy={{item.http_proxy}}
+              - https_proxy={{item.https_proxy}}
+              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ lookup('dig', hostvars[host].inventory_hostname) }}{{ '' if loop.last else ','}}{% endfor %}
+    with_items:
+      - { http_proxy: "{{PROXY_HTTP}}", https_proxy: "{{PROXY_HTTPS}}", no_proxy: "{{PROXY_NOPROXY}}" }
+    when: "inventory_hostname == SWARMJOIN and PROXY_ENABLED=='true'"
+
+
 ### LDAP SETTINGS
   - name: Add LDAP settings to new caddy/Caddyfile.ldap
     replace:
@@ -139,8 +169,6 @@
               - source: grafana_ldap
                 target: /etc/grafana/ldap.toml
     when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and LDAP_ENABLED == 'true'"
-
-### PROXY SETTINGS
 
 
 ### ADD PROMETHEUS SCRAPE CONFIGS FOR HOSTS

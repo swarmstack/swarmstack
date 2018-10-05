@@ -41,6 +41,13 @@
       path: /etc/yum.repos.d/docker-test.repo
       state: absent
 
+  - name: add proxy to /etc/yum.conf
+    lineinfile:
+      path: /etc/yum.conf
+      regexp: '^proxy='
+      line: 'proxy={{PROXY_YUM}}'
+    when: "PROXY_ENABLED=='true'"
+
   - name: yum clean all
     command: yum clean all
     args:

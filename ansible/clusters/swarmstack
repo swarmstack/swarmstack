@@ -11,6 +11,12 @@ PUSH_PASSWORD=pushpass
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 
+PROXY_ENABLED=false
+PROXY_HTTP=http://proxy.example.com:80
+PROXY_HTTPS=https://proxy.example.com:443
+PROXY_YUM=_none_
+PROXY_NOPROXY=.example.com,alertmanager,alertmanagerb,grafana,portainer,prometheus,pushgateway,unsee,172.16.0.0/12,10.0.0.0/8
+
 LDAP_ENABLED=false
 #LDAP_GROUP=some_group_dn
 #LDAP_HOST=ldap.example.com
