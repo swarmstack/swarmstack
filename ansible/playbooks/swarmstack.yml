@@ -99,7 +99,7 @@
   - name: Update docker-compose.yml with grafana LDAP settings 1 of 4
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 1 of 4"
-      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 1 of 4"
+      marker_end: "SWARMSTACK_END Grafana LDAP 1 of 4"
       path: /usr/local/src/localswarmstack/docker-compose.yml
       insertbefore: '  grafana_provisioning_datasources:'
       block: |2
@@ -110,7 +110,7 @@
   - name: Update docker-compose.yml with grafana LDAP settings 2 of 4
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 2 of 4"
-      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 2 of 4"
+      marker_end: "SWARMSTACK_END Grafana LDAP 2 of 4"
       path: /usr/local/src/localswarmstack/docker-compose.yml
       insertbefore: '  grafana_provisioning_datasources:'
       block: |2
@@ -121,7 +121,7 @@
   - name: Update docker-compose.yml with grafana LDAP settings 3 of 4
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
-      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
+      marker_end: "SWARMSTACK_END Grafana LDAP 3 of 4"
       path: /usr/local/src/localswarmstack/docker-compose.yml
       insertbefore: '      - source: grafana_dashboard_etcd-dash'
       block: |2
@@ -132,7 +132,7 @@
   - name: Update docker-compose.yml with grafana LDAP settings 4 of 4
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
-      marker_end: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
+      marker_end: "SWARMSTACK_END Grafana LDAP 4 of 4"
       path: /usr/local/src/localswarmstack/docker-compose.yml
       insertbefore: '      - source: grafana_dashboard_etcd-dash'
       block: |2
@@ -147,7 +147,7 @@
   - name: Add NetData to local Prometheus scrapes
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
-      marker_end: "SWARMSTACK_BEGIN NetData {{item}}"
+      marker_end: "SWARMSTACK_END NetData {{item}}"
       path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
       block: |2
           - job_name: 'netdata-{{item}}'
