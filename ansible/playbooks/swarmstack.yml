@@ -50,7 +50,7 @@
     when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Generate admin password hash for portainer
-    shell: "htpasswd -nbB admin '{{ADMIN_PASSWORD}}' | cut -d ':' -f 2 | sed 's/\\$/$$/g'"
+    shell: "htpasswd -nbB admin '{{ADMIN_PASSWORD}}' | cut -d ':' -f 2 | sed 's/\\$/\\$\\$/g'"
     register: portaineradminpw
     when: "inventory_hostname == SWARMJOIN"
 
@@ -58,8 +58,8 @@
     lineinfile:
       path: /usr/local/src/localswarmstack/docker-compose.yml
       regexp: "command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify"
-      line: "    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify --admin-password {{ item[0] }}"
-    with_items: "{{portaineradminpw.stdout_lines}}"
+      line: "    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify --admin-password {{ item }}"
+    with_items: "{{portaineradminpw.stdout}}"
     when: "inventory_hostname == SWARMJOIN"
 
 
