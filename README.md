@@ -99,6 +99,8 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _Some basic commands for working with swarmstack and Portworx storage are noted in [Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
+- _Open an issue. [How do I use this project?](https://github.com/swarmstack/swarmstack/issues/1)_ 
+
 ```
 # You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
 #
