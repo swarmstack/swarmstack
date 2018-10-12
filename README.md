@@ -101,9 +101,8 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _Open an issue. [How do I use this project?](https://github.com/swarmstack/swarmstack/issues/1)_ 
 
+You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
 ```
-# You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
-#
 # yum install git ansible epel-release
 # cd /usr/local/src/
 # git clone https://github.com/swarmstack/swarmstack.git
@@ -116,23 +115,29 @@ Edit these files: | |
 [roles/files/etc/swarmstack_fw/rules/firewall.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/cluster.rules) | _Used to permit traffic to the hosts themselves_ |
 [roles/files/etc/swarmstack_fw/rules/docker.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules) | _Used to limit access to Docker service ports_ |
 
-- All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
+All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
+
+---
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/firewall.yml -k
 ```
 * _optional (but HIGHLY recommended), you can run and re-run this playbook to manage firewalls on all of your nodes whether they run Docker or not._
+---
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/docker.yml -k
 ```
 * _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host as kernels are updated._
+---
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/etcd.yml -k
 ```
 * _optional: used by Portworx to store storage cluster metadata in a highly-available manner. Only 3 nodes need to be defined to run etcd, and you'll probably just need to run this playbook once to establish the initial etcd cluster (which can be used by multiple Portworx clusters)._
+---
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/portworx.yml -k
 ```
-* _optional, installs Portworx in groups of 3 nodes each. If you are instead bringing your own persistent storage, be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._ 
+* _optional, installs Portworx in groups of 3 nodes each. If you are instead bringing your own persistent storage, be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._
+---
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
