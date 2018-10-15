@@ -101,7 +101,7 @@
   - name: configure Docker systemd proxy.conf
     copy: src=../roles/{{CLUSTER}}/files/etc/systemd/system/docker.service.d/proxy.conf dest=/etc/systemd/system/docker.service.d/proxy.conf owner=root group=root mode="u=rw,g=r,o=r"
     notify: systemctl-docker
-    when: "'swarm' in group_names"
+    when: "'swarm' in group_names and PROXY_ENABLED=='true'"
 
   - name: process systemd changes immediately
     meta: flush_handlers
