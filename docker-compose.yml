@@ -45,6 +45,8 @@ volumes:
         size: 10
 
 configs:
+  alertmanager_config:
+    file: ./alertmanager/conf/alertmanager.yml
 
   caddy_config:
     file: ./caddy/Caddyfile
@@ -89,6 +91,9 @@ services:
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=tasks.alertmanagerB:9094'
+    configs:
+      - source: alertmanager_config
+        target: /etc/alertmanager/alertmanager.yml
     volumes:
       - alertmanager:/alertmanager
     deploy:
@@ -110,6 +115,9 @@ services:
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=alertmanager:9094'
+    configs:
+      - source: alertmanager_config
+        target: /etc/alertmanager/alertmanager.yml
     volumes:
       - alertmanagerB:/alertmanager
     deploy:
