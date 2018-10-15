@@ -3,7 +3,7 @@ global:
   evaluation_interval: 15s
 
   external_labels:
-    monitor: 'promswarm'
+    monitor: 'swarmstack'
 
 rule_files:
   - "container_nodes.yml"
