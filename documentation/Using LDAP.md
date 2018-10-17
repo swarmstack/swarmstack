@@ -1,4 +1,8 @@
-# Using LDAP with swarmstack
+# Using LDAP
+
+LDAP configuration can be applied automatically to the Caddy proxy that fronts most of the tools, as well as Grafana. You'll need to set LDAP_ENABLE=true and uncomment and configure the rest of the LDAP settings within one of your ansible/cluster files. Portainer requires manual LDAP configuration (uses similar settings) currently.
+
+The documentation below is for reference about what the swarmstack playbook will apply when configured as above, and can be used as a reference if you need to make changes to your local copy of swarmstack.
 
 ### Caddy - LDAP
 

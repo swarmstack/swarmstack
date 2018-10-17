@@ -98,6 +98,8 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _To manually push ephemeral or batch metrics into Prometheus, see [Using Pushgateway.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20Pushgateway.md)_
 
+_ _For reference on what swarmstack configures when enabling LDAP, see [Using LDAP.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md). Otherwise, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD you set before running the 
+
 - _Some basic commands for working with swarmstack and Portworx storage are noted in [Notes.md](https://github.com/swarmstack/swarmstack/blob/master/documentation/Notes.md)_
 
 - _Open an issue. [How do I use this project?](https://github.com/swarmstack/swarmstack/issues/1)_ 
@@ -114,10 +116,12 @@ Edit these files: | |
 ---- | - |
 [clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack) | _Configure all of your cluster nodes and storage devices_ |
 [alertmanager/conf/alertmanager.yml](https://github.com/swarmstack/swarmstack/blob/master/alertmanager/conf/alertmanager.yml) | _Optional: Configure where Alertmanagers send alert notifications_ |
-[roles/files/etc/swarmstack_fw/rules/firewall.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/cluster.rules) | _Used to permit traffic to the hosts themselves_ |
-[roles/files/etc/swarmstack_fw/rules/docker.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules) | _Used to limit access to Docker service ports_ |
+[roles/swarmstack/files/etc/swarmstack_fw/rules/firewall.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/cluster.rules) | _Used to permit traffic to the hosts themselves_ |
+[roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules) | _Used to limit access to Docker service ports_ |
 
 All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
+
+After installation for the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD you've set. You can update the ADMIN_PASSWORD later by simply re-running the swarmstack.yml playbook. If configuring LDAP, the Grafana and Portainer services will also have their initial 'admin' user with your ADMIN_PASSWORD.
 
 ---
 ```
