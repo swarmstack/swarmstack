@@ -50,7 +50,7 @@ swarm03.example.com
 #  persistent volumes. This will cause these containers to always be scheduled onto one of the 3
 #  nodes whose storage volumes are being handled by Portworx.
 #
-# With PX-Enterprise, you can optionally just put all of your hosts into the portworx-RED group.
+# With PX-Enterprise, you can optionally just put all of your hosts into RED group.
 
 [portworx]
 swarm01.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
