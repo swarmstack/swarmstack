@@ -1,6 +1,6 @@
 __swarmstack__
 
-__A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, and other high-availability features that your applications can take advantage of.__
+__A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.__
 
 <!-- TOC -->
 
@@ -8,6 +8,7 @@ __A Docker swarm stack for operating highly-available containerized applications
 - [FEATURES](#features)
 - [REQUIREMENTS](#requirements)
 - [SWARMSTACK INSTALLATION](#swarmstack-installation)
+- [MONITORING AND ALERTING](#monitoring-and-alerting)
 - [NETWORK URLs](#network-urls)
 - [SCREENSHOTS](#screenshots)
     - [Caddy Link Dashboard](#caddy-link-dashboard)
@@ -143,6 +144,28 @@ All of the playbooks below are idempotent and can be re-run as needed when makin
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
 * _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing NetData on each node in order for Prometheus to collect metrics from it._
+
+---
+
+## MONITORING AND ALERTING
+
+### Monitoring
+
+The Grafana _Cluster Nodes_ dashboard will provide the best visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _Unsee_ (which watches both Alertmanager instances in one place), or the Prometheus _Alerts_ tab.
+
+### Alerting
+
+You can configure the Alertmanager instances to send emails or other notifications whenever Prometheus fires an alert to them. Alerts will be sent to both instance, and de-duplicated using a gossip protocol between them. Please see [Alertmanager Configuration](https://prometheus.io/docs/alerting/configuration/) to understand it's built-in delivery mechanisms.
+
+You can configure the routes and receivers for the swarmstack Alertmanager instances by editing /usr/local/src/localswarmstack/[alertmanager/conf/alertmanager.yml](https://github.com/swarmstack/swarmstack/blob/master/alertmanager/conf/alertmanager.yml)
+
+If you need to connect to a service that isn't supported natively by Alertmanager, you have the option to configure it to fire a webhook towards a target URL, with some JSON data about the alert being sent in the payload. You can provide the receiving service yourself, or consume cloud services such as [https://www.built.io/](https://www.built.io/).
+
+One option would be to configure a bot listening for alerts from Alertmanager instances (you could use it also as an alerting target for your code as well). Upon receiving alerts via a web server port, the bot would then relay them to an instant-message destination. swarmstack builds Docker images of Errbot, one of many bot programs that can provide a conduit between receiving a webhook, processing the received data, and then connecting to something else (in this case, instant-messaging networks) and relaying the message to a recipient or a room's occupants. If this sounds like the option for you, swarmstack currently builds 2 Docker images, one includes just the Alertmanager receiver and Errbot itself, which has built-in support for several instant-message networks, and a second Docker image to support Cisco Webex Teams connections where needed:
+
+[https://github.com/swarmstack/errbot-docker-alertmanager](https://github.com/swarmstack/errbot-docker-alertmanager)
+
+[https://github.com/swarmstack/errbot-docker-webex-alertmanager](https://github.com/swarmstack/errbot-docker-webex-alertmanager) _Currently only supports direct-message channel with the bot, but is under active development to support room announcements as well_
 
 ---
 

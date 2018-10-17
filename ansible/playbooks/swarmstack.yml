@@ -30,6 +30,14 @@
   - name: Ensure NetData is enabled and started
     systemd: name=netdata state=started enabled=yes masked=no
 
+  - name: Always upgrade NetData
+    shell: /usr/src/netdata.git/netdata-updater.sh
+    args:
+      warn: no
+      executable: /bin/bash
+    ignore_errors: true
+    changed_when: False
+
 
 ### DOWNLOAD SWARMSTACK
   - name: Download latest swarmstack for comparison
