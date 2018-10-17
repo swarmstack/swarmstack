@@ -121,7 +121,7 @@ Edit these files: | |
 
 All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
 
-After installation for the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD you've set. You can update the ADMIN_PASSWORD later by simply re-running the swarmstack.yml playbook. If configuring LDAP, the Grafana and Portainer services will also have their initial 'admin' user with your ADMIN_PASSWORD.
+After installation for the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD you've set. You can update the ADMIN_PASSWORD later by executing _docker stack rm swarmstack_ (persistent data volumes will be preserved) and then re-running the swarmstack.yml playbook. If configuring LDAP, the Grafana and Portainer services will also have their initial 'admin' user set to ADMIN_PASSWORD.
 
 ---
 ```
