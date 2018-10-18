@@ -82,7 +82,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:v0.15.2
     networks:
       - net
     command:
@@ -106,7 +106,7 @@ services:
           memory: 64M
 
   alertmanagerB:
-    image: prom/alertmanager
+    image: prom/alertmanager:v0.15.2
     networks:
       - net
     command:
@@ -138,7 +138,6 @@ services:
       - "9000:9000"
       - "9090:9090"
       - "9091:9091"
-      - "9092:9092"
       - "9093:9093"
       - "9094:9094"
       - "9095:9093"
@@ -171,7 +170,7 @@ services:
           memory: 64M
 
   cadvisor:
-    image: google/cadvisor
+    image: google/cadvisor:v0.31.0
     networks:
       - net
     command: -logtostderr -docker_only
@@ -190,7 +189,7 @@ services:
           memory: 64M
 
   grafana:
-    image: grafana/grafana:5.3.0
+    image: grafana/grafana:5.3.1
     networks:
       - net
     environment:
@@ -237,7 +236,7 @@ services:
           memory: 64M
 
   portainer:
-    image: portainer/portainer
+    image: portainer/portainer:1.19.2
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     volumes:
       - portainer_data:/data
@@ -251,7 +250,7 @@ services:
         constraints: [node.role == manager]
 
   portainer-agent:
-    image: portainer/agent
+    image: portainer/agent:1.1.2
     environment:
       AGENT_CLUSTER_ADDR: tasks.portainer-agent
       # AGENT_PORT: 9001
@@ -267,7 +266,7 @@ services:
         constraints: [node.platform.os == linux]
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.4.3
     networks:
       - net
     command:
@@ -297,7 +296,7 @@ services:
           memory: 128M
 
   pushgateway:
-    image: prom/pushgateway
+    image: prom/pushgateway:v0.6.0
     networks:
       - net
     deploy:
