@@ -199,7 +199,7 @@ iptables | Firewall management | See ansible/playbooks/firewall.yml
 
 Monitoring / Telemetry | Metrics URL | Source / Image 
 ---------------------- | ----------- | --------------
-[cAdvisor](https://github.com/google/cadvisor) | Docker overlay network swarmstack_net:<br>_http://cadvisor:8080/metrics_ | Source:[https://github.com/google/cadvisor](https://github.com/google/cadvisor) Image:[https://hub.docker.com/r/google/cadvisor/google/cadvisor](https://hub.docker.com/r/google/cadvisor/google/cadvisor) v0.31.0
+[cAdvisor](https://github.com/google/cadvisor) | Docker overlay network swarmstack_net:<br>_http://cadvisor:8080/metrics_ | Source:[https://github.com/google/cadvisor](https://github.com/google/cadvisor) Image:[https://hub.docker.com/r/google/cadvisor](https://hub.docker.com/r/google/cadvisor) v0.31.0
 [Docker Swarm](https://docs.docker.com/engine/swarm/) | Docker Node IP:<br>_http://swarmhost:9323/metrics_ | See ansible/playbooks/docker.yml
 [etcd3](https://github.com/etcd-io/etcd) | Docker Node IP:<br>_http://swarmhost:2379/metrics_ | See ansible/playbooks/etcd.yml
 [Grafana](https://grafana.com) | Docker overlay network swarmstack_net:<br>_http://grafana:3000/metrics_ | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana) Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 5.3.1
