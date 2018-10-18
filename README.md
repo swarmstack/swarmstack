@@ -177,7 +177,7 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below
 
-DevOps Tools    | Connection URL (proxied by Caddy) | Source / Image 
+DevOps Tools    | Connection URL<br>(proxied by Caddy) | Source / Image 
 --------------- | --------------------------------- | --------------
 [Alertmanager](https://prometheus.io/docs/alerting/alertmanager/) | _https://swarmhost:9093_ | Source:[https://github.com/prometheus/alertmanager](https://github.com/prometheus/alertmanager) Image:[https://hub.docker.com/r/prom/alertmanager](https://hub.docker.com/r/prom/alertmanager) v0.15.2
 [Alertmanager](https://prometheus.io/docs/alerting/alertmanager/)B | _https://swarmhost:9095_ | Source:[https://github.com/prometheus/alertmanager](https://github.com/prometheus/alertmanager) Image:[https://hub.docker.com/r/prom/alertmanager](https://hub.docker.com/r/prom/alertmanager) v0.15.2
@@ -192,21 +192,21 @@ DevOps Tools    | Connection URL (proxied by Caddy) | Source / Image
 
 Security | Notes | Source / Image
 -------- | ----- | --------------
-Firewall management | iptables | See ansible/playbooks/firewall.yml
+iptables | Firewall management | See ansible/playbooks/firewall.yml
 [Caddy](https://caddyserver.com/) proxy server | See above connection URLs | Source:[https://github.com/swarmstack/caddy](https://github.com/swarmstack/caddy) Image:[https://hub.docker.com/r/swarmstack/caddy](https://hub.docker.com/r/swarmstack/caddy) no-stats
 
 ---
 
 Monitoring / Telemetry | Metrics URL | Source / Image 
 ---------------------- | ----------- | --------------
-[cAdvisor](https://github.com/google/cadvisor) | Docker overlay network swarmstack_net<br>_http://cadvisor:8080/metrics_ | Source:[https://github.com/google/cadvisor](https://github.com/google/cadvisor) Image:[https://hub.docker.com/r/google/cadvisor/google/cadvisor](https://hub.docker.com/r/google/cadvisor/google/cadvisor) v0.31.0
-[Docker Swarm](https://docs.docker.com/engine/swarm/) | Docker Node IP<br>_http://swarmhost:9323/metrics_ | See ansible/playbooks/docker.yml
-[etcd3](https://github.com/etcd-io/etcd) | Docker Node IP<br>_http://swarmhost:2379/metrics_ | See ansible/playbooks/etcd.yml
-[Grafana](https://grafana.com) | Docker overlay network swarmstack_net<br>_http://grafana:3000/metrics_ | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana) Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 5.3.1
-[NetData](https://my-netdata.io/) | Docker Node IP<br>_http://swarmhost:19999/api/v1/allmetrics_ | See ansible/playbooks/swarmstack.yml
-[Portworx](https://portworx.com) | Docker Node IP<br>_http://swarmhost:9001/metrics_ | See ansible/playbooks/portworx.yml
-[Prometheus](https://prometheus.io) | Docker overlay network swarmstack_net<br>_http://prometheus:9090/metrics_ | Source:[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus) Image:[https://hub.docker.com/r/prom/prometheus](https://hub.docker.com/r/prom/prometheus) v2.4.3
-[Pushgateway](https://prometheus.io/docs/practices/pushing/) | Docker overlay network swarmstack_net<br>_https://pushgateway:9091/metrics_ | Source:[https:/github.com/prometheus/pushgateway](https:/github.com/prometheus/pushgateway) Image:[https://hub.docker.com/r/prom/pushgateway](https://hub.docker.com/r/prom/pushgateway) v0.6.0
+[cAdvisor](https://github.com/google/cadvisor) | Docker overlay network swarmstack_net:<br>_http://cadvisor:8080/metrics_ | Source:[https://github.com/google/cadvisor](https://github.com/google/cadvisor) Image:[https://hub.docker.com/r/google/cadvisor/google/cadvisor](https://hub.docker.com/r/google/cadvisor/google/cadvisor) v0.31.0
+[Docker Swarm](https://docs.docker.com/engine/swarm/) | Docker Node IP:<br>_http://swarmhost:9323/metrics_ | See ansible/playbooks/docker.yml
+[etcd3](https://github.com/etcd-io/etcd) | Docker Node IP:<br>_http://swarmhost:2379/metrics_ | See ansible/playbooks/etcd.yml
+[Grafana](https://grafana.com) | Docker overlay network swarmstack_net:<br>_http://grafana:3000/metrics_ | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana) Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 5.3.1
+[NetData](https://my-netdata.io/) | Docker Node IP:<br>_http://swarmhost:19999/api/v1/allmetrics_ | See ansible/playbooks/swarmstack.yml
+[Portworx](https://portworx.com) | Docker Node IP:<br>_http://swarmhost:9001/metrics_ | See ansible/playbooks/portworx.yml
+[Prometheus](https://prometheus.io) | Docker overlay network swarmstack_net:<br>_http://prometheus:9090/metrics_ | Source:[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus) Image:[https://hub.docker.com/r/prom/prometheus](https://hub.docker.com/r/prom/prometheus) v2.4.3
+[Pushgateway](https://prometheus.io/docs/practices/pushing/) | Docker overlay network swarmstack_net:<br>_https://pushgateway:9091/metrics_ | Source:[https:/github.com/prometheus/pushgateway](https:/github.com/prometheus/pushgateway) Image:[https://hub.docker.com/r/prom/pushgateway](https://hub.docker.com/r/prom/pushgateway) v0.6.0
 
 ---
 
