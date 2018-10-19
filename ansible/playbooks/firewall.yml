@@ -7,6 +7,9 @@
 
   tasks:
 
+  - name: install epel-release
+    yum: name=epel-release state=latest
+
   - name: yum clean all
     command: yum clean all
     args:
@@ -14,10 +17,7 @@
     changed_when: false
 
   - name: mask firewalld
-    systemd: name=firewalld masked=yes
-
-  - name: remove firewalld
-    yum: name=firewalld state=absent
+    systemd: name=firewalld state=stopped enabled=no masked=yes
 
   - name: install initscripts
     yum: name=initscripts state=installed
@@ -107,5 +107,26 @@
 
   - name: retain last applied fw rules
     shell: cp /etc/sysconfig/iptables /etc/swarmstack_fw/lastfw.applied
+
+  - name: install fail2ban
+    yum: name=fail2ban state=latest
+
+  - name: configure fail2ban for sshd
+    blockinfile:
+      path: /etc/fail2ban/jail.local
+      create: yes
+      block: |
+        [DEFAULT]
+        # Ban hosts for one hour:
+        bantime = 600
+
+        # Override /etc/fail2ban/jail.d/00-firewalld.conf:
+        banaction = iptables-multiport
+
+        [sshd]
+        enabled = true
+
+  - name: enable fail2ban in systemd
+    systemd: name=fail2ban state=started masked=no enabled=yes
 
 ...
