@@ -192,7 +192,8 @@ DevOps Tools    | Connection URL<br>(proxied by Caddy) | Source / Image
 
 Security | Notes | Source / Image
 -------- | ----- | --------------
-iptables | Firewall management | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
+[fail2ban](https://www.fail2ban.org) | Brute-force prevention | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
+[iptables](https://en.wikipedia.org/wiki/Iptables) | Firewall management | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
 [Caddy](https://caddyserver.com/) proxy server | See above connection URLs | Source:[https://github.com/swarmstack/caddy](https://github.com/swarmstack/caddy) Image:[https://hub.docker.com/r/swarmstack/caddy](https://hub.docker.com/r/swarmstack/caddy) no-stats
 
 ---
