@@ -1,19 +1,30 @@
-# Example alertmanager.yml configuration when using https://github.com/swarmstack/errbot-docker-alertmanager
+# Example alertmanager.yml configuration
 #
-# See https://errbot.io for how to configure Errbot default backends such as slack or email, or other Errbot docker images
+# See https://prometheus.io/docs/alerting/configuration/ for Alertmanager configuration syntax and built-in receivers. Currently, these include email, HipChat, PagerDuty, OpsGenie, Slack, VictorOps, and WeChat. If you need to send to a target that isn't built into Alertmanager, consider configuring a webhook_config below and running a bot to receive alerts. swarmstack provides some Errbot docker images for this purpose, which currently also supports IRC, Telegram Messenger, and XMPP/jabber services such as Google Hangouts (talk.google.com). There is also a seperate Errbot Docker image with Cisco Webex Teams backend support.
 #
+# https://github.com/swarmstack/errbot-docker-alertmanager
+# https://github.com/swarmstack/errbot-docker-webex-alertmanager
+#
+# See https://errbot.io for how to configure Errbot default backends such as XMPP (jabber) or IRC.
 # See https://github.com/mayflower/errbot-alerrtmanagerr for how to send alerts to the bot from Prometheus Alertmanager
 #
 # Change recipient/example.com to a user (e.g. my_username/companydomain.com) to receive direct alerts the bot, or join your bot
 # to a channel and change recipient to the Room ID to have the bot announce alerts to everyone in a channel.
-route:
-    receiver: 'slack'
-
-receivers:
-    - name: 'slack'
-      slack_configs:
-          - send_resolved: true
-            text: "{{ .CommonAnnotations.description }}"
-            #username: <user>#
-            #channel: <channel>#
-            #api_url: <url>#
+#
+#route:
+#
+#  receiver: 'first-responders'
+#
+#receivers:
+#
+#  - name: 'first-responders'
+#
+#    email_configs:
+#      - to: 'user@example.com'
+#        send_resolved: false
+#        from: 'no-reply@example.com'
+#        smarthost: 'outbound.example.com:25'
+#
+#    webhook_configs:
+#      - send_resolved: false
+#        url: http://errbot:3141/alerrt/username/domain.com/
