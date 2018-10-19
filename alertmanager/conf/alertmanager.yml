@@ -8,9 +8,6 @@
 # See https://errbot.io for how to configure Errbot default backends such as XMPP (jabber) or IRC.
 # See https://github.com/mayflower/errbot-alerrtmanagerr for how to send alerts to the bot from Prometheus Alertmanager
 #
-# Change recipient/example.com to a user (e.g. my_username/companydomain.com) to receive direct alerts the bot, or join your bot
-# to a channel and change recipient to the Room ID to have the bot announce alerts to everyone in a channel.
-#
 #route:
 #
 #  receiver: 'first-responders'
