@@ -169,7 +169,7 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 [https://github.com/swarmstack/errbot-docker-alertmanager](https://github.com/swarmstack/errbot-docker-alertmanager)
 
-[https://github.com/swarmstack/errbot-docker-webex-alertmanager](https://github.com/swarmstack/errbot-docker-webex-alertmanager) _Currently only supports direct-message channel with the bot, but is under active development to support room announcements as well_
+[https://github.com/swarmstack/errbot-docker-webex-alertmanager](https://github.com/swarmstack/errbot-docker-webex-alertmanager)
 
 ---
 
