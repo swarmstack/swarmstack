@@ -148,7 +148,7 @@ After execution of the swarmstack.yml playbook, you'll log into most of the tool
 ```
 # ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
 ```
-* _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing NetData on each node in order for Prometheus to collect metrics from it._
+* _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing or updating NetData on each node in order for Prometheus to collect metrics from it._
 
 ---
 
