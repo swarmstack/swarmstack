@@ -25,6 +25,7 @@ __A Docker swarm stack for operating highly-available containerized applications
     - [Prometheus - Graphs](#prometheus---graphs)
     - [Prometheus - Alerts](#prometheus---alerts)
     - [Prometheus - Targets](#prometheus---targets)
+- [CREDITS](#credits)
 
 <!-- /TOC -->
 
@@ -241,4 +242,12 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 ### Prometheus - Targets
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_targets.png)
 ---
+## CREDITS
+
 Credit is due to the excellent DevOps stack proposed and maintained by [Stefan Prodan](https://stefanprodan.com/) and his project [swarmprom](https://github.com/stefanprodan/swarmprom).
+
+Thanks to Mark Sullivan at Cisco for his work on the Cisco Webex Teams backend for Errbot.
+
+Thank you Carl Bergquist at Grafana Labs for the golang updates.
+
+Thanks goes to the team at Portworx for their excellent storage product and support.
