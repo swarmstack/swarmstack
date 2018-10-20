@@ -17,6 +17,27 @@ alerting:
 
 scrape_configs:
 
+  - job_name: 'alertmanager'
+    dns_sd_configs:
+    - names:
+      - 'tasks.alertmanager'
+      type: 'A'
+      port: 9093
+
+  - job_name: 'alertmanagerB'
+    dns_sd_configs:
+    - names:
+      - 'tasks.alertmanagerB'
+      type: 'A'
+      port: 9093
+
+  - job_name: 'caddy'
+    dns_sd_configs:
+    - names:
+      - 'tasks.caddy'
+      type: 'A'
+      port: 9180
+
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
@@ -28,6 +49,13 @@ scrape_configs:
       type: 'A'
       port: 8080
 
+  - job_name: 'grafana'
+    dns_sd_configs:
+    - names:
+      - 'tasks.grafana'
+      type: 'A'
+      port: 3000
+
   - job_name: 'pushgateway'
     honor_labels: true
     dns_sd_configs:
@@ -36,19 +64,12 @@ scrape_configs:
       type: 'A'
       port: 9091
 
-  - job_name: 'grafana'
+  - job_name: 'unsee'
     dns_sd_configs:
     - names:
-      - 'tasks.grafana'
+      - 'tasks.unsee'
       type: 'A'
-      port: 3000
-
-  - job_name: 'caddy'
-    dns_sd_configs:
-    - names:
-      - 'tasks.caddy'
-      type: 'A'
-      port: 9180
+      port: 8080
 
 # EXAMPLE MANUAL SCRAPE CONFIG, COPY EACH STANZA FOR EACH OF YOUR NODES
 #

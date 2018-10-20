@@ -79,6 +79,9 @@ configs:
   prometheus-portworx:
     file: ./prometheus/rules/portworx.yml
 
+  unsee-conf:
+    file: ./unsee/unsee.yaml
+
 services:
 
   alertmanager:
@@ -90,7 +93,7 @@ services:
       - '--storage.path=/alertmanager'
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
-      - '--cluster.peer=tasks.alertmanagerB:9094'
+      - '--cluster.peer=alertmanagerB:9094'
     configs:
       - source: alertmanager_config
         target: /etc/alertmanager/alertmanager.yml
@@ -310,6 +313,9 @@ services:
 
   unsee:
     image: cloudflare/unsee:v0.9.2
+    configs:
+      - source: unsee-conf
+        target: /unsee.yaml
     networks:
       - net
     environment:

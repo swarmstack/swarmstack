@@ -1,0 +1,11 @@
+alertmanager:
+  interval: 30s
+  servers:
+    - name: alertmanager
+      uri: http://alertmanager:9093
+      timeout: 10s
+      proxy: true
+    - name: alertmanagerB
+      uri: http://alertmanagerB:9093
+      timeout: 10s
+      proxy: true

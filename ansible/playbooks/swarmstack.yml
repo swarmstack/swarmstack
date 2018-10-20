@@ -70,6 +70,27 @@
     with_items: "{{portaineradminpw.stdout}}"
     when: "inventory_hostname == SWARMJOIN"
 
+  - name: Update docker-compose.yml with web.external-url for alertmanager
+    lineinfile:
+      insertbefore: 'cluster.peer=tasks.alertmanagerB:9094'
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9093/'"
+    when: "inventory_hostname == SWARMJOIN"
+
+  - name: Update docker-compose.yml with web.external-url for alertmanagerB
+    lineinfile:
+      insertbefore: 'cluster.peer=tasks.alertmanager:9094'
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9095/'"
+    when: "inventory_hostname == SWARMJOIN"
+
+  - name: Update docker-compose.yml with web.external-url for Prometheus
+    lineinfile:
+      insertafter: 'storage.tsdb.retention'
+      path: /usr/local/src/localswarmstack/docker-compose.yml
+      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9090/'"
+    when: "inventory_hostname == SWARMJOIN"
+
 
 ### PROXY SETTINGS
   - name: Update docker-compose.yml with proxy settings for Caddy
