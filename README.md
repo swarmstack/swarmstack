@@ -105,7 +105,7 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 - _Open an issue. [How do I use this project?](https://github.com/swarmstack/swarmstack/issues/1)_ 
 
-You should perform installation from a host outside the cluster, as the docker.yml playbook may need to reboot hosts if kernels are updated.
+You may want to perform installation from a host outside the cluster, as running the docker.yml playbook may reboot hosts if kernels are updated (you can re-run it in the future to keep your hosts up-to-date). You can work around this by performing a 'yum update kernel' and rebooting if updated on one of your swarm hosts first and then running the ansible playbooks from that host.
 ```
 # yum install git ansible epel-release
 # cd /usr/local/src/
