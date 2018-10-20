@@ -13,20 +13,20 @@
 # See https://errbot.io for how to configure Errbot default backends such as XMPP (jabber) or IRC.
 # See https://github.com/mayflower/errbot-alerrtmanagerr for how to send alerts to the bot from Prometheus Alertmanager
 
-#route:
-#
-#  receiver: 'first-responders'
+route:
 
-#receivers:
-#
-#  - name: 'first-responders'
-#
+  receiver: 'first-responders'
+
+receivers:
+
+  - name: 'first-responders'
+
 #    email_configs:
 #      - to: 'user@example.com'
 #        send_resolved: false
 #        from: 'no-reply@example.com'
 #        smarthost: 'outbound.example.com:25'
-#
+
 #    webhook_configs:
 #      - send_resolved: false
 #        url: http://errbot:3141/alerrt/username/domain.com/
