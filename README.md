@@ -176,7 +176,7 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 ## NETWORK URLs
 
-Below is mainly for documentation. After installing swarmstack below, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below
+Below is mainly for documentation. After installing swarmstack, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below
 
 DevOps Tools    | Connection URL<br>(proxied by Caddy) | Source / Image 
 --------------- | --------------------------------- | --------------
