@@ -1,31 +1,36 @@
-__swarmstack__
+# swarmstack
 
 __A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.__
 
+ ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")
+ 
 <!-- TOC -->
 
-- [WHY?](#why)
-- [FEATURES](#features)
-- [REQUIREMENTS](#requirements)
-- [INSTALLATION](#installation)
-- [MONITORING AND ALERTING](#monitoring-and-alerting)
-- [NETWORK URLs](#network-urls)
-- [SCREENSHOTS](#screenshots)
-    - [Caddy Link Dashboard](#caddy-link-dashboard)
-    - [Grafana Dashboards List](#grafana-dashboards-list)
-    - [Grafana - Docker Swarm Nodes](#grafana---docker-swarm-nodes)
-    - [Grafana - Docker Swarm Services](#grafana---docker-swarm-services)
-    - [Grafana - etcd](#grafana---etcd)
-    - [Grafana - Portworx Cluster Status](#grafana---portworx-cluster-status)
-    - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
-    - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
-    - [Alertmanager](#alertmanager)
-    - [Portainer - Dashboard](#portainer---dashboard)
-    - [Portainer - Stacks](#portainer---stacks)
-    - [Prometheus - Graphs](#prometheus---graphs)
-    - [Prometheus - Alerts](#prometheus---alerts)
-    - [Prometheus - Targets](#prometheus---targets)
-- [CREDITS](#credits)
+- [swarmstack](#swarmstack)
+    - [WHY?](#why)
+    - [FEATURES](#features)
+    - [REQUIREMENTS](#requirements)
+    - [INSTALLATION](#installation)
+    - [MONITORING AND ALERTING](#monitoring-and-alerting)
+        - [Monitoring](#monitoring)
+        - [Alerting](#alerting)
+    - [NETWORK URLs](#network-urls)
+    - [SCREENSHOTS](#screenshots)
+        - [Caddy Link Dashboard](#caddy-link-dashboard)
+        - [Grafana Dashboards List](#grafana-dashboards-list)
+        - [Grafana - Docker Swarm Nodes](#grafana---docker-swarm-nodes)
+        - [Grafana - Docker Swarm Services](#grafana---docker-swarm-services)
+        - [Grafana - etcd](#grafana---etcd)
+        - [Grafana - Portworx Cluster Status](#grafana---portworx-cluster-status)
+        - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
+        - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
+        - [Alertmanager](#alertmanager)
+        - [Portainer - Dashboard](#portainer---dashboard)
+        - [Portainer - Stacks](#portainer---stacks)
+        - [Prometheus - Graphs](#prometheus---graphs)
+        - [Prometheus - Alerts](#prometheus---alerts)
+        - [Prometheus - Targets](#prometheus---targets)
+    - [CREDITS](#credits)
 
 <!-- /TOC -->
 
