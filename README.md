@@ -69,13 +69,14 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 
 ## FEATURES
 
-- A collection of ansible playbooks and a docker-compose stack that:
+A set of ansible playbooks and a docker-compose stack that:
+
 - Tunes EL7 sysctls for optimal network performance
-- Optionally brings up a 3+ node docker swarm cluster from minimal EL7 hosts
-- Optionally brings up HA etcd cluster (used by Portworx for cluster metadata)
-- Optionally brings up HA Portworx PX-Dev storage cluster (used to replicate persistent container volumes across Docker nodes)
-- Configures and deploys a turn-key HA DevOps stack Docker, based on Prometheus and various exporters, Alertmanager,Grafana dashboards
+- Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or bring your own)
 - Automatically prunes unused Docker containers / volumes / images from nodes
+- Installs and configures an 3-node etcd cluster, used by Portworx for cluster metadata
+- Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
+- Configures and deploys the swarmstack DevOps tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, and Portainer to manage the Docker swarm via GUI. All tools are secured using HTTPS by a Caddy reverse proxy.
 
 ---
 
