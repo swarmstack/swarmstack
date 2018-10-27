@@ -171,11 +171,9 @@ You can configure the routes and receivers for the swarmstack Alertmanager insta
 
 If you need to connect to a service that isn't supported natively by Alertmanager, you have the option to configure it to fire a webhook towards a target URL, with some JSON data about the alert being sent in the payload. You can provide the receiving service yourself, or consume cloud services such as [https://www.built.io/](https://www.built.io/).
 
-One option would be to configure a bot listening for alerts from Alertmanager instances (you could use it also as an alerting target for your code as well). Upon receiving alerts via a web server port, the bot would then relay them to an instant-message destination. swarmstack builds Docker images of Errbot, one of many bot programs that can provide a conduit between receiving a webhook, processing the received data, and then connecting to something else (in this case, instant-messaging networks) and relaying the message to a recipient or a room's occupants. If this sounds like the option for you, swarmstack currently builds 2 Docker images, one includes just the Alertmanager receiver and Errbot itself, which has built-in support for several instant-message networks, and a second Docker image to support Cisco Webex Teams connections where needed:
+One option would be to configure a bot listening for alerts from Alertmanager instances (you could use it also as an alerting target for your code as well). Upon receiving alerts via a web server port, the bot would then relay them to an instant-message destination. swarmstack builds a Docker image of Errbot, one of many bot programs that can provide a conduit between receiving a webhook, processing the received data, and then connecting to something else (in this case, instant-messaging networks) and relaying the message to a recipient or a room's occupants. If this sounds like the option for you, please see the following project:
 
-[https://github.com/swarmstack/errbot-docker-alertmanager](https://github.com/swarmstack/errbot-docker-alertmanager)
-
-[https://github.com/swarmstack/errbot-docker-webex-alertmanager](https://github.com/swarmstack/errbot-docker-webex-alertmanager)
+[https://github.com/swarmstack/errbot-docker](https://github.com/swarmstack/errbot-docker)
 
 ---
 

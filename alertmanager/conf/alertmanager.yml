@@ -1,19 +1,17 @@
 # Example alertmanager.yml configuration
 #
 # See https://prometheus.io/docs/alerting/configuration/ for Alertmanager configuration syntax and built-in receivers.
-# Currently, these include email, HipChat, PagerDuty, OpsGenie, Slack, VictorOps, and WeChat. If you need to send to a
-# target that isn't built into Alertmanager, consider configuring a webhook_config below and running a bot to receive
-# and relay alerts. swarmstack provides some Errbot docker images for this purpose, which currently also supports IRC,
-# Telegram Messenger, and XMPP/jabber services such as Google Hangouts (talk.google.com). There is also a seperate
-# Errbot Docker image with Cisco Webex Teams backend support, and other backends, such CampFire, Discord, Gitter,
-# Matrix, Mattermost, Matrix, Microsoft Bot Framework, Skype, Tox, VK, and Zulip as well as others are supported
-# through the community.
+# Currently, these include email, HipChat, PagerDuty, OpsGenie, Slack, VictorOps, and WeChat.
+
+# If you need to send to a target that isn't built into Alertmanager, consider configuring a webhook_config below and
+# using an online service such as [built.io](https://built.io) or instead running a bot container to receive
+# and relay alerts. swarmstack provides an Errbot Docker image for this purpose, which currently also supports Cisco
+# Webex Teams, IRC, Telegram Messenger, and XMPP/Jabber services such as Google Hangouts (talk.google.com).
 #
-# https://github.com/swarmstack/errbot-docker-alertmanager
-# https://github.com/swarmstack/errbot-docker-webex-alertmanager
+# Other backends, such CampFire, Discord, Gitter, Matrix, Mattermost, Matrix, Microsoft Bot Framework, Skype, Tox, VK,
+# and Zulip and others are supported through the Errbot community. If you want to run a bot to relay alerts, see:
 #
-# See https://errbot.io for how to configure Errbot default backends such as XMPP (jabber) or IRC.
-# See https://github.com/mayflower/errbot-alerrtmanagerr for how to send alerts to the bot from Prometheus Alertmanager
+# https://github.com/swarmstack/errbot-docker
 
 route:
 
