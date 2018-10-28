@@ -112,13 +112,17 @@ A set of ansible playbooks and a docker-compose stack that:
 
 You may want to perform installation from a host outside the cluster, as running the docker.yml playbook may reboot hosts if kernels are updated (you can re-run it in the future to keep your hosts up-to-date). You can work around this by performing a 'yum update kernel' and rebooting if updated on one of your swarm hosts first and then running the ansible playbooks from that host.
 ```
-# yum install git ansible epel-release
+# yum install epel-release && yum install git ansible
+
 # cd /usr/local/src/
+
 # git clone https://github.com/swarmstack/swarmstack.git
+
 # rsync -aq --exclude=.git swarmstack/ localswarmstack/
+
 # cd localswarmstack/ansible
 ```
-Edit these files: | |
+Edit these (4) files: | |
 ---- | - |
 [clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack) | _Configure all of your cluster nodes and storage devices_ |
 [alertmanager/conf/alertmanager.yml](https://github.com/swarmstack/swarmstack/blob/master/alertmanager/conf/alertmanager.yml) | _Optional: Configure where the Alertmanagers send notifications_ |
@@ -130,30 +134,33 @@ All of the playbooks below are idempotent and can be re-run as needed when makin
 After execution of the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD you've set. You can update the ADMIN_PASSWORD later by executing _docker stack rm swarmstack_ (persistent data volumes will be preserved) and then re-running the swarmstack.yml playbook. Instances such as Grafana and Portainer will save credential configuration in their respective persistent data volumes. These volumes can be manually removed and would be automatically re-initialized if you ever encounter issues with a particular tool container. You would lose any historical information such as metrics if you choose to initialize an application by executing _docker volume rm swarmstack_volumename_ before re-running the swarmstack.yml playbook.
 
 ---
-```
-# ansible-playbook -i clusters/swarmstack playbooks/firewall.yml -k
-```
-* _optional (but HIGHLY recommended), you can run and re-run this playbook to manage firewalls on all of your nodes whether they run Docker or not._
+
+* ansible-playbook -i clusters/swarmstack [playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml) -k
+
+    _optional (but HIGHLY recommended), you can run and re-run this playbook to manage firewalls on all of your nodes whether they run Docker or not._
+
 ---
-```
-# ansible-playbook -i clusters/swarmstack playbooks/docker.yml -k
-```
-* _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host as kernels are updated._
+
+* ansible-playbook -i clusters/swarmstack [playbooks/docker.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/docker.yml) -k
+
+    _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host as kernels are updated._
+
 ---
-```
-# ansible-playbook -i clusters/swarmstack playbooks/etcd.yml -k
-```
-* _optional: used by Portworx to store storage cluster metadata in a highly-available manner. Only 3 nodes need to be defined to run etcd, and you'll probably just need to run this playbook once to establish the initial etcd cluster (which can be used by multiple Portworx clusters)._
+
+* ansible-playbook -i clusters/swarmstack [playbooks/etcd.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/etcd.yml) -k
+
+    _optional: used by Portworx to store storage cluster metadata in a highly-available manner. Only 3 nodes need to be defined to run etcd, and you'll probably just need to run this playbook once to establish the initial etcd cluster (which can be used by multiple Portworx clusters)._
 ---
-```
-# ansible-playbook -i clusters/swarmstack playbooks/portworx.yml -k
-```
-* _optional, installs Portworx in groups of 3 nodes each. If you are instead bringing your own persistent storage, be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._
+
+* ansible-playbook -i clusters/swarmstack [playbooks/portworx.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/portworx.yml) -k
+
+    _optional, installs Portworx in groups of 3 nodes each. If you are instead bringing your own persistent storage, be sure to update the pxd driver in [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml). Add new groups of 3 hosts later as your cluster grows._
+
 ---
-```
-# ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
-```
-* _deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing or updating NetData on each node in order for Prometheus to collect metrics from it._
+
+* ansible-playbook -i clusters/swarmstack [playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) -k
+
+    _This deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing or updating NetData on each node in order for Prometheus to collect metrics from it._
 
 ---
 

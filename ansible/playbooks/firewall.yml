@@ -38,7 +38,7 @@
 
   - name: copy /etc/swarmstack_fw/rules/docker.rules
     copy: src=../roles/{{CLUSTER}}/files/etc/swarmstack_fw/rules/docker.rules dest=/etc/swarmstack_fw/rules/docker.rules owner=root group=root mode="u=rw,g=r,o=r"
-    when: "'no-docker' not in group_names"
+    when: "'swarm' in group_names"
 
   - name: Save the existing firewall rules to /etc/sysconfig/iptables file
     shell: /sbin/service iptables save
@@ -59,11 +59,11 @@
     args:
       warn: false
     ignore_errors: yes
-    when: "'no-docker' not in group_names"
+    when: "'swarm' in group_names"
 
   - name: ensure DOCKER-USER chain is flushed
     iptables: chain=DOCKER-USER flush=yes
-    when: "'no-docker' not in group_names"
+    when: "'swarm' in group_names"
 
   - name: Save the existing firewall rules to /etc/sysconfig/iptables file
     shell: /sbin/service iptables save
@@ -83,7 +83,7 @@
 
   - name: Add docker.rules
     shell: cat /etc/swarmstack_fw/rules/docker.rules | awk -F '#' '{print $1}' | sed '/^\s*$/d' >> /etc/swarmstack_fw/proposedfw.tmp
-    when: "'no-docker' not in group_names"
+    when: "'swarm' in group_names"
 
   - name: Add cluster.rules
     shell: cat /etc/swarmstack_fw/rules/cluster.rules | awk -F '#' '{print $1}' | sed '/^\s*$/d' >> /etc/swarmstack_fw/proposedfw.tmp
