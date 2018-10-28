@@ -6,30 +6,33 @@ __A Docker swarm stack for operating highly-available containerized applications
  
 <!-- TOC -->
 
-- [WHY?](#why)
-- [FEATURES](#features)
-- [REQUIREMENTS](#requirements)
-- [INSTALLATION](#installation)
-- [MONITORING AND ALERTING](#monitoring-and-alerting)
-  - [Monitoring](#monitoring)
-  - [Alerting](#alerting)
-- [NETWORK URLs](#network-urls)
-- [SCREENSHOTS](#screenshots)
-  - [Caddy Link Dashboard](#caddy-link-dashboard)
-  - [Grafana Dashboards List](#grafana-dashboards-list)
-    - [Grafana - Docker Swarm Nodes](#grafana---docker-swarm-nodes)
-    - [Grafana - Docker Swarm Services](#grafana---docker-swarm-services)
-    - [Grafana - etcd](#grafana---etcd)
-    - [Grafana - Portworx Cluster Status](#grafana---portworx-cluster-status)
-    - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
-    - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
-  - [Alertmanager](#alertmanager)
-  - [Portainer - Dashboard](#portainer---dashboard)
-    - [Portainer - Stacks](#portainer---stacks)
-  - [Prometheus - Graphs](#prometheus---graphs)
-    - [Prometheus - Alerts](#prometheus---alerts)
-    - [Prometheus - Targets](#prometheus---targets)
-- [CREDITS](#credits)
+- [swarmstack](#swarmstack)
+    - [WHY?](#why)
+    - [FEATURES](#features)
+    - [REQUIREMENTS](#requirements)
+    - [INSTALLATION](#installation)
+    - [MONITORING AND ALERTING](#monitoring-and-alerting)
+        - [Monitoring](#monitoring)
+        - [Alerting](#alerting)
+    - [NETWORK URLs](#network-urls)
+    - [SCREENSHOTS](#screenshots)
+        - [Caddy Link Dashboard](#caddy-link-dashboard)
+        - [Grafana Dashboards List](#grafana-dashboards-list)
+        - [Grafana - Docker Swarm Nodes](#grafana---docker-swarm-nodes)
+        - [Grafana - Docker Swarm Services](#grafana---docker-swarm-services)
+        - [Grafana - etcd](#grafana---etcd)
+        - [Grafana - Portworx Cluster Status](#grafana---portworx-cluster-status)
+        - [Grafana - Portworx Volume Status](#grafana---portworx-volume-status)
+        - [Grafana - Prometheus Stats](#grafana---prometheus-stats)
+        - [Alertmanager](#alertmanager)
+        - [Portainer - Cluster Visualizer](#portainer---cluster-visualizer)
+        - [Portainer - Dashboard](#portainer---dashboard)
+        - [Portainer - Stacks](#portainer---stacks)
+        - [Prometheus - Graphs](#prometheus---graphs)
+        - [Prometheus - Alerts](#prometheus---alerts)
+        - [Prometheus - Targets](#prometheus---targets)
+    - [CREDITS](#credits)
+    - [FILETREE](#filetree)
 
 <!-- /TOC -->
 
@@ -241,6 +244,8 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus.png)
 ### Alertmanager
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/screen9.png)
+### Portainer - Cluster Visualizer
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portainer_cluster.png)
 ### Portainer - Dashboard
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/portainer-dashboard.png)
 ### Portainer - Stacks
@@ -251,7 +256,9 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_alerts.png)
 ### Prometheus - Targets
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/prometheus_targets.png)
+
 ---
+
 ## CREDITS
 
 Credit is due to the excellent DevOps stack proposed and maintained by [Stefan Prodan](https://stefanprodan.com/) and his project [swarmprom](https://github.com/stefanprodan/swarmprom).
@@ -261,3 +268,132 @@ Thanks to Mark Sullivan at Cisco for his work on the Cisco Webex Teams backend f
 Thank you Carl Bergquist at Grafana Labs for the golang updates.
 
 Thanks goes to the team at Portworx for their excellent storage product and support.
+
+---
+
+## FILETREE
+
+```
+.
+├── LICENSE
+├── PRIVACY.md
+├── README.md
+├── alertmanager
+│   └── conf
+│       └── alertmanager.yml
+├── ansible
+│   ├── README.md
+│   ├── clusters
+│   │   └── swarmstack
+│   ├── playbooks
+│   │   ├── docker.yml
+│   │   ├── etcd.yml
+│   │   ├── firewall.yml
+│   │   ├── includes
+│   │   │   └── tasks
+│   │   │       ├── prompt_colors
+│   │   │       │   ├── set_prompt.yml
+│   │   │       │   ├── set_prompts_blue.yml
+│   │   │       │   ├── set_prompts_green.yml
+│   │   │       │   └── set_prompts_red.yml
+│   │   │       └── sysctl_el7.yml
+│   │   ├── portworx.yml
+│   │   ├── swarmstack.yml
+│   │   └── util.yml
+│   └── roles
+│       ├── common
+│       │   └── files
+│       │       └── etc
+│       │           ├── cron.daily
+│       │           │   └── clean-docker
+│       │           ├── docker
+│       │           │   └── daemon.json
+│       │           ├── swarmstack_fw
+│       │           │   └── rules
+│       │           │       └── common.rules
+│       │           ├── systemd
+│       │           │   └── system
+│       │           │       └── docker.service.d
+│       │           │           └── docker.conf
+│       │           ├── udev
+│       │           │   └── rules.d
+│       │           │       └── 59-custom-txqueuelen.rules
+│       │           └── yum.repos.d
+│       │               ├── docker-edge.repo
+│       │               ├── docker-stable.repo
+│       │               └── docker-test.repo
+│       └── swarmstack
+│           └── files
+│               └── etc
+│                   ├── swarmstack_fw
+│                   │   └── rules
+│                   │       ├── cluster.rules
+│                   │       └── docker.rules
+│                   └── systemd
+│                       └── system
+│                           └── docker.service.d
+│                               ├── docker.conf
+│                               └── proxy.conf
+├── caddy
+│   ├── Caddyfile
+│   ├── Caddyfile.ldap
+│   └── index.html
+├── docker-compose.yml
+├── documentation
+│   ├── Adding\ your\ own\ applications\ to\ monitoring.md
+│   ├── Manual\ swarmstack\ installation.md
+│   ├── Notes.md
+│   ├── Updating\ swarmstack.md
+│   ├── Using\ LDAP.md
+│   ├── Using\ Pushgateway.md
+│   ├── Working\ with\ swarmstack\ behind\ a\ web\ proxy.md
+│   ├── logos
+│   │   ├── swarmstack150x150.png
+│   │   ├── swarmstack300x300.png
+│   │   └── swarmstack500x500.png
+│   └── screens
+│       ├── docker_swarm_nodes.png
+│       ├── docker_swarm_services.png
+│       ├── etcd.png
+│       ├── portainer-dashboard.png
+│       ├── portainer-stacks.png
+│       ├── portainer_cluster.png
+│       ├── portworx_cluster_status.png
+│       ├── portworx_volumes.png
+│       ├── prometheus.png
+│       ├── prometheus_alerts.png
+│       ├── prometheus_targets.png
+│       ├── screen1.png
+│       ├── screen10.png
+│       ├── screen2.png
+│       ├── screen9.png
+│       └── swarmstack-diagram.png
+├── grafana
+│   ├── dashboards
+│   │   ├── cluster-nodes.json
+│   │   ├── docker-containers.json
+│   │   ├── etcd-dash.json
+│   │   ├── portworx-cluster-dash.json
+│   │   ├── portworx-volumes-dash.json
+│   │   └── prometheus-2-stats.json
+│   ├── dashboards.yml
+│   ├── datasources
+│   │   └── prometheus.yaml
+│   ├── grafana.ini
+│   └── ldap.toml
+├── prometheus
+│   ├── Dockerfile
+│   ├── conf
+│   │   └── prometheus.yml
+│   └── rules
+│       ├── container_nodes.yml
+│       ├── docker_containers.yml
+│       └── portworx.yml
+├── unsee
+│   └── unsee.yaml
+└── utils
+    ├── itdock
+    ├── lgdock
+    ├── lsdock
+    └── psdock
+```
