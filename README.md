@@ -75,11 +75,11 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 A set of ansible playbooks and a docker-compose stack that:
 
 - Tunes EL7 sysctls for optimal network performance
-- Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or bring your own)
-- Automatically prunes unused Docker containers / volumes / images from nodes
-- Installs and configures an 3-node etcd cluster, used by Portworx for cluster metadata
-- Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
-- Configures and deploys the swarmstack DevOps tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, and Portainer to manage the Docker swarm via GUI. All tools are secured using HTTPS by a Caddy reverse proxy.
+- _optional:docker_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
+- _optional:docker_ Automatically prunes unused Docker containers / volumes / images from nodes
+- _optional:storage_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
+- _optional:storage_ Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
+- _swarmstack:DevOps_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, and Portainer to manage the Docker swarm via GUI. All tools are secured using HTTPS by a Caddy reverse proxy. Optional [Errbot](https://github.com/swarmstack/errbot-docker) to connect alerts to social rooms to not natively supported by Alertmanager
 
 ---
 
@@ -87,9 +87,13 @@ A set of ansible playbooks and a docker-compose stack that:
 
 3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions into the storage cluster. _More devices usually equals better performance_.
 
- With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide up to _1TB_ of persistent storage for up to _40_ volumes across those 3 nodes. When deploying or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use node.label.storagegroup constraints within your Docker services to pin them to one particular grouping of 3 hosts within the larger cluster each running their own 3-node Portworx storage cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage, including swarmstack.
+With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide a minimum 40GB (needed by swarmstack) up to Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. 
+
+When deploying or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use node.label.storagegroup constraints within your Docker services to pin them to one particular grouping of 3 hosts within the larger cluster each running their own 3-node Portworx storage cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. 
+
+Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage, including swarmstack.
  
- When using [Portworx PX-Enterprise](https://portworx.com/), or bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
+When using [Portworx PX-Enterprise](https://portworx.com/), or bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
 
  ---
  
