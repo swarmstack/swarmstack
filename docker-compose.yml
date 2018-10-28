@@ -192,7 +192,7 @@ services:
           memory: 64M
 
   grafana:
-    image: grafana/grafana:5.3.1
+    image: grafana/grafana:5.3.2
     networks:
       - net
     environment:
@@ -296,7 +296,7 @@ services:
         limits:
           memory: 2048M
         reservations:
-          memory: 128M
+          memory: 1024M
 
   pushgateway:
     image: prom/pushgateway:v0.6.0
