@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  gather_facts: true
   order: sorted
   remote_user: root
 
@@ -102,7 +103,7 @@
       block: |2
               - http_proxy={{item.http_proxy}}
               - https_proxy={{item.https_proxy}}
-              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ lookup('dig', hostvars[host].inventory_hostname) }}{{ '' if loop.last else ','}}{% endfor %}
+              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ hostvars[host].inventory_hostname }}{{ '' if loop.last else ','}}{% endfor %}
     with_items:
       - { http_proxy: "{{PROXY_HTTP}}", https_proxy: "{{PROXY_HTTPS}}", no_proxy: "{{PROXY_NOPROXY}}" }
     when: "inventory_hostname == SWARMJOIN and PROXY_ENABLED=='true'"
@@ -116,7 +117,7 @@
       block: |2
               - http_proxy={{item.http_proxy}}
               - https_proxy={{item.https_proxy}}
-              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ lookup('dig', hostvars[host].inventory_hostname) }}{{ '' if loop.last else ','}}{% endfor %}
+              - no_proxy={{item.no_proxy}},{% for host in groups['swarm'] %}{{ hostvars[host].inventory_hostname }}{{ '' if loop.last else ','}}{% endfor %}
     with_items:
       - { http_proxy: "{{PROXY_HTTP}}", https_proxy: "{{PROXY_HTTPS}}", no_proxy: "{{PROXY_NOPROXY}}" }
     when: "inventory_hostname == SWARMJOIN and PROXY_ENABLED=='true'"

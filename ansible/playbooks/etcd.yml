@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  gather_facts: true
   remote_user: root
 
   roles:
@@ -8,7 +9,7 @@
   tasks:
 
   - name: install or update etcd
-    yum: name=etcd state=latest masked=no
+    yum: name=etcd state=latest
 
   - name: enable etcd service to create systemd file
     systemd: name=etcd enabled=yes 
@@ -34,7 +35,7 @@
           --advertise-client-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 \
           --listen-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
           --initial-advertise-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
-          --initial-cluster {% for host in groups['etcd'] %}etcd-{{ hostvars[host].inventory_hostname}}=http://{{ lookup('dig', hostvars[host].inventory_hostname) }}:2380{{ '' if loop.last else ','}}{% endfor %} \
+          --initial-cluster {% for host in groups['etcd'] %}etcd-{{ hostvars[host].inventory_hostname}}=http://{{ hostvars[host].inventory_hostname }}:2380{{ '' if loop.last else ','}}{% endfor %} \
           --initial-cluster-token etcd-token \
           --initial-cluster-state new
     notify: systemctl-etcd
