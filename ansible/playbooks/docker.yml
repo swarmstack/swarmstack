@@ -12,8 +12,6 @@
   - name: add /etc/udev/rules.d/59-custom-txqueuelen.rules
     copy: src=../roles/common/files/etc/udev/rules.d/59-custom-txqueuelen.rules dest=/etc/udev/rules.d/59-custom-txqueuelen.rules owner=root group=root mode="u=rw,g=r,o=r"
 
-  - import_tasks: includes/tasks/update_rsyslog.yml
-
   - name: remove old docker stuff
     yum: name=docker-engine,docker-ce-selinux state=absent
 
