@@ -75,21 +75,21 @@
     lineinfile:
       insertbefore: 'cluster.peer=alertmanagerB:9094'
       path: /usr/local/src/localswarmstack/docker-compose.yml
-      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9093/'"
+      line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9093/'"
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Update docker-compose.yml with web.external-url for alertmanagerB
     lineinfile:
       insertbefore: 'cluster.peer=alertmanager:9094'
       path: /usr/local/src/localswarmstack/docker-compose.yml
-      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9095/'"
+      line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9095/'"
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Update docker-compose.yml with web.external-url for Prometheus
     lineinfile:
       insertafter: 'storage.tsdb.retention'
       path: /usr/local/src/localswarmstack/docker-compose.yml
-      line: "      - '--web.external-url=https://{{ SWARMJOIN }}:9090/'"
+      line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9090/'"
     when: "inventory_hostname == SWARMJOIN"
 
 
@@ -266,7 +266,7 @@
     lineinfile:
       insertbefore: 'SWARMSTACK JS MARKER'
       path: /usr/local/src/localswarmstack/caddy/index.html
-      line: "document.getElementById('{{hostvars[item]['inventory_hostname_short']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname_short']}}/';"
+      line: "document.getElementById('{{hostvars[item]['inventory_hostname']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname']}}/';"
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
 
@@ -277,7 +277,7 @@
       path: /usr/local/src/localswarmstack/caddy/index.html
       block: |
         <div class="boxes">
-          <div class="linkbox"><a target="_blank" href="" id="{{hostvars[item]['inventory_hostname_short']}}"><h3>NetData - {{hostvars[item]['inventory_hostname_short']}}</h3></a></div>
+          <div class="linkbox"><a target="_blank" href="" id="{{hostvars[item]['inventory_hostname']}}"><h3>NetData - {{hostvars[item]['inventory_hostname']}}</h3></a></div>
           <div class="box">Everything happening on your systems and applications</div>
         </div>
     with_items: "{{groups['all']}}"
@@ -289,8 +289,8 @@
       marker: "# {{item}} ANSIBLE MANAGED BLOCK"
       path: /usr/local/src/localswarmstack/caddy/Caddyfile
       block: |2
-          proxy /{{hostvars[item]['inventory_hostname_short']}} http://{{item}}:19999/ {
-            without /{{hostvars[item]['inventory_hostname_short']}}
+          proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
+            without /{{hostvars[item]['inventory_hostname']}}
             transparent
           }
     with_items: "{{groups['all']}}"
@@ -302,8 +302,8 @@
       marker: "# {{item}} ANSIBLE MANAGED BLOCK"
       path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
       block: |2
-          proxy /{{hostvars[item]['inventory_hostname_short']}} http://{{item}}:19999/ {
-            without /{{hostvars[item]['inventory_hostname_short']}}
+          proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
+            without /{{hostvars[item]['inventory_hostname']}}
             transparent
           }
     with_items: "{{groups['all']}}"

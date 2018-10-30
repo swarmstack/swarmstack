@@ -3,6 +3,7 @@
 [swarmstack:vars]
 CLUSTER=swarmstack
 SWARMJOIN=swarm01.example.com
+EXTERNAL_ENDPOINT=external.cisco.com
 ADMIN_PASSWORD=changeme!42
 PUSH_USER=pushuser
 PUSH_PASSWORD=pushpass
