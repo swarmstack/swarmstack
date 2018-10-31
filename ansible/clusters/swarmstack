@@ -1,24 +1,28 @@
 # Main example swarmstack ansible cluster file in INI format
 
 [swarmstack:vars]
-CLUSTER=swarmstack
-SWARMJOIN=swarm01.example.com
-EXTERNAL_ENDPOINT=external.cisco.com
-ADMIN_PASSWORD=changeme!42
-PUSH_USER=pushuser
-PUSH_PASSWORD=pushpass
+CLUSTER=swarmstack                      # The name of this cluster. Copy this file plus ../roles/swarmstack to separate clusters
+SWARMJOIN=swarm01.example.com           # Define a manager node for swarmstack to use
+EXTERNAL_ENDPOINT=external.example.com  # This URL will be used for Alertmanager links in emails
+ADMIN_PASSWORD=changeme!42              # Will set the initial admin password for all tools
+PUSH_USER=pushuser                      # Used for Prometheus Pushgateway
+PUSH_PASSWORD=pushpass                  # Used for Prometheus Pushgateway
+PORTWORX_INSTALL=px-dev			# Set this to px-enterprise:1.5.1 to start 30 day evaluation, downgrade to px-dev not possible
 
-# Other swarmstack settings
+portworx/px-enterprise:1.5.1
+
+
+# Other optional swarmstack settings
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
-
 PROXY_ENABLED=false
+LDAP_ENABLED=false
+
 #PROXY_HTTP=http://proxy.example.com:80
 #PROXY_HTTPS=https://proxy.example.com:443
 #PROXY_YUM=_none_
 #PROXY_NOPROXY=.example.com,alertmanager,alertmanagerb,grafana,portainer,prometheus,pushgateway,unsee,172.16.0.0/12,10.0.0.0/8
-
-LDAP_ENABLED=false
+# See https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md
 #LDAP_GROUP=some_group_dn
 #LDAP_HOST=ldap.example.com
 #LDAP_PORT=636
@@ -31,7 +35,13 @@ LDAP_ENABLED=false
 #LDAP_SEARCH_BASE_DNS=o=example.com
 #LDAP_ATTRIBUTE_USERNAME=sAMAccountName
 #LDAP_GROUP_DN=CN=mygroup,OU=groups,O=example.com
-# See https://github.com/freman/caddy-reauth and http://docs.grafana.org/installation/ldap/
+# See https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md
+# Also see https://github.com/freman/caddy-reauth and http://docs.grafana.org/installation/ldap/
+
+
+# CONFIGURE YOUR HOSTS IN THE SECTIONS BELOW
+#
+# Be sure to change memory-32GB or include additional memory sections and place your hosts in them if host memory sizes vary. These settings tune several EL7 sysctls for optimal performance when the docker.yml playbook is run on a host. It's safe to run the docker.yml playbook against a pre-existing Docker swarm cluster, it will detect that the swarm already exists and will only add any new hosts you've configured below in the [swarm] section to that existing cluster. Be sure to define ALL of your swarm hosts participating in the cluster here, whether or not they were instanciated by swarmstack's docker.yml playbook. Also make sure you set SWARMJOIN above to an EXISTING Docker swarm manager, so that any new nodes you are adding will be joined to it.
 
 [swarmstack:children]
 etcd

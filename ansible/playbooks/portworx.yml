@@ -19,7 +19,7 @@
     when: "'portworx' in group_names"
 
   - name: install Portworx OCI bundle
-    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/px-dev
+    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_INSTALL }}
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_installed.stat.exists == False"
