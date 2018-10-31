@@ -1,18 +1,27 @@
 # Main example swarmstack ansible cluster file in INI format
-
 [swarmstack:vars]
-CLUSTER=swarmstack                      # The name of this cluster. Copy this file plus ../roles/swarmstack to separate clusters
-SWARMJOIN=swarm01.example.com           # Define a manager node for swarmstack to use
-EXTERNAL_ENDPOINT=external.example.com  # This URL will be used for Alertmanager links in emails
-ADMIN_PASSWORD=changeme!42              # Will set the initial admin password for all tools
-PUSH_USER=pushuser                      # Used for Prometheus Pushgateway
-PUSH_PASSWORD=pushpass                  # Used for Prometheus Pushgateway
-PORTWORX_INSTALL=px-dev			# Set this to px-enterprise:1.5.1 to start 30 day evaluation, downgrade to px-dev not possible
 
-portworx/px-enterprise:1.5.1
+CLUSTER=swarmstack
+# The name of this cluster. Copy this file plus ../roles/swarmstack to create new separately named clusters
+
+SWARMJOIN=swarm01.example.com
+# Define a manager node for swarmstack to use
+
+EXTERNAL_ENDPOINT=external.example.com
+# This URL will be used for Alertmanager links in emails
+
+ADMIN_PASSWORD=changeme!42
+# Will set the initial admin password for all tools
+
+PUSH_USER=pushuser
+PUSH_PASSWORD=pushpass
+# Used for Prometheus Pushgateway
+
+PORTWORX_INSTALL=px-dev
+# Set this to px-enterprise:1.5.1 to start 30 day evaluation, downgrade to px-dev not possible
 
 
-# Other optional swarmstack settings
+# Some optional swarmstack settings
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
 REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
 PROXY_ENABLED=false
