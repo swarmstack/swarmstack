@@ -1,4 +1,4 @@
-# Portworx Lighthouse stack for Portworx PX-Enterprise
+# PX-Lighthouse swarmstack for Portworx PX-Enterprise
 
 You can use this stack after deploying swarmstack if you chose to set PORTWORX_INSTALL=px-enterprise:1.5.1
 
