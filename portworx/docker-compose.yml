@@ -1,0 +1,26 @@
+version: "3.3"
+networks:
+  default:
+    external:
+      name: swarmstack_net
+
+volumes:
+    px-lighthouse-config:
+      driver: pxd
+      driver_opts:
+        repl: 2
+        size: 2
+
+services:
+  lighthouse:
+    image: portworx/px-lighthouse:1.5.0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 384M
+    volumes:
+      - px-lighthouse-config:/config
