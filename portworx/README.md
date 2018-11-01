@@ -4,7 +4,7 @@ You can use this stack after deploying swarmstack if you chose to set PORTWORX_I
 
 ```
 cd /usr/local/src/localswarmstack/portworx
-docker stack deploy -c docker-compose.yml lighthouse 
+docker stack deploy -c docker-compose.yml px-lighthouse 
 ```
 
 You'll then need to configure your localswarmstack/docker-compose.yml caddy service and add the ports 9096 (http:) and 9097 (https:)
@@ -27,7 +27,7 @@ You'll then need to configure your localswarmstack/docker-compose.yml caddy serv
       - "19998:19999"
 ```
 
-Also update caddy/Caddyfile (or caddy/Caddyfile.ldap if using LDAP), add the sections:
+Also update caddy/Caddyfile or caddy/Caddyfile.ldap and add these sections:
 
 ```
 :9096 {
@@ -46,10 +46,10 @@ Also update caddy/Caddyfile (or caddy/Caddyfile.ldap if using LDAP), add the sec
 }
 ```
 
-Finally, remove and re-deploy swarmstack, which will re-configure caddy to proxy the lighthouse traffic:
+Finally, remove and re-deploy swarmstack, which will re-configure caddy to proxy the PX-Lighthouse traffic:
 
 ```
-cd /usr/local/source
+cd /usr/local/src/localswarmstack
 docker stack rm swarmstack
 ADMIN_PASSWORD='changeme!42' docker stack deploy -c docker-compose.yml swarmstack
 # or cd ansible; ansible-playbook -i clusters/swarmstack playbooks/swarmstack.yml -k
