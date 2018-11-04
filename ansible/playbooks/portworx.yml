@@ -30,7 +30,7 @@
     when: "'portworx' in group_names"
 
   - name: configure Portworx OCI bundle
-    shell: /opt/pwx/bin/px-runc install -c {{ hostvars[inventory_hostname]['PWX_STORAGE_GROUP'] }} -k {% for host in groups['etcd'] %}etcd:http://{{ hostvars[host].inventory_hostname }}:2379{{ '' if loop.last else ','}}{% endfor %}{% for device in hostvars[inventory_hostname]['DEVICES'] %} -s {{ device }}{% endfor %} -d {{ hostvars[inventory_hostname]['DATAIFACE'] }} -m {{ hostvars[inventory_hostname]['MGTIFACE'] }}
+    shell: /opt/pwx/bin/px-runc install -c {{ hostvars[inventory_hostname]['PWX_STORAGE_GROUP'] }} -k {% for host in groups['etcd'] %}etcd:http://{{ hostvars[host].inventory_hostname }}:2379{{ '' if loop.last else ','}}{% endfor %}{% for device in hostvars[inventory_hostname]['DEVICES'] %} -s {{ device }}{% endfor %} -d {{ hostvars[inventory_hostname]['PWX_DATA'] }} -m {{ hostvars[inventory_hostname]['PWX_MGT'] }}
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_configured.stat.exists == False"

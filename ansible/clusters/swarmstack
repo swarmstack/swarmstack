@@ -58,6 +58,7 @@ portworx
 swarm
 memory-32GB
 
+
 [etcd]
 swarm01.example.com
 swarm02.example.com
@@ -73,26 +74,28 @@ swarm03.example.com
 # With PX-Enterprise, you can optionally just put all of your hosts into RED group.
 
 [portworx]
-swarm01.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-swarm02.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
-swarm03.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' DATAIFACE=eth0 MGTIFACE=eth0
+swarm01.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' PWX_DATA=eth0 PWX_MGT=eth0
+swarm02.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' PWX_DATA=eth0 PWX_MGT=eth0
+swarm03.example.com   PWX_STORAGE_GROUP='RED'  DEVICES='["/dev/sdb"]' PWX_DATA=eth0 PWX_MGT=eth0
 
-# swarm04.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/sdb1","/dev/sdc"]'        DATAIFACE=eth0 MGTIFACE=eth0
-# swarm05.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/xvda1"]'                  DATAIFACE=eth0 MGTIFACE=eth0
-# swarm06.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/nvme0","/dev/nvme1n1p1"]' DATAIFACE=eth0 MGTIFACE=eth0
+# swarm04.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/sdb1","/dev/sdc"]'        PWX_DATA=eth0 PWX_MGT=eth0
+# swarm05.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/xvda1"]'                  PWX_DATA=eth0 PWX_MGT=eth0
+# swarm06.example.com PWX_STORAGE_GROUP='BLUE' DEVICES='["/dev/nvme0","/dev/nvme1n1p1"]' PWX_DATA=eth0 PWX_MGT=eth0
+#   You can contribute block devices or partitions to Portworx
 
 
 # Docker recommends no more than 7 manager nodes in a cluster.
 # 5 or 3 managers are warranted for smaller clusters.
 
 [swarm]
-swarm01.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager'
-swarm02.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager'
-swarm03.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager'
+swarm01.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager' DOCKER_DATA=eth0 DOCKER_MGT=eth0
+swarm02.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager' DOCKER_DATA=eth0 DOCKER_MGT=eth0
+swarm03.example.com   DOCKER_STORAGE_GROUP='RED'  ROLE='manager' DOCKER_DATA=eth0 DOCKER_MGT=eth0
 
-# swarm04.example.com DOCKER_STORAGE_GROUP='BLUE' ROLE='manager'
-# swarm05.example.com DOCKER_STORAGE_GROUP='BLUE' ROLE='manager'
-# swarm06.example.com DOCKER_STORAGE_GROUP='BLUE'
+# swarm04.example.com DOCKER_STORAGE_GROUP='BLUE' ROLE='manager' DOCKER_DATA=eth0 DOCKER_MGT=eth0
+# swarm05.example.com DOCKER_STORAGE_GROUP='BLUE' ROLE='manager' DOCKER_DATA=eth0 DOCKER_MGT=eth0
+# swarm06.example.com DOCKER_STORAGE_GROUP='BLUE'                DOCKER_DATA=eth0 DOCKER_MGT=eth0
+
 
 # see playbooks/includes/tasks/sysctl_el7.yml to add other memory configurations
 [memory-2GB]

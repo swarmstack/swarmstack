@@ -176,7 +176,7 @@
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
 
   - name: initialize swarm
-    command: "docker swarm init --advertise-addr {{hostvars[inventory_hostname]['ansible_default_ipv4']['address']}}"
+    command: "docker swarm init --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }}"
     run_once: true
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and swarm_initialized is failed"
 
@@ -213,13 +213,13 @@
     when: "'swarm' in group_names and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
 
   - name: join manager nodes to swarm
-    command: "docker swarm join --token {{swarm_token_manager.stdout}} {{SWARMJOIN}}:2377"
+    command: "docker swarm join --token {{swarm_token_manager.stdout}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
     ignore_errors: true
     register: join_manager_node
     when: "'swarm' in group_names and ROLE is defined and ROLE == 'manager' and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
 
   - name: join worker nodes to swarm
-    command: "docker swarm join --token {{swarm_token_worker.stdout}} {{SWARMJOIN}}:2377"
+    command: "docker swarm join --token {{swarm_token_worker.stdout}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
     ignore_errors: true
     when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
 
