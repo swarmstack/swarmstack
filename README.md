@@ -85,6 +85,8 @@ A set of ansible playbooks and a docker-compose stack that:
 
 ## REQUIREMENTS
 
+There is a 'docker-compose-singlebox.yml' stack that can be used to evaluate swarmstack on a single host without requiring etcd and portworx or other persistent storage. Please see the INSTALLATION section for instructions on installing this _singlebox_ version of swarmstack.
+
 3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions into the storage cluster. _More devices usually equals better performance_.
 
 With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide a minimum 40GB (needed by swarmstack) up to Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. 
@@ -129,9 +131,10 @@ You may want to perform installation from a host outside the cluster, as running
 
 # cd localswarmstack/ansible
 
+```
+
 There is a 'docker-compose-singlebox.yml' stack that can be used to evaluate swarmstack on a single host without requiring etcd and portworx or other persistent storage. This stack will save persistent named volumes to that single host instead. Please see the file for installation instructions, skipping all of the steps below.
 
-```
 Edit these (4) files: | |
 ---- | - |
 [clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack) | _Configure all of your cluster nodes and storage devices_ |
