@@ -125,9 +125,12 @@ You may want to perform installation from a host outside the cluster, as running
 
 # git clone https://github.com/swarmstack/swarmstack.git
 
-# rsync -aq --exclude=.git swarmstack/ localswarmstack/
+# rsync -aq --exclude=.git --exclude=.gitignore swarmstack/ localswarmstack/
 
 # cd localswarmstack/ansible
+
+There is a 'docker-compose-singlebox.yml' stack that can be used to evaluate swarmstack on a single host without requiring etcd and portworx or other persistent storage. This stack will save persistent named volumes to that single host instead. Please see the file for installation instructions, skipping all of the steps below.
+
 ```
 Edit these (4) files: | |
 ---- | - |
