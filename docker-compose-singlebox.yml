@@ -22,7 +22,6 @@ version: "3.3"
 #  You might care to also update the Docker storage-driver from older "aufs" to "overlay2" before clicking "Apply & Restart".
 
 
-
 #  All singlebox users will need to edit the 2 files below, and add your localhost IP address to replace all occurances of the
 #  10.0.13.2 IP with your host IP so that Caddy and Prometheus can access your Docker and NetData installations correctly:
 #
