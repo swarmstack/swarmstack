@@ -1,12 +1,13 @@
 # swarmstack
 
-__A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.__
+A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
 
-[![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg) [https://youtu.be/3FpTcVnvfRg](https://youtu.be/3FpTcVnvfRg)
+[![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg)
  
 <!-- TOC -->
 
-- [swarmstack](#swarmstack)
+- [swarmstack introduction video](https://youtu.be/3FpTcVnvfRg)
+- [swarmstack playlist videos](https://www.youtube.com/playlist?list=PLffspZ58HP-Nv8tDHGJoawAZQStkNzA7u)
     - [WHY?](#why)
     - [FEATURES](#features)
     - [REQUIREMENTS](#requirements)
