@@ -1,0 +1,109 @@
+:80 {
+  tls off
+  redir https://{hostonly}{uri}
+}
+
+:443 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  root /www
+}
+
+:3000 {
+  tls self_signed
+  errors stderr
+
+  proxy / grafana:3000 {
+    transparent
+    websocket
+  }
+}
+
+:9000 {
+  tls self_signed
+  errors stderr
+
+  proxy / portainer:9000 {
+    transparent
+    websocket
+  }
+}
+
+
+:9090 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  proxy / prometheus:9090 {
+    transparent
+  }
+}
+
+:9091 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  proxy / pushgateway:9091 {
+    transparent
+  }
+
+  basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
+  proxy /metrics/job/ pushgateway:9091 {
+    transparent
+  }
+}
+
+:9093 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  proxy / alertmanager:9093 {
+    transparent
+  }
+}
+
+:9094 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  proxy / unsee:8080 {
+    transparent
+  }
+}
+
+:9095 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+  proxy / alertmanagerB:9093 {
+    transparent
+  }
+}
+
+:9180 {
+  tls off
+  errors stderr
+
+  prometheus {
+    use_caddy_addr
+  }
+}
+
+:19999 {
+  tls self_signed
+  errors stderr
+
+  basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
+  proxy /swarmhost1 http://10.0.13.2:19999/ {
+    without /swarmhost1
+    transparent
+  }
+}

@@ -1,0 +1,85 @@
+global:
+  scrape_interval:     22s
+  evaluation_interval: 15s
+
+  external_labels:
+    monitor: 'swarmstack'
+
+rule_files:
+  - "container_nodes.yml"
+  - "docker_containers.yml"
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: [ 'alertmanager:9093', 'alertmanagerB:9093' ]
+
+scrape_configs:
+
+  - job_name: 'alertmanager'
+    dns_sd_configs:
+    - names:
+      - 'tasks.alertmanager'
+      type: 'A'
+      port: 9093
+
+  - job_name: 'alertmanagerB'
+    dns_sd_configs:
+    - names:
+      - 'tasks.alertmanagerB'
+      type: 'A'
+      port: 9093
+
+  - job_name: 'caddy'
+    dns_sd_configs:
+    - names:
+      - 'tasks.caddy'
+      type: 'A'
+      port: 9180
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'cadvisor'
+    dns_sd_configs:
+    - names:
+      - 'tasks.cadvisor'
+      type: 'A'
+      port: 8080
+
+  - job_name: 'grafana'
+    dns_sd_configs:
+    - names:
+      - 'tasks.grafana'
+      type: 'A'
+      port: 3000
+
+  - job_name: 'pushgateway'
+    honor_labels: true
+    dns_sd_configs:
+    - names:
+      - 'tasks.pushgateway'
+      type: 'A'
+      port: 9091
+
+  - job_name: 'unsee'
+    dns_sd_configs:
+    - names:
+      - 'tasks.unsee'
+      type: 'A'
+      port: 8080
+
+  - job_name: 'netdata-swarmhost1'
+    metrics_path: '/api/v1/allmetrics'
+    params:
+      format: [prometheus_all_hosts]
+    honor_labels: true
+    static_configs:
+      - targets: ['10.0.13.2:19999']
+
+  - job_name: 'dockerd-swarmhost1'
+    metrics_path: '/metrics'
+    honor_labels: true
+    static_configs:
+      - targets: ['10.0.13.2:9323']
