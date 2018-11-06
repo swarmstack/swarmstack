@@ -43,19 +43,19 @@
 ### DOWNLOAD SWARMSTACK
   - name: Download latest swarmstack for comparison
     git:
-      repo: https://github.com/swarmstack/swarmstack.git
-      dest: /usr/local/src/swarmstack
+      repo: {{ SWARMSTACK_REPO }}
+      dest: {{ SWARMSTACK_SRC_DIR }}
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Check if local copy of swarmstack exists
-    stat: path=/usr/local/src/localswarmstack
+    stat: path={{ SWARMSTACK_LOCAL_DIR }}
     changed_when: false
     register: localswarmstack
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Create a local copy of swarmstack for editing
-    shell: rsync -aq --exclude=.git /usr/local/src/swarmstack/ /usr/local/src/localswarmstack/
+    shell: rsync -aq --exclude=.git --exclude=.gitignore {{SWARMSTACK_SRC_DIR}}/ {{SWARMSTACK_LOCAL_DIR}}/
     when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
   - name: Generate admin password hash for portainer
@@ -65,7 +65,7 @@
 
   - name: Update docker-compose.yml with portainer admin password hash
     lineinfile:
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       regexp: "command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify"
       line: "    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify --admin-password {{ item }}"
     with_items: "{{portaineradminpw.stdout}}"
@@ -74,21 +74,21 @@
   - name: Update docker-compose.yml with web.external-url for alertmanager
     lineinfile:
       insertbefore: 'cluster.peer=alertmanagerB:9094'
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9093/'"
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Update docker-compose.yml with web.external-url for alertmanagerB
     lineinfile:
       insertbefore: 'cluster.peer=alertmanager:9094'
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9095/'"
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Update docker-compose.yml with web.external-url for Prometheus
     lineinfile:
       insertafter: 'storage.tsdb.retention'
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       line: "      - '--web.external-url=https://{{ EXTERNAL_ENDPOINT }}:9090/'"
     when: "inventory_hostname == SWARMJOIN"
 
@@ -98,7 +98,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Caddy PROXY"
       marker_end: "SWARMSTACK_END Caddy PROXY"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertafter: '      - CADDYPATH='
       block: |2
               - http_proxy={{item.http_proxy}}
@@ -112,7 +112,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana PROXY"
       marker_end: "SWARMSTACK_END Grafana PROXY"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertbefore: '      - GF_SECURITY_ADMIN_USER='
       block: |2
               - http_proxy={{item.http_proxy}}
@@ -126,14 +126,14 @@
 ### LDAP SETTINGS
   - name: Add LDAP settings to new caddy/Caddyfile.ldap
     replace:
-      path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
+      path: {{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile.ldap
       regexp: '^    ldap url=.*$'
       replace: "    ldap url={{ (LDAP_USE_SSL == 'true') | ternary('ldaps','ldap') }}://{{LDAP_HOST}}:{{LDAP_PORT}},insecure={{LDAP_INSECURE}},timeout=5s,username={{LDAP_BIND_DN}},password={{LDAP_BIND_PASSWORD}},base=\"{{LDAP_SEARCH_BASE_DNS}}\",filter=\"{{LDAP_SEARCH_FILTER}}\""
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
 
   - name: Add LDAP settings to grafana/ldap.toml
     lineinfile:
-      path: /usr/local/src/localswarmstack/grafana/ldap.toml
+      path: {{SWARMSTACK_LOCAL_DIR}}/grafana/ldap.toml
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
     with_items:
@@ -151,7 +151,7 @@
 
   - name: Update docker-compose.yml with caddy settings
     lineinfile:
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       regexp: "^    file: ./caddy/Caddyfile$"
       line: "    file: ./caddy/Caddyfile.ldap"
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
@@ -160,7 +160,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 1 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 1 of 4"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertbefore: '  grafana_provisioning_datasources:'
       block: |2
           grafana_configuration:
@@ -171,7 +171,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 2 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 2 of 4"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertbefore: '  grafana_provisioning_datasources:'
       block: |2
           grafana_ldap:
@@ -182,7 +182,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 3 of 4"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertbefore: '      - source: grafana_dashboard_etcd-dash'
       block: |2
               - source: grafana_configuration
@@ -193,7 +193,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 4 of 4"
-      path: /usr/local/src/localswarmstack/docker-compose.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml
       insertbefore: '      - source: grafana_dashboard_etcd-dash'
       block: |2
               - source: grafana_ldap
@@ -206,7 +206,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
       marker_end: "SWARMSTACK_END NetData {{item}}"
-      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml
       block: |2
           - job_name: 'netdata-{{item}}'
             metrics_path: '/api/v1/allmetrics'
@@ -222,7 +222,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN docker {{item}}"
       marker_end: "SWARMSTACK_END docker {{item}}"
-      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml
       block: |2
           - job_name: 'dockerd-{{item}}'
             metrics_path: '/metrics'
@@ -236,7 +236,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN etcd {{item}}"
       marker_end: "SWARMSTACK_END etcd {{item}}"
-      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml
       block: |2
           - job_name: 'etcd-{{item}}'
             metrics_path: '/metrics'
@@ -250,7 +250,7 @@
     blockinfile:
       marker_begin: "SWARMSTACK_BEGIN Portworx {{item}}"
       marker_end: "SWARMSTACK_END Portworx {{item}}"
-      path: /usr/local/src/localswarmstack/prometheus/conf/prometheus.yml
+      path: {{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml
       block: |2
           - job_name: 'portworx-{{item}}'
             metrics_path: '/metrics'
@@ -265,7 +265,7 @@
   - name: Add all hosts to javascript 
     lineinfile:
       insertbefore: 'SWARMSTACK JS MARKER'
-      path: /usr/local/src/localswarmstack/caddy/index.html
+      path: {{SWARMSTACK_LOCAL_DIR}}/caddy/index.html
       line: "document.getElementById('{{hostvars[item]['inventory_hostname']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname']}}/';"
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
@@ -274,7 +274,7 @@
     blockinfile:
       insertbefore: 'SWARMSTACK HTML MARKER'
       marker: "<!-- {{item}} ANSIBLE MANAGED BLOCK -->"
-      path: /usr/local/src/localswarmstack/caddy/index.html
+      path: {{SWARMSTACK_LOCAL_DIR}}/caddy/index.html
       block: |
         <div class="boxes">
           <div class="linkbox"><a target="_blank" href="" id="{{hostvars[item]['inventory_hostname']}}"><h3>NetData - {{hostvars[item]['inventory_hostname']}}</h3></a></div>
@@ -287,7 +287,7 @@
     blockinfile:
       insertbefore: 'SWARMSTACK MARKER'
       marker: "# {{item}} ANSIBLE MANAGED BLOCK"
-      path: /usr/local/src/localswarmstack/caddy/Caddyfile
+      path: {{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile
       block: |2
           proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
             without /{{hostvars[item]['inventory_hostname']}}
@@ -300,7 +300,7 @@
     blockinfile:
       insertbefore: 'SWARMSTACK MARKER'
       marker: "# {{item}} ANSIBLE MANAGED BLOCK"
-      path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
+      path: {{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile.ldap
       block: |2
           proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
             without /{{hostvars[item]['inventory_hostname']}}
@@ -319,7 +319,7 @@
     when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
-    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c /usr/local/src/localswarmstack/docker-compose.yml swarmstack"
+    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_TLS={{CADDY_TLS}} CADDY_URL={{CADDY_URL}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 

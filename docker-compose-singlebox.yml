@@ -8,6 +8,12 @@ version: "3.3"
 #  You'll need to install NetData on your host for Prometheus and Grafana. singlebox stack has been tested on CentOS7 and macOS.
 #  See https://github.com/netdata/netdata/wiki/Installation for futher assistance installing NetData on your OS.
 
+#  You can optionally install your own certificates into Caddy by consulting ./caddy/caddycerts/README.md and manually
+#  uncommenting the (8) related lines in this file pertaining to caddy_cert and caddy_key. You'll also need to edit
+#  caddy/Caddyfile-singlebox and replace all "tls self_signed" with "tls { load /etc/caddycerts }"
+#
+#  You can instead use Let's Encrypt certificates by adding CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com'
+#  and also CADDY_TLS='user@example.com' ahead of ADMIN_PASSWORD below when deploying the stack below.
 
 #  macOS:  With brew installed, install NetData with 'brew install netdata'. You'll then need to edit:
 #
@@ -65,6 +71,10 @@ configs:
     file: ./caddy/Caddyfile-singlebox
   caddy_www:
     file: ./caddy/index-singlebox.html
+#  caddy_cert:
+#    file: ./caddy/caddycerts/cert.pem
+#  caddy_key:
+#    file: ./caddy/caddycerts/key.pem
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
@@ -155,9 +165,11 @@ services:
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - CADDYPATH=/etc/caddycerts
+      - CADDY_TLS=${CADDY_TLS:-self_signed}
+      - CADDY_URL=${CADDY_URL:-}
       - PUSH_USER=${PUSH_USER:-pushuser}
       - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
-      - CADDYPATH=/etc/caddycerts
       #- http_proxy=http://proxy.example.com:80
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
@@ -166,6 +178,10 @@ services:
         target: /etc/Caddyfile
       - source: caddy_www
         target: /www/index.html
+#      - source: caddy_cert
+#        target: /caddy/caddycerts/cert.pem
+#      - source:  caddy_key
+#        target: /caddy/caddycerts/key.pem
     volumes:
       - caddycerts:/etc/caddycerts
     deploy:

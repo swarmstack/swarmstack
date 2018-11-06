@@ -52,6 +52,10 @@ configs:
     file: ./caddy/Caddyfile
   caddy_www:
     file: ./caddy/index.html
+#  caddy_cert:
+#    file: ./caddy/caddycerts/cert.pem
+#  caddy_key:
+#    file: ./caddy/caddycerts/key.pem
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
@@ -150,9 +154,11 @@ services:
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - CADDY_TLS=${CADDY_TLS:-self_signed}
+      - CADDY_URL=${CADDY_URL:-}
+      - CADDYPATH=/etc/caddycerts
       - PUSH_USER=${PUSH_USER:-pushuser}
       - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
-      - CADDYPATH=/etc/caddycerts
       #- http_proxy=http://proxy.example.com:80
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
@@ -161,6 +167,10 @@ services:
         target: /etc/Caddyfile
       - source: caddy_www
         target: /www/index.html
+#      - source: caddy_cert
+#        target: /caddy/caddycerts/cert.pem
+#      - source:  caddy_key
+#        target: /caddy/caddycerts/key.pem
     volumes:
       - caddycerts:/etc/caddycerts
     deploy:

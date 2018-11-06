@@ -8,30 +8,23 @@ SWARMJOIN=swarm01.example.com
 # Define a manager node for swarmstack to use
 
 EXTERNAL_ENDPOINT=external.example.com
-# This URL will be used for Alertmanager links in emails
+# This URL will be used for email or webhook links generated in Alertmanager, Prometheus, and Unsee
 
 ADMIN_PASSWORD=changeme!42
 # Will set the initial admin password for all tools
 
-PUSH_USER=pushuser
-PUSH_PASSWORD=pushpass
-# Used for Prometheus Pushgateway
-
-PORTWORX_INSTALL=px-dev
-# Set this to px-enterprise:1.5.1 to start 30 day evaluation, downgrade to px-dev not possible
 
 
-# Some optional swarmstack settings
-REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600
-REBOOT_TIMEOUT=120  # Physical hosts may take much longer to boot.
-PROXY_ENABLED=false
+# OTHER OPTIONAL SWARMSTACK SETTINGS
+
+CADDY_TLS=self_signed
+CADDY_URL=
+# Set CADDY_TLS from self_signed to a valid email address if using Let's Encrypt
+# Set CADDY_TLS from self_signed to '{ load /etc/caddycerts }' if bringing your own certificates
+# Set CADDY_URL to a wildcard such as '*.example.com' or FQDN when using Let's Encrypt or User-supplied certificates
+# See caddy/caddycerts/README.md for more information when supplying your own certificates
+
 LDAP_ENABLED=false
-
-#PROXY_HTTP=http://proxy.example.com:80
-#PROXY_HTTPS=https://proxy.example.com:443
-#PROXY_YUM=_none_
-#PROXY_NOPROXY=.example.com,alertmanager,alertmanagerb,grafana,portainer,prometheus,pushgateway,unsee,172.16.0.0/12,10.0.0.0/8
-# See https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md
 #LDAP_GROUP=some_group_dn
 #LDAP_HOST=ldap.example.com
 #LDAP_PORT=636
@@ -46,6 +39,29 @@ LDAP_ENABLED=false
 #LDAP_GROUP_DN=CN=mygroup,OU=groups,O=example.com
 # See https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md
 # Also see https://github.com/freman/caddy-reauth and http://docs.grafana.org/installation/ldap/
+
+PORTWORX_INSTALL=px-dev
+# Set to px-enterprise:1.5.1 to start 30 day eval of their Enterprise version, later downgrade to px-dev not possible
+
+PROXY_ENABLED=false
+#PROXY_HTTP=http://proxy.example.com:80
+#PROXY_HTTPS=https://proxy.example.com:443
+#PROXY_YUM=_none_
+#PROXY_NOPROXY=.example.com,alertmanager,alertmanagerb,grafana,portainer,prometheus,pushgateway,unsee,172.16.0.0/12,10.0.0.0/8
+# See https://github.com/swarmstack/swarmstack/blob/master/documentation/Working%20with%20swarmstack%20behind%20a%20web%20proxy.md
+
+PUSH_USER=pushuser
+PUSH_PASSWORD=pushpass
+# Used for Prometheus Pushgateway
+
+REBOOT_DELAY=30
+REBOOT_TIMEOUT=120
+# For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600. Physical hosts may take much longer to boot.
+
+SWARMSTACK_REPO=https://github.com/swarmstack/swarmstack
+SWARMSTACK_SRC_DIR=/usr/local/src/swarmstack
+SWARMSTACK_LOCAL_DIR=/usr/local/src/localswarmstack
+
 
 
 # CONFIGURE YOUR HOSTS IN THE SECTIONS BELOW

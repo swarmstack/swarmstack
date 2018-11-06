@@ -4,8 +4,8 @@
   errors stderr
 }
 
-:443 {
-  tls self_signed
+{$CADDY_URL}:443 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
@@ -15,8 +15,8 @@
   root /www
 }
 
-:3000 {
-  tls self_signed
+{$CADDY_URL}:3000 {
+  tls {$CADDY_TLS}
   errors stderr
 
   proxy / grafana:3000 {
@@ -25,8 +25,8 @@
   }
 }
 
-:9000 {
-  tls self_signed
+{$CADDY_URL}:9000 {
+  tls {$CADDY_TLS}
   errors stderr
 
   proxy / portainer:9000 {
@@ -35,8 +35,8 @@
   }
 }
 
-:9090 {
-  tls self_signed
+{$CADDY_URL}:9090 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
@@ -48,9 +48,9 @@
   }
 }
 
-:9091 {
+{$CADDY_URL}:9091 {
   errors stderr
-  tls self_signed
+  tls {$CADDY_TLS}
 
   reauth {
     path /
@@ -67,8 +67,8 @@
   }
 }
 
-:9093 {
-  tls self_signed
+{$CADDY_URL}:9093 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
@@ -80,8 +80,8 @@
   }
 }
 
-:9094 {
-  tls self_signed
+{$CADDY_URL}:9094 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
@@ -93,8 +93,8 @@
   }
 }
 
-:9095 {
-  tls self_signed
+{$CADDY_URL}:9095 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
@@ -106,7 +106,7 @@
   }
 }
 
-:9180 {
+{$CADDY_URL}:9180 {
   tls off
   errors stderr
 
@@ -115,8 +115,8 @@
   }
 }
 
-:19999 {
-  tls self_signed
+{$CADDY_URL}:19999 {
+  tls {$CADDY_TLS}
   errors stderr
 
   reauth {
