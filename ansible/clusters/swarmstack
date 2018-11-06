@@ -20,6 +20,8 @@ PUSH_PASSWORD=pushpass
 PORTWORX_INSTALL=px-dev
 # Set this to px-enterprise:1.5.1 to start 30 day evaluation, downgrade to px-dev not possible
 
+CADDY_CUSTOM_CERTS=false
+# Use custom certs for Caddy cert.pem key.pem in caddycerts volume must exist
 
 # Some optional swarmstack settings
 REBOOT_DELAY=30     # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600

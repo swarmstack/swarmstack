@@ -200,6 +200,20 @@
                 target: /etc/grafana/ldap.toml
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
 
+### Caddy settings for SSL
+  - name: Enable Custom SSL Certs for Caddy
+    replace:
+      path: /usr/local/src/localswarmstack/caddy/Caddyfile
+      regexp: "  tls self_signed"
+      replace: "  tls /etc/caddycerts/cert.pem /etc/caddycerts/key.pem"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and CADDY_CUSTOM_CERTS == 'true'"
+
+  - name: Enable Custom SSL Certs for Caddy LDAP
+    replace:
+      path: /usr/local/src/localswarmstack/caddy/Caddyfile.ldap
+      regexp: "  tls self_signed"
+      replace: "  tls /etc/caddycerts/cert.pem /etc/caddycerts/key.pem"
+    when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists and CADDY_CUSTOM_CERTS == 'true' and LDAP_ENABLED == 'true'"
 
 ### ADD PROMETHEUS SCRAPE CONFIGS FOR HOSTS
   - name: Add NetData to local Prometheus scrapes
