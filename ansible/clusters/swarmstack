@@ -1,6 +1,9 @@
 # Main example swarmstack ansible cluster file in INI format
 [swarmstack:vars]
 
+SWARMSTACKREPO=https://github.com/swarmstack/swarmstack
+# Swarmstack public or internal repo
+
 CLUSTER=swarmstack
 # The name of this cluster. Copy this file plus ../roles/swarmstack to create new separately named clusters
 

@@ -43,7 +43,7 @@
 ### DOWNLOAD SWARMSTACK
   - name: Download latest swarmstack for comparison
     git:
-      repo: https://github.com/swarmstack/swarmstack.git
+      repo: "{{SWARMSTACKREPO}}"
       dest: /usr/local/src/swarmstack
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN"
