@@ -9,11 +9,11 @@ version: "3.3"
 #  See https://github.com/netdata/netdata/wiki/Installation for futher assistance installing NetData on your OS.
 
 #  You can optionally install your own certificates into Caddy by consulting ./caddy/caddycerts/README.md and manually
-#  uncommenting the (8) related lines in this file pertaining to caddy_cert and caddy_key. You'll also need to edit
-#  caddy/Caddyfile-singlebox and replace all "tls self_signed" with "tls { load /etc/caddycerts }"
+#  uncommenting the (8) related lines in this file pertaining to caddy_cert and caddy_key. You'll also need to add
+#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and CADDY_TLS='{ load /etc/caddycerts }' ahead of ADMIN_PASSWORD below.
 #
 #  You can instead use Let's Encrypt certificates by adding CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com'
-#  and also CADDY_TLS='user@example.com' ahead of ADMIN_PASSWORD below when deploying the stack below.
+#  and also CADDY_TLS='user@example.com' ahead of ADMIN_PASSWORD below.
 
 #  macOS:  With brew installed, install NetData with 'brew install netdata'. You'll then need to edit:
 #
