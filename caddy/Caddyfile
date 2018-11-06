@@ -1,4 +1,4 @@
-{$CADDY_URL}:80 {
+:80 {
   tls off
   redir https://{hostonly}{uri}
 }

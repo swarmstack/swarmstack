@@ -86,7 +86,7 @@
   }
 }
 
-{$CADDY_URL}:9180 {
+:9180 {
   tls off
   errors stderr
 
