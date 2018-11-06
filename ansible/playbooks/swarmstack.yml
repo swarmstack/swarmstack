@@ -9,36 +9,21 @@
 
   tasks:
 
-### INSTALL NETDATA ON ALL HOSTS
   - name: Install requisite packages on SWARMJOIN host
     yum: name=ansible,git,httpd-tools state=latest
     when: "inventory_hostname == SWARMJOIN"
 
-  - name: Check if NetData already installed
-    shell: which netdata ; if [ $? -eq 1 ]; then echo 'notinstalled'; else echo 'installed'; fi
-    changed_when: false
-    register: netdatainstalled
-
-  - name: Install NetData
+### INSTALL NETDATA ON ALL HOSTS
+  - name: Always (re)install NetData (bug in netdata-updater.sh if moving between v10 and v11)
     shell: bash <(curl -Ss https://my-netdata.io/kickstart.sh) all --dont-wait
     args:
       warn: no
       executable: /bin/bash
     ignore_errors: true
     changed_when: False
-    when: "netdatainstalled.stdout.find('notinstalled') != -1"
 
   - name: Ensure NetData is enabled and started
     systemd: name=netdata state=started enabled=yes masked=no
-
-  - name: Always upgrade NetData
-    shell: /usr/src/netdata.git/netdata-updater.sh
-    args:
-      warn: no
-      executable: /bin/bash
-    ignore_errors: true
-    changed_when: False
-
 
 ### DOWNLOAD SWARMSTACK
   - name: Download latest swarmstack for comparison
@@ -68,6 +53,7 @@
       path: "{{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml"
       regexp: "command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify"
       line: "    command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify --admin-password {{ item }}"
+      backrefs: yes
     with_items: "{{portaineradminpw.stdout}}"
     when: "inventory_hostname == SWARMJOIN"
 
@@ -154,6 +140,7 @@
       path: "{{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml"
       regexp: "^    file: ./caddy/Caddyfile$"
       line: "    file: ./caddy/Caddyfile.ldap"
+      backrefs: yes
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
 
   - name: Update docker-compose.yml with grafana LDAP settings 1 of 4
@@ -319,7 +306,7 @@
     when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
-    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_TLS={{CADDY_TLS}} CADDY_URL={{CADDY_URL}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
+    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_TLS={{CADDY_TLS}} CADDY_URL='{{CADDY_URL}}' PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 
