@@ -12,11 +12,13 @@ swarmstack ansible users:
 
 swarmstack singlebox users:
 
-- un-comment the related caddy_key and caddy_cert config lines in your local docker-compose-singlebox.yml
+- un-comment all related caddy_key and caddy_cert config lines in your local docker-compose-singlebox.yml
 
 - add CADDY_URL='fqdn.example.com' and CADDY_TLS='{ load /etc/caddycerts }' when deploying swarmstack:
 
 ```
-ADMIN_PASSWORD='changeme!42' CADDY_URL='fqdn.example.com' and CADDY_TLS='{ load /etc/caddycerts }' \
+ADMIN_PASSWORD='changeme!42' \
+CADDY_URL='fqdn.example.com' \
+CADDY_TLS='{ load /etc/caddycerts }' \
 docker stack deploy -c docker-compose-singlebox.yml swarmstack
 ```
