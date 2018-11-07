@@ -7,14 +7,14 @@
 
   tasks:
 
-  - name: install epel-release
-    yum: name=epel-release state=latest
-
   - name: yum clean all
     command: yum clean all
     args:
       warn: no
     changed_when: false
+
+  - name: install epel-release
+    yum: name=epel-release state=latest
 
   - name: mask firewalld
     systemd: name=firewalld state=stopped enabled=no masked=yes
@@ -117,7 +117,6 @@
       create: yes
       block: |
         [DEFAULT]
-        # Ban hosts for one hour:
         bantime = 600
 
         # Override /etc/fail2ban/jail.d/00-firewalld.conf:
@@ -128,5 +127,18 @@
 
   - name: enable fail2ban in systemd
     systemd: name=fail2ban state=started masked=no enabled=yes
+
+  - name: adjust ownership of /var/log/fail2ban.log
+    file:
+      path: /var/log/fail2ban.log
+      owner: root
+      group: adm
+      mode: 0640
+
+  - name: update /etc/logrotate.d/fail2ban create ownership
+    lineinfile:
+      path: "/etc/logrotate.d/fail2ban"
+      insertbefore: "notifempty"
+      line: "    create 0640 root adm"
 
 ...
