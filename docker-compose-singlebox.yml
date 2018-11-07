@@ -1,51 +1,80 @@
 version: "3.3"
 
-#  This "singlebox" stack will use LOCAL storage and expects to be deployed to a single Docker swarm host so that the volumes
-#  will always be available on that host. This stack ONLY should deploy to any machine capable of running Docker
-#  swarm, and can be used to evaluate the DevOps stack tools before making the commitment to build out more
-#  static VMs with persistent storage.
-
-#  You'll need to install NetData on your host for Prometheus and Grafana. singlebox stack has been tested on CentOS7 and macOS.
-#  See https://github.com/netdata/netdata/wiki/Installation for futher assistance installing NetData on your OS.
-
-#  You can optionally install your own certificates into Caddy by consulting ./caddy/caddycerts/README.md and manually
-#  uncommenting the (8) related lines in this file pertaining to caddy_cert and caddy_key. You'll also need to add
-#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and CADDY_TLS='{ load /etc/caddycerts }' ahead of ADMIN_PASSWORD below.
+#  This "singlebox" stack will use LOCAL storage and expects to be deployed to
+#  a single Docker swarm host so that the volumes will always be available on
+#  that host. etcd, Portworx storage, and firewall management are not performed
+#  in this deployment, although you can still use the firewall playbook on EL7
+#  hosts running iptables (at this time). If you need to run on an existing
+#  swarm of multiple host, we suggest you modify docker-compose-singlebox.yml
+#  and place the appropriate Docker node label contraints to pin services with
+#  volumes to their respective local volume hosts.
 #
-#  You can instead use Let's Encrypt certificates by adding CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com'
-#  and also CADDY_TLS='user@example.com' ahead of ADMIN_PASSWORD below.
+#  This stack should deploy to any machine capable of running Docker swarm, and
+#  can be used to evaluate or even operate the DevOps stack tools, or possibly
+#  as a POC before building out further.
 
-#  macOS:  With brew installed, install NetData with 'brew install netdata'. You'll then need to edit:
+
+#  You'll need to install NetData on your host for Prometheus and Grafana.
+#  singlebox stack has been tested on CentOS7 and macOS.
+#  See https://github.com/netdata/netdata/wiki/Installation for futher
+#  assistance installing NetData on your OS.
+
+
+#  You can optionally install your own certificates into Caddy by consulting
+#  ./caddy/caddycerts/README.md and manually uncommenting the (8) related lines
+#  in this file pertaining to caddy_cert and caddy_key. You'll also need to add
+#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also
+#  CADDY_TLS='{ load /etc/caddycerts }' both ahead of ADMIN_PASSWORD below.
 #
-#    /usr/local/etc/netdata/netdata.conf and change 'localhost' to '*' to allow NetData to bind to your mac's IP. Then:
+#  You can instead use Let's Encrypt certificates by adding
+#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also
+#  CADDY_TLS='user@example.com' both ahead of ADMIN_PASSWORD below.
+
+
+#  macOS:  With brew installed, install NetData with 'brew install netdata'.
+#  You'll then need to edit:
+#
+#    /usr/local/etc/netdata/netdata.conf
+#
+#  and change 'localhost' to '*' to allow NetData to bind the macOS IP. Then:
 #
 #    'brew services restart netdata' to restart NetData with the new setting.
 #
-#  You'll also need to expose Docker 'experimental' metrics on default port 9323, see this URL for instructions on macOS:
+#  You'll also need to expose Docker 'experimental' metrics on default port
+#  9323, see this URL for instructions on macOS:
 #
 #    https://www.brianchristner.io/how-to-monitor-docker-for-mac-windows/
 #  
-#  You might care to also update the Docker storage-driver from older "aufs" to "overlay2" before clicking "Apply & Restart".
+#  You might care to also update the Docker storage-driver from older "aufs" to
+#  "overlay2" before clicking "Apply & Restart".
 
 
-#  All singlebox users will need to edit the 2 files below, and add your localhost IP address to replace all occurances of the
-#  10.0.13.2 IP with your host IP so that Caddy and Prometheus can access your Docker and NetData installations correctly:
+#  All singlebox users will need to edit the 2 files below and add your host's
+#  IP address; replace all occurances of the 10.0.13.2 IP with your host IP so
+#  that Caddy and Prometheus can access your Docker and NetData installations:
 #
 #    ./caddy/Caddyfile-singlebox
 #    ./prometheus/conf/prometheus-singlebox.yml
 
 
-#  Finally, after you've initalized swarm mode on the single Docker host or macOS with 'docker swarm init', and
-#  your host responds to 'docker node ls', you won't run any of the ansible playbooks from swarmstack, instead just, simply
-#  deploy this pre-configured docker-compose-singlebox.yml stack with:
-#
+#  Finally, after you've initalized swarm mode on the single Docker host or
+#  macOS with 'docker swarm init', and your host responds to 'docker node ls',
+#  you won't run any of the ansible playbooks from swarmstack, instead just
+#  deploy this pre-configured docker-compose-singlebox.yml stack with, noting
+#  to add CADDY_TLS and CADDY_URL as above if needed.
+
+
 #    ADMIN_PASSWORD='changeme!42' docker stack deploy -c docker-compose-singlebox.yml swarmstack
 
 
-#  You should then be able to surf to http://127.0.0.1 and access each tool as 'admin' and the ADMIN_PASSWORD you've set.
+#  You should then be able to surf to http://127.0.0.1 and access each tool as
+#  'admin' and the ADMIN_PASSWORD you've set.
 #
-#  UNINSTALL: 'docker stack rm swarmstack && docker volume prune' or, after removing the stack, 'docker volume rm swarmstack_grafana'
-#  or other swarmstack volumes before re-deploying to initialize any application's data volume(s) before reploying the stack.
+#  UNINSTALL:  docker stack rm swarmstack && docker volume prune
+#
+#  RE-INITIALIZE A SERVICE:  docker stack rm swarmstack && \
+#  docker volume rm swarmstack_grafana && (deploy as above ADMIN_PASSWORD=..)
+
 
 networks:
   net:
