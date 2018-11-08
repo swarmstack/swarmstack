@@ -43,6 +43,12 @@ volumes:
       driver_opts:
         repl: 2
         size: 10
+    swarm-endpoints:
+      driver: pxd
+      driver_opts:
+        repl: 1
+        size: 1
+        shared: "true"
 
 configs:
   alertmanager_config:
@@ -106,6 +112,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9093"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 128M
@@ -130,6 +140,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9093"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 128M
@@ -176,6 +190,9 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+        prometheus.enable: "true"
+        prometheus.port: "9180"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 128M
@@ -195,6 +212,10 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     deploy:
       mode: global
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 128M
@@ -242,6 +263,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "3000"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 128M
@@ -291,6 +316,7 @@ services:
       - '--web.enable-admin-api'
     volumes:
       - prometheus:/prometheus
+      - swarm-endpoints:/etc/swarm-endpoints/:ro
     configs:
       - source: prometheus-conf
         target: /etc/prometheus/prometheus.yml
@@ -303,6 +329,10 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9090"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 2048M
@@ -316,11 +346,45 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9091"
+        prometheus.path: "/metrics"
       resources:
         limits:
           memory: 512M
         reservations:
           memory: 128M
+
+  swarm-discovery-server:
+    image: jmendiara/prometheus-swarm-discovery:0.2.0
+    networks:
+      - net
+    command:
+      - server
+      - -l=debug
+    ports:
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+  swarm-discovery-client:
+    image: jmendiara/prometheus-swarm-discovery:0.2.0
+    networks:
+      - net
+    command:
+      - client
+      - -i=5
+      - -s=http://swarm-discovery-server:8080
+      - -o=/swarm-endpoints/swarm-endpoints.json
+      - -p=swarmstack_prometheus
+      - -l=debug
+    volumes:
+      - swarm-endpoints:/swarm-endpoints/
 
   unsee:
     image: cloudflare/unsee:v0.9.2
@@ -334,3 +398,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"

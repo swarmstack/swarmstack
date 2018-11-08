@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.3.1"
+      "version": "5.3.2"
     },
     {
       "type": "panel",
@@ -92,8 +92,88 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
+        "w": 2,
         "x": 0,
+        "y": 0
+      },
+      "id": 45,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(alertmanager_alerts{state=\"active\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Alerts Active",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 2,
         "y": 0
       },
       "id": 43,
@@ -140,7 +220,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Alerts sent to Alertmanager",
+      "title": "Prom Alerts Sent",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -172,8 +252,248 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
+        "w": 2,
+        "x": 4,
+        "y": 0
+      },
+      "id": 47,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(alertmanager_alerts{state=\"suppressed\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Alerts Suppressed",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
         "x": 6,
+        "y": 0
+      },
+      "id": 49,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(alertmanager_silences{state=\"active\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Active Silences",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 8,
+        "y": 0
+      },
+      "id": 51,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(alertmanager_silences{state=\"expired\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Expired Silences",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Prometheus",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 10,
         "y": 0
       },
       "id": 41,
@@ -213,14 +533,14 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "prometheus_notifications_alertmanagers_discovered{instance=\"localhost:9090\",job=\"prometheus\"}",
+          "expr": "sum(prometheus_notifications_alertmanagers_discovered{job=~\".*_prometheus\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
       "thresholds": "",
-      "title": "Alertmanager Instances",
+      "title": "Alertmanagers",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -293,7 +613,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "prometheus_tsdb_wal_corruptions_total{job=\"prometheus\"}",
+          "expr": "sum(prometheus_tsdb_wal_corruptions_total{job=~\".*_prometheus\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "",
@@ -356,7 +676,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "prometheus_engine_query_duration_seconds{job=\"prometheus\", quantile=\"0.99\"}",
+          "expr": "prometheus_engine_query_duration_seconds{job=~\".*_prometheus\", quantile=\"0.99\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{slice}}_p99",
@@ -441,7 +761,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(prometheus_tsdb_head_active_appenders{job=\"prometheus\"})",
+          "expr": "sum(prometheus_tsdb_head_active_appenders{job=~\".*_prometheus\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -451,7 +771,7 @@
           "step": 20
         },
         {
-          "expr": "sum(process_open_fds{job=\"prometheus\"})",
+          "expr": "sum(process_open_fds{job=~\".*_prometheus\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -543,7 +863,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(prometheus_tsdb_head_samples_appended_total{job=\"prometheus\"}[5m]))",
+          "expr": "sum(irate(prometheus_tsdb_head_samples_appended_total{job=~\".*_prometheus\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -719,7 +1039,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "prometheus_tsdb_head_chunks{job=\"prometheus\"}",
+          "expr": "sum(prometheus_tsdb_head_chunks{job=~\".*prometheus\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -811,7 +1131,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "max(prometheus_rule_group_duration_seconds{job=\"prometheus\"}) by (quantile)",
+          "expr": "max(prometheus_rule_group_duration_seconds{job=~\".*_prometheus\"}) by (quantile)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -897,7 +1217,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(process_resident_memory_bytes{job=\"prometheus\"})",
+          "expr": "sum(process_resident_memory_bytes{job=~\".*prometheus\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -907,7 +1227,7 @@
           "step": 20
         },
         {
-          "expr": "process_virtual_memory_bytes{job=\"prometheus\"}",
+          "expr": "sum(process_virtual_memory_bytes{job=~\".*_prometheus\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -999,7 +1319,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "prometheus_tsdb_head_gc_duration_seconds{job=\"prometheus\",quantile=\"0.99\"}",
+          "expr": "prometheus_tsdb_head_gc_duration_seconds{job=~\".*_prometheus\",quantile=\"0.99\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "duration-p99",
@@ -1007,7 +1327,7 @@
           "step": 20
         },
         {
-          "expr": "irate(prometheus_tsdb_head_gc_duration_seconds_count{job=\"prometheus\"}[5m])",
+          "expr": "irate(prometheus_tsdb_head_gc_duration_seconds_count{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "collections",
@@ -1099,7 +1419,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(prometheus_tsdb_compaction_duration_bucket{job=\"prometheus\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(rate(prometheus_tsdb_compaction_duration_bucket{job=~\".*_prometheus\"}[5m])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1109,7 +1429,7 @@
           "step": 20
         },
         {
-          "expr": "irate(prometheus_tsdb_compactions_total{job=\"prometheus\"}[5m])",
+          "expr": "irate(prometheus_tsdb_compactions_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "compactions",
@@ -1117,7 +1437,7 @@
           "step": 20
         },
         {
-          "expr": "irate(prometheus_tsdb_compactions_failed_total{job=\"prometheus\"}[5m])",
+          "expr": "irate(prometheus_tsdb_compactions_failed_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "failed",
@@ -1125,7 +1445,7 @@
           "step": 20
         },
         {
-          "expr": "irate(prometheus_tsdb_compactions_triggered_total{job=\"prometheus\"}[5m])",
+          "expr": "irate(prometheus_tsdb_compactions_triggered_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "triggered",
@@ -1210,7 +1530,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(prometheus_rule_group_iterations_missed_total{job=\"prometheus\"}[5m])",
+          "expr": "rate(prometheus_rule_group_iterations_missed_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "missed",
@@ -1218,7 +1538,7 @@
           "step": 10
         },
         {
-          "expr": "rate(prometheus_rule_group_iterations_total{job=\"prometheus\"}[5m])",
+          "expr": "rate(prometheus_rule_group_iterations_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "iterations",
@@ -1309,7 +1629,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "prometheus_tsdb_blocks_loaded{job=\"prometheus\"}",
+          "expr": "prometheus_tsdb_blocks_loaded{job=~\".*_prometheus\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "blocks",
@@ -1392,7 +1712,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(prometheus_tsdb_reloads_total{job=\"prometheus\"}[5m])",
+          "expr": "rate(prometheus_tsdb_reloads_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "reloads",
@@ -1400,7 +1720,7 @@
           "step": 20
         },
         {
-          "expr": "rate(prometheus_tsdb_reloads_failures_total{job=\"prometheus\"}[5m])",
+          "expr": "rate(prometheus_tsdb_reloads_failures_total{job=~\".*_prometheus\"}[5m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1493,5 +1813,5 @@
   "timezone": "browser",
   "title": "Prometheus 2.0 Stats",
   "uid": "mGFfYSRiz",
-  "version": 1
+  "version": 2
 }
