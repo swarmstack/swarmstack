@@ -362,7 +362,7 @@ services:
       - net
     command:
       - server
-      - -l=debug
+      - -l=warn
     ports:
       - '8080:8080'
     volumes:
@@ -382,7 +382,7 @@ services:
       - -s=http://swarm-discovery-server:8080
       - -o=/swarm-endpoints/swarm-endpoints.json
       - -p=swarmstack_prometheus
-      - -l=debug
+      - -l=warn
     volumes:
       - swarm-endpoints:/swarm-endpoints/
 
