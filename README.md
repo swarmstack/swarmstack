@@ -1,6 +1,6 @@
 # swarmstack
 
-A Docker swarm stack for operating highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
+A Docker swarm-based starting point for monitoring highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
 
 [![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg)
  
@@ -90,13 +90,13 @@ There is a 'docker-compose-singlebox.yml' stack that can be used to evaluate swa
 
 3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions into the storage cluster. _More devices usually equals better performance_.
 
-With [Portworx PX-Developer](https://github.com/portworx/px-dev) version we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide a minimum 40GB (needed by swarmstack) up to Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. 
+Using [Portworx PX-Developer](https://github.com/portworx/px-dev) version by default, we'll install a storage cluster for each set of (3) hosts added to the cluster, which will provide a minimum 40GB (needed by swarmstack) up to the Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. 
 
 When deploying or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use node.label.storagegroup constraints within your Docker services to pin them to one particular grouping of 3 hosts within the larger cluster each running their own 3-node Portworx storage cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. 
 
-Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will likely require persistent storage, including swarmstack.
+Containers not needing persistent storage can be scheduled across the entire cluster. Only a subset of your application containers will require persistent storage, including swarmstack. The Portworx storage space is available for your applications to use.
  
-When using [Portworx PX-Enterprise](https://portworx.com/), or bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
+When choosing [Portworx PX-Enterprise](https://portworx.com/) during installation, or when bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster.
 
  ---
  
@@ -206,6 +206,14 @@ You'll need to expose your metrics in a Prometheus-compatible format on an HTTP 
         prometheus.enable: "true"
         prometheus.port: "9093"
         prometheus.path: "/metrics"
+```
+
+You can also write Prometheus alerts to check the health of any persistent 'pxd' volumes your own container stacks and services consume, under various Prometheus promql "px_" queries (or via the optional [swarmstack/errbot-promql](https://github.com/swarmstack/errbot-promql) bot plugin), such as current volume capacity or HA level of availability:
+
+```
+px_volume_capacity_bytes
+px_volume_capacity_bytes{volumename="my_volumename"}
+px_volume_currhalevel
 ```
 
 ### Alerting
