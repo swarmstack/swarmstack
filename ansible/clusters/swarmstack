@@ -17,11 +17,13 @@ ADMIN_PASSWORD=changeme!42
 
 # OTHER OPTIONAL SWARMSTACK SETTINGS
 
-CADDY_TLS=self_signed
+CADDY_CERT=self_signed
+# Set CADDY_CERT to a valid email address if using Let's Encrypt
+# Set CADDY_CERT to '/etc/caddycerts/cert.pem' if bringing your own certificate, see caddy/caddycerts/README.md
+CADDY_KEY=
+# Set CADDY_KEY to '/etc/caddycerts/key.pem' if bringing your own certificate, see caddy/caddycerts/README.md
 CADDY_URL=
-# Set CADDY_TLS from self_signed to a valid email address if using Let's Encrypt
-# Set CADDY_TLS from self_signed to '{ load /etc/caddycerts }' if bringing your own certificates
-# Set CADDY_URL to a wildcard such as '*.example.com' or FQDN when using Let's Encrypt or User-supplied certificates
+# If not using self_signed, Set CADDY_URL to a wildcard such as '*.example.com' or FQDN when using Let's Encrypt or User-supplied certificates
 # See caddy/caddycerts/README.md for more information when supplying your own certificates
 
 LDAP_ENABLED=false

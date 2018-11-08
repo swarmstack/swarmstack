@@ -306,7 +306,7 @@
     when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
-    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_TLS={{CADDY_TLS}} CADDY_URL='{{CADDY_URL}}' PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
+    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_CERT={{CADDY_CERT}} CADDY_KEY={{CADDY_KEY}} CADDY_URL='{{CADDY_URL}}' PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 

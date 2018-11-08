@@ -168,7 +168,8 @@ services:
     environment:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - CADDY_TLS=${CADDY_TLS:-self_signed}
+      - CADDY_CERT=${CADDY_CERT:-self_signed}
+      - CADDY_KEY=${CADDY_KEY:-}
       - CADDY_URL=${CADDY_URL:-}
       - CADDYPATH=/etc/caddycerts
       - PUSH_USER=${PUSH_USER:-pushuser}

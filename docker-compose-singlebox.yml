@@ -23,14 +23,16 @@ version: "3.3"
 
 #CERTIFICATES
 #  You can optionally install your own certificates into Caddy by consulting
-#  ./caddy/caddycerts/README.md and manually uncommenting the (8) related lines
-#  in this file pertaining to caddy_cert and caddy_key. You'll also need to add
-#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also
-#  CADDY_TLS='{ load /etc/caddycerts }' both ahead of ADMIN_PASSWORD below.
+#  ./caddy/caddycerts/README.md and manually uncommenting the related lines
+#  in this file pertaining to caddy_cert and caddy_key. You'll need to add
+#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also 
+#  CADDY_CERT='/etc/caddycerts/cert.pem' and CADDY_KEY='/etc/caddycerts/key.pem'
+#
+#  Insert CADDY_URL, CADDY_CERT, and CADDY_KEY ahead of ADMIN_PASSWORD below.
 #
 #  You can instead use Let's Encrypt certificates by adding
 #  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also
-#  CADDY_TLS='user@example.com' both ahead of ADMIN_PASSWORD below.
+#  CADDY_CERT='user@example.com' both ahead of ADMIN_PASSWORD below.
 
 
 #macOS
@@ -51,6 +53,7 @@ version: "3.3"
 #  You might care to also update the Docker storage-driver from older "aufs" to
 #  "overlay2" before clicking "Apply & Restart".
 
+
 #INSTALL
 #  All singlebox users will need to edit the 2 files below and add your host's
 #  IP address; replace all occurances of the 10.0.13.2 IP with your host IP so
@@ -63,7 +66,7 @@ version: "3.3"
 #  macOS with 'docker swarm init', and your host responds to 'docker node ls',
 #  you won't run any of the ansible playbooks from swarmstack, instead just
 #  deploy this pre-configured docker-compose-singlebox.yml stack with, noting
-#  to add CADDY_TLS and CADDY_URL as above if needed.
+#  to optionally add CADDY_CERT, CADDY_KEY, and CADDY_URL as above if needed.
 
 #    ADMIN_PASSWORD='changeme!42' docker stack deploy -c docker-compose-singlebox.yml swarmstack
 
@@ -106,6 +109,7 @@ configs:
 #    file: ./caddy/caddycerts/cert.pem
 #  caddy_key:
 #    file: ./caddy/caddycerts/key.pem
+#    file: ./caddy/caddycerts/single-combined-file.pem
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
@@ -197,7 +201,8 @@ services:
       - ADMIN_USER=${ADMIN_USER:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - CADDYPATH=/etc/caddycerts
-      - CADDY_TLS=${CADDY_TLS:-self_signed}
+      - CADDY_CERT=${CADDY_CERT:-self_signed}
+      - CADDY_KEY=${CADDY_KEY:-}
       - CADDY_URL=${CADDY_URL:-}
       - PUSH_USER=${PUSH_USER:-pushuser}
       - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
