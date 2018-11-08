@@ -22,7 +22,7 @@ volumes:
       driver: pxd
       driver_opts:
         repl: 2
-        size: 2
+        size: 1
     grafana:
       driver: pxd
       driver_opts:
