@@ -46,7 +46,7 @@ volumes:
     swarm-endpoints:
       driver: pxd
       driver_opts:
-        repl: 1
+        repl: 2
         size: 1
         shared: "true"
 
