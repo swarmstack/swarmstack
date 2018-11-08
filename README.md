@@ -185,7 +185,28 @@ Instances such as Grafana and Portainer will save credential configuration in th
 
 ### Monitoring
 
-The Grafana _Cluster Nodes_ dashboard will provide the best visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _Unsee_ (which watches both Alertmanager instances in one place), or the Prometheus _Alerts_ tab.
+The Grafana _Cluster Nodes_ dashboard will provide the best visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _Unsee_ (which watches both Alertmanager instances in one place), or your Alertmanager instances, or and consult the Prometheus _Alerts_ tab for rules.
+
+To attach your own applications into Prometheus monitoring, you'll need to make sure you deploy your services to attach to the swarmstack monitoring network in your own docker-compose files. See [swarmstack/errbot-docker/docker-compose-swarmstack.yml](https://github.com/swarmstack/errbot-docker/blob/master/docker-compose-swarmstack.yml) to see an example service attaching to swarmstack_net with:
+
+```
+networks:
+  default:
+    external:
+      name: swarmstack_net
+```
+
+You'll need to expose your metrics in a Prometheus-compatible format on an HTTP port (traffic on the swarmstack_net overlay network is encrypted), and add the following labels to your service so that Prometheus will quickly start to scrape it. See [swarmstack/swarmstack/docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml) for examples of services requesting to be monitored by Prometheus:
+
+```
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9093"
+        prometheus.path: "/metrics"
+```
 
 ### Alerting
 
