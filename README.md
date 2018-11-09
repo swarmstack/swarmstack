@@ -381,8 +381,13 @@ Thanks goes to the team at Portworx for their excellent storage product and supp
 │                               └── proxy.conf
 ├── caddy
 │   ├── Caddyfile
+│   ├── Caddyfile-singlebox
 │   ├── Caddyfile.ldap
+│   ├── caddycerts
+│   │   └── README.md
+│   ├── index-singlebox.html
 │   └── index.html
+├── docker-compose-singlebox.yml
 ├── docker-compose.yml
 ├── documentation
 │   ├── Adding\ your\ own\ applications\ to\ monitoring.md
@@ -426,9 +431,12 @@ Thanks goes to the team at Portworx for their excellent storage product and supp
 │   │   └── prometheus.yaml
 │   ├── grafana.ini
 │   └── ldap.toml
+├── portworx
+│   ├── README.md
+│   └── docker-compose.yml
 ├── prometheus
-│   ├── Dockerfile
 │   ├── conf
+│   │   ├── prometheus-singlebox.yml
 │   │   └── prometheus.yml
 │   └── rules
 │       ├── container_nodes.yml
@@ -441,4 +449,6 @@ Thanks goes to the team at Portworx for their excellent storage product and supp
     ├── lgdock
     ├── lsdock
     └── psdock
+
+44 directories, 85 files
 ```

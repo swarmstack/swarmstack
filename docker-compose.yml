@@ -58,10 +58,10 @@ configs:
     file: ./caddy/Caddyfile
   caddy_www:
     file: ./caddy/index.html
-#  caddy_cert:
-#    file: ./caddy/caddycerts/cert.pem
-#  caddy_key:
-#    file: ./caddy/caddycerts/key.pem
+  #caddy_cert:
+  #  file: ./caddy/caddycerts/cert.pem
+  #caddy_key:
+  #  file: ./caddy/caddycerts/key.pem
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
@@ -182,10 +182,10 @@ services:
         target: /etc/Caddyfile
       - source: caddy_www
         target: /www/index.html
-#      - source: caddy_cert
-#        target: /caddy/caddycerts/cert.pem
-#      - source:  caddy_key
-#        target: /caddy/caddycerts/key.pem
+      #- source: caddy_cert
+      #  target: /caddy/caddycerts/cert.pem
+      #- source: caddy_key
+      #  target: /caddy/caddycerts/key.pem
     volumes:
       - caddycerts:/etc/caddycerts
     deploy:
