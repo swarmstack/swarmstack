@@ -209,12 +209,13 @@ You'll need to expose your metrics in a Prometheus-compatible format on an HTTP 
         prometheus.path: "/metrics"
 ```
 
-You can use PromQL expressions within Grafana and Prometheus alike to create graphs and also Prometheus alert rules based on the same expressions, such as to alert when the availability status of some of your critical persistent volumes falls below 2.
+You can use PromQL expressions within Grafana and Prometheus alike to create graphs and also Prometheus alert rules based on the same expressions, such as to alert when the availability status of some of your critical persistent volumes falls below 2. Try these:
 
 ```
 px_volume_capacity_bytes
 px_volume_capacity_bytes{volumename="my_volumename"}
 px_volume_currhalevel
+count(up)
 ```
 
 See [Querying Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/) for the basics of PromQL syntax. The limited video playlist at the top of this page is an excellent resource to understand the tools deeper.
