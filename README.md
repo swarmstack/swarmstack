@@ -15,6 +15,7 @@ A Docker swarm-based starting point for monitoring highly-available containerize
     - [MONITORING AND ALERTING](#monitoring-and-alerting)
         - [Monitoring](#monitoring)
         - [Alerting](#alerting)
+    - [SCALING](#scaling)
     - [NETWORK URLs](#network-urls)
     - [SCREENSHOTS](#screenshots)
         - [Caddy Link Dashboard](#caddy-link-dashboard)
@@ -231,6 +232,10 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 [https://github.com/swarmstack/errbot-docker](https://github.com/swarmstack/errbot-docker)
 
 ---
+
+## SCALING
+
+The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created HA swarmstack users. If you find that you are needing to do query look-backs further than a few days, you should instead explore deploying an InfluxDB as the storage back-end for Prometheus, scaling with designs such as [these](https://docs.openstack.org/developer/performance-docs/methodologies/monitoring/influxha.html) if your needs grow even further. Also refer to Cortex and related comments above.
 
 ## NETWORK URLs
 
