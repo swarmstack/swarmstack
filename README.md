@@ -37,7 +37,7 @@ A Docker swarm-based starting point for monitoring highly-available containerize
 
 <!-- /TOC -->
 
-Easily deploy and update Docker swarm nodes as you scale up from at least (3) baremetal servers, ec2 instances, or virtual machines, which will host and monitor your highly-available containerized applications.
+Easily deploy and update Docker swarm nodes as you scale up from at least (3) baremetal servers, AWS/GCE/etc instances, virtual machine(s) or just a single macOS laptop if you really need to, which will host your monitored containerized applications.
 
 Manage one or more Docker swarm host clusters via ansible playbooks that can _(optionally)_ help you install and maintain Docker swarms, automatically install [Portworx](https://portworx.com) Developer or Enterprise persistent storage for your application's HA container volumes replicated across your swarm nodes, and also automatically update firewall configurations on all of your nodes.
 
