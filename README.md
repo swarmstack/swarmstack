@@ -235,7 +235,7 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 ## SCALING
 
-The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. If you find that you are needing to do query look-backs further than a few days, you should instead explore deploying an InfluxDB as the storage back-end for Prometheus, scaling with designs such as [these](https://docs.openstack.org/developer/performance-docs/methodologies/monitoring/influxha.html) if your needs grow even further. Also refer to Cortex and related comments above.
+The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. If you find that you are needing to do query look-backs further than a few days, you should instead explore deploying an InfluxDB, Postgres or other [storage back-end for Prometheus](https://prometheus.io/docs/operating/integrations/), scaling even further with designs such as [these](https://docs.openstack.org/developer/performance-docs/methodologies/monitoring/influxha.html) if your needs grow even further. Also refer to Cortex and related comments above.
 
 ## NETWORK URLs
 
