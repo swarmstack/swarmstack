@@ -208,13 +208,15 @@ You'll need to expose your metrics in a Prometheus-compatible format on an HTTP 
         prometheus.path: "/metrics"
 ```
 
-You can also write Prometheus alerts to check the health of any persistent 'pxd' volumes your own container stacks and services consume, under various Prometheus promql "px_" queries (or via the optional [swarmstack/errbot-promql](https://github.com/swarmstack/errbot-promql) bot plugin), such as current volume capacity or HA level of availability:
+You can use PromQL expressions within Grafana and Prometheus alike, and also create your own Prometheus alert rules based on the same expression, to check the health of any of your persistent volumes that your own container stacks and services consume, under various Prometheus promql queries (or via the optional [swarmstack/errbot-promql](https://github.com/swarmstack/errbot-promql) bot plugin), such as Portworx current volume capacity or HA level of availability of any volume:
 
 ```
 px_volume_capacity_bytes
 px_volume_capacity_bytes{volumename="my_volumename"}
 px_volume_currhalevel
 ```
+
+See [Querying Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/) for the basics of PromQL syntax. The limited video playlist at the top of this page is an excellent resource to understand the tools deeper.
 
 ### Alerting
 
