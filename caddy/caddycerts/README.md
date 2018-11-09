@@ -1,8 +1,10 @@
 # Using user-supplied certificates with Caddyserver and swarmstack
 
-Place your own separate cert.pem and key.pem files in this directory under your local copy of swarmstack.
+This has security considerations, and you might want to build your own Caddy image by cloning the https://github.com/swarmstack/caddy repo and building your own caddy:no-stats container image with your certificate files baked into the build. Anyone with just read-access to the Docker swarm API, via mis-configured firewall, swarm /var/run/docker.sock file, or administrative access in containers (such as Portainer) are able to see the full contents of files that Docker swarm configs are pushing into container files.
 
-## swarmstack ansible users:
+Place your own separate cert.pem and key.pem files in this directory within your local copy of swarmstack.
+
+## swarmstack HA users:
 
 - un-comment all the related caddy_key and caddy_cert config lines in your local docker-compose.yml
 
