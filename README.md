@@ -236,9 +236,9 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 ## SCALING
 
-The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. Prometheus itself is not designed for long-term storage and retrival of data, but can work with several storage back-ends as remote-read and remote-write targets. If you find that you need to do perform queries on data older than a few days, you should explore deploying other options for long-term storage and retrieval of Prometheus data. Prometheus can optionally replicate metrics stored within it's own internal time-series database (tsdb) out to one or more external tsdb such as InfluxDB and supports efficient remote-read and write from these longer-term storage sources.
+The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. Prometheus itself is not designed for long-term storage and retrival of data, but can work with several storage back-ends as remote-read and remote-write targets. If you find that you need to perform queries on metrics data older than a few days, you should explore deploying other options for long-term storage and retrieval of Prometheus data. Prometheus can optionally replicate metrics stored within it's own internal time-series database (tsdb) out to one or more external tsdb such as InfluxDB and supports efficient remote-read and write from these longer-term storage sources.
 
-InfluxDB and Postgres (even streaming read replication) can be used to persist Thanos data for some needs, other [storage back-end for Prometheus](https://prometheus.io/docs/operating/integrations/) are also available.
+InfluxDB and Postgres (even streaming read replication) can be used to persist metrics data in a way that Prometheus can consume it, other [storage back-end for Prometheus](https://prometheus.io/docs/operating/integrations/) are also available.
 
 You might instead choose to scale your Prometheus using a federated architecture across multiple Prometheus shards using [Thanos](https://github.com/improbable-eng/thanos), see [PromCon 2018: Thanos - Prometheus at Scale](https://youtu.be/Fb_lYX01IX4)
 
