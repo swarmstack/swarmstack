@@ -305,8 +305,8 @@ services:
   portainer-agent:
     image: portainer/agent:1.1.2
     environment:
-      AGENT_CLUSTER_ADDR: tasks.portainer-agent
-      # AGENT_PORT: 9001
+      - AGENT_CLUSTER_ADDR=tasks.portainer-agent
+      #- AGENT_PORT=9001
       LOG_LEVEL: warn
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
