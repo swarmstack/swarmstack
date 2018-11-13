@@ -224,7 +224,7 @@
     when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and node_swarm_cluster_id.stdout != swarm_cluster_id.stdout"
 
   - name: add node.label.storagegroup to swarm nodes on SWARMJOIN host
-    command: "docker node update --label-add storagegroup={{hostvars[item]['DOCKER_STORAGE_GROUP']}} {{hostvars[item].ansible_hostname}}"
+    command: "docker node update --label-add storagegroup={{hostvars[item]['DOCKER_STORAGE_GROUP']}} {{hostvars[item].inventory_hostname}}"
     ignore_errors: true
     with_items: "{{ groups['swarm'] }}"
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
