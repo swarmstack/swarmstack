@@ -1,14 +1,12 @@
 # ansible playbooks for swarmstack
 
-### Please note that the ansible playbooks in this folder only support EL7 (RHEL/CentOS) target hosts. It will mask off firewalld if present and install iptables to manage kernel iptables chains. 
+Please note that the ansible playbooks in this folder only support EL7 (RHEL/CentOS) target hosts. It will mask off firewalld if present and install iptables to manage kernel iptables chains. 
+
+Be sure to 'yum update kernel' and reboot this node first if the node you are running the ansible playbooks from needs kernel updates and will run the _playbooks/docker.yml_ playbook, as it may reboot this host and would not be able to continue with running the ansible playbooks.
 
 From any host on your network that can route to your Docker hosts, including any of the eventual manager hosts of your Docker swarm:
 
 ```
-## yum update kernel # and reboot first if the node you are running the ansible playbooks
-## from needs kernel updates and will run the _playbooks/docker.yml_ playbook, as it may
-## reboot this host and would not be able to continue with running the ansible playbooks.
-#
 # yum install epel-release
 # yum install ansible
 # yum install git
