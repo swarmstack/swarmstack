@@ -191,6 +191,7 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      labels:
         prometheus.enable: "true"
         prometheus.port: "9180"
         prometheus.path: "/metrics"
