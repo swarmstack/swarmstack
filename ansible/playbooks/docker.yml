@@ -1,7 +1,7 @@
 ---
 - hosts: all
   gather_facts: true
-  order: sorted
+  serial: 1
   remote_user: root
   roles:
   - ../roles/common

@@ -161,7 +161,7 @@ Instances such as Grafana and Portainer will save credential configuration in th
 
 * ansible-playbook -i clusters/swarmstack [playbooks/docker.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/docker.yml) -k
 
-    _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host as kernels are updated._
+    _optional, use this if you haven't already brought up a Docker swarm, or just need to add additional nodes to a new or existing cluster. This playbook will also update all yum packages on each node when run, and will reboot each host serially if kernels are updated. You should develop a process to perform this type of update maintenance on your hosts regularly just by running this playbook again._
 
 ---
 
