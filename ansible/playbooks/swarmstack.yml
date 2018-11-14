@@ -250,17 +250,23 @@
 
 ### MODIFY CADDY CONFIGS
   - name: Add all hosts to javascript 
-    lineinfile:
+    blockinfile:
+      marker_begin: "//SWARMSTACK_BEGIN js {{item}}"
+      marker_end: "//SWARMSTACK_END js {{item}}"
+      marker: "{mark}"
       insertbefore: 'SWARMSTACK JS MARKER'
       path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/index.html"
-      line: "document.getElementById('{{hostvars[item]['inventory_hostname']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname']}}/';"
+      block: |
+        document.getElementById('{{hostvars[item]['inventory_hostname']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname']}}/';
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Add all hosts to HTML
     blockinfile:
+      marker_begin: "<!-- SWARMSTACK_BEGIN html {{item}} -->"
+      marker_end: "<!-- SWARMSTACK_END html {{item}} -->"
+      marker: "{mark}"
       insertbefore: 'SWARMSTACK HTML MARKER'
-      marker: "<!-- {{item}} ANSIBLE MANAGED BLOCK -->"
       path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/index.html"
       block: |
         <div class="boxes">
@@ -272,8 +278,9 @@
 
   - name: Add NetData proxy for all hosts to Caddyfile
     blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
+      marker_end: "SWARMSTACK_END NetData {{item}}"
       insertbefore: 'SWARMSTACK MARKER'
-      marker: "# {{item}} ANSIBLE MANAGED BLOCK"
       path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile"
       block: |2
           proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
@@ -285,8 +292,9 @@
 
   - name: Add NetData proxy for all hosts to Caddyfile.ldap example
     blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
+      marker_end: "SWARMSTACK_END NetData {{item}}"
       insertbefore: 'SWARMSTACK MARKER'
-      marker: "# {{item}} ANSIBLE MANAGED BLOCK"
       path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile.ldap"
       block: |2
           proxy /{{hostvars[item]['inventory_hostname']}} http://{{item}}:19999/ {
@@ -306,7 +314,7 @@
     when: "inventory_hostname == SWARMJOIN"
    
   - name: Bring up swarmstack
-    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_CERT={{CADDY_CERT}} CADDY_KEY={{CADDY_KEY}} CADDY_URL='{{CADDY_URL}}' PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
+    shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_CERT={{CADDY_CERT}} CADDY_KEY={{CADDY_KEY}} CADDY_URL={{CADDY_URL}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
 

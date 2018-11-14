@@ -20,6 +20,6 @@ Place your own separate cert.pem and key.pem files in this directory within your
 ADMIN_PASSWORD='changeme!42' \
 CADDY_URL='fqdn.example.com' \
 CADDY_CERT='/etc/caddycerts/cert.pem' \
-CADDY_KEY='/etc/caddycerts/key.pem' \
+CADDY_KEY=' /etc/caddycerts/key.pem' #NOTE leading space \
 docker stack deploy -c docker-compose-singlebox.yml swarmstack
 ```

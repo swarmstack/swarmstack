@@ -151,7 +151,7 @@ services:
           memory: 64M
 
   caddy:
-    image: swarmstack/caddy:no-stats
+    image: swarmstack/caddy:no-stats.0.11.0-2
     ports:
       - "80:80"
       - "443:443"
