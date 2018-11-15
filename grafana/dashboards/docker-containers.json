@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1542244718595,
+  "iteration": 1542312335652,
   "links": [],
   "panels": [
     {
@@ -449,7 +449,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(10, sum(label_replace(netdata_cgroup_cpu_percent_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)(.*).cpu\") ) by (chart,instance) )",
+          "expr": "topk(5, sum(label_replace(netdata_cgroup_cpu_percent_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)(.*).cpu\") ) by (chart,instance) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -542,7 +542,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(10, sum(label_replace(netdata_cgroup_mem_MB_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)(.*).mem\") ) by (chart,instance) )",
+          "expr": "topk(5, sum(label_replace(netdata_cgroup_mem_MB_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)(.*).mem\") ) by (chart,instance) )",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{instance}} {{chart}}",
@@ -635,7 +635,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(10, sum(label_replace(netdata_cgroup_cpu_percent_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_]+).*\") ) by (chart, instance) )",
+          "expr": "topk(5, sum(label_replace(netdata_cgroup_cpu_percent_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_]+).*\") ) by (chart, instance) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -728,7 +728,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(10, sum(label_replace(netdata_cgroup_mem_MB_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
+          "expr": "topk(5, sum(label_replace(netdata_cgroup_mem_MB_average{instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} {{chart}}",
@@ -794,10 +794,10 @@
       "legend": {
         "alignAsTable": false,
         "avg": false,
-        "current": true,
+        "current": false,
         "hideEmpty": false,
         "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": false,
         "show": false,
@@ -820,7 +820,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(engine_daemon_health_checks_total{job=~\"dockerd-$node_id\"}) by (instance)",
+          "expr": "topk(5,  sum(engine_daemon_health_checks_total{job=~\"dockerd-($node_id)\"}) by (instance) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -830,7 +830,7 @@
           "step": 10
         },
         {
-          "expr": "sum(engine_daemon_health_checks_failed_total{job=~\"dockerd-$node_id\"}) by (instance)",
+          "expr": "- bottomk(5, sum(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}) by (instance) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -925,7 +925,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(10, sum(label_replace(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\",dimension=\"received\",instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
+          "expr": "topk(5, sum(label_replace(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\",dimension=\"received\",instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -1114,7 +1114,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "- topk(10, sum(label_replace(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\",dimension=\"sent\",instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
+          "expr": "- bottomk(5, sum(label_replace(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\",dimension=\"sent\",instance=~\"$node_id\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart, instance) )",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} {{chart}}",
@@ -1454,5 +1454,5 @@
   "timezone": "",
   "title": "Docker Containers",
   "uid": "zr_baSRmk",
-  "version": 1
+  "version": 2
 }

@@ -215,7 +215,7 @@ services:
         target: /www/index.html
       #- source: caddy_cert
       #  target: /caddy/caddycerts/cert.pem
-      #- source:  caddy_key
+      #- source: caddy_key
       #  target: /caddy/caddycerts/key.pem
     volumes:
       - caddycerts:/etc/caddycerts
