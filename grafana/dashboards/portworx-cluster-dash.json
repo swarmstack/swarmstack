@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.2.4"
+      "version": "5.3.2"
     },
     {
       "type": "panel",
@@ -473,10 +473,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "px_cluster_cpu_percent",
+          "expr": "topk(10, px_cluster_cpu_percent)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster}} - {{instance}}",
+          "legendFormat": "{{instance}}",
           "metric": "",
           "refId": "A",
           "step": 10
@@ -485,7 +485,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "CPU Usage",
+      "title": "Top CPU Usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -565,18 +565,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(px_network_io_received_bytes[5m])",
+          "expr": "topk(5, irate(px_network_io_received_bytes[5m]) )",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "Received: {{cluster}} - {{instance}}",
+          "legendFormat": "Received: {{instance}}",
           "refId": "A",
           "step": 20
         },
         {
-          "expr": "1-irate(px_network_io_bytessent[5m])",
+          "expr": "bottomk(5, 0-irate(px_network_io_bytessent[5m]) )",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "Sent: {{cluster}} - {{instance}}",
+          "legendFormat": "Sent: {{instance}}",
           "refId": "B",
           "step": 20
         }
@@ -584,7 +584,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Network IOs",
+      "title": "Top Network IOs",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -627,6 +627,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 2,
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -678,7 +679,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Disk Utilization",
+      "title": "Disk Active Time",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -694,6 +695,7 @@
       },
       "yaxes": [
         {
+          "decimals": 2,
           "format": "percent",
           "label": "",
           "logBase": 1,
@@ -707,7 +709,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -759,20 +761,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "0-irate(px_disk_stats_write_bytes[5m])",
+          "expr": "bottomk( 5, 0-irate(px_disk_stats_write_bytes[5m]) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 4,
-          "legendFormat": "Write: {{cluster}} - {{instance}}",
+          "legendFormat": "Write: {{instance}}",
           "refId": "A",
           "step": 40
         },
         {
-          "expr": "irate(px_disk_stats_read_bytes[5m])",
+          "expr": "topk(5, irate(px_disk_stats_read_bytes[5m]) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 4,
-          "legendFormat": "Read: {{cluster}} - {{instance}}",
+          "legendFormat": "Read: {{instance}}",
           "refId": "B",
           "step": 40
         }
@@ -780,7 +782,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Disk Throughput",
+      "title": "Top Disk Throughput",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -840,7 +842,7 @@
         "hideZero": true,
         "max": false,
         "min": false,
-        "show": true,
+        "show": false,
         "sort": "current",
         "sortDesc": true,
         "total": false,
@@ -864,7 +866,7 @@
           "expr": "px_cluster_pendingio",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster}} - {{instance}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
         }
@@ -957,7 +959,7 @@
           "expr": "(px_cluster_disk_utilized_bytes/px_cluster_disk_available_bytes)*100",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{cluster}} - {{instance}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
         }
@@ -1046,18 +1048,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "0-irate(px_disk_stats_write_seconds[5m])",
+          "expr": "bottomk(5, 0-irate(px_disk_stats_write_seconds[5m]) )",
           "format": "time_series",
           "intervalFactor": 4,
-          "legendFormat": "Write: {{cluster}} - {{instance}}",
+          "legendFormat": "Write: {{instance}}",
           "refId": "A",
           "step": 40
         },
         {
-          "expr": "1-irate(px_disk_stats_read_seconds[5m]) ",
+          "expr": "topk(5, irate(px_disk_stats_read_seconds[5m]) )",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "Read: {{cluster}} - {{instance}}",
+          "legendFormat": "Read: {{instance}}",
           "refId": "B",
           "step": 20
         }
@@ -1081,6 +1083,7 @@
       },
       "yaxes": [
         {
+          "decimals": 1,
           "format": "short",
           "label": "",
           "logBase": 1,
@@ -1144,5 +1147,5 @@
   "timezone": "browser",
   "title": "Portworx Cluster Status",
   "uid": "NynWmntmk",
-  "version": 2
+  "version": 3
 }
