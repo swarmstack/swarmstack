@@ -25,8 +25,8 @@
   - name: Ensure NetData is enabled and started
     systemd: name=netdata state=started enabled=yes masked=no
 
-### DOWNLOAD SWARMSTACK
-  - name: Download latest swarmstack for comparison
+### DOWNLOAD SWARMSTACK FILES TO SWARMJOIN HOST, COPY SOME LOCAL FILES TO SWARMJOIN HOST
+  - name: Use git to download latest swarmstack
     git:
       repo: "{{ SWARMSTACK_REPO }}"
       dest: "{{ SWARMSTACK_SRC_DIR }}"
@@ -43,6 +43,49 @@
     shell: "rsync -aq --exclude=.git --exclude=.gitignore {{SWARMSTACK_SRC_DIR}}/ {{SWARMSTACK_LOCAL_DIR}}/"
     when: "inventory_hostname == SWARMJOIN and not localswarmstack.stat.exists"
 
+  - name: gather name of host running ansible playbooks currently
+    command: hostname
+    delegate_to: localhost
+    register: hostname
+  - set_fact:
+      ANSIBLE_HOST: hostname.stdout
+
+  - name: Check if local copy of ansible role exists
+    stat: path={{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/{{ CLUSTER }}
+    changed_when: false
+    register: localrole
+    when: "inventory_hostname == SWARMJOIN"
+
+  - name: move swarmstack role to CLUSTER if CLUSTER doesn't already exist on SWARMJOIN
+    command: mv {{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/swarmstack {{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/{{ CLUSTER }}
+    when: "CLUSTER != 'swarmstack' and inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN and not localrole.stat.exists"
+
+  - name: copy cluster file to SWARMJOIN host if different
+    copy: src=../clusters/{{ CLUSTER }} dest={{ SWARMSTACK_LOCAL_DIR }}/ansible/clusters/{{ CLUSTER }} owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+  - name: copy common.rules to SWARMJOIN host if different
+    copy: src=../roles/common/files/etc/swarmstack_fw/rules/common.rules dest={{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/common/files/etc/swarmstack_fw/rules/common.rules owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+  - name: copy cluster.rules to SWARMSTACK_LOCAL_DIR on SWARMJOIN host
+    copy: src=../roles/{{ CLUSTER }}/files/etc/swarmstack_fw/rules/cluster.rules dest={{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/{{ CLUSTER }}/files/etc/swarmstack_fw/rules/cluster.rules owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+  - name: copy docker.rules to SWARMSTACK_LOCAL_DIR on SWARMJOIN host
+    copy: src=../roles/{{ CLUSTER }}/files/etc/swarmstack_fw/rules/docker.rules dest={{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/{{ CLUSTER }}/files/etc/swarmstack_fw/rules/docker.rules owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+  - name: copy alertmanager.yml to SWARMSTACK_LOCAL_DIR on SWARMJOIN host
+    copy: src=../../alertmanager/conf/alertmanager.yml dest={{ SWARMSTACK_LOCAL_DIR }}/alertmanager/conf/alertmanager.yml owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+  - name: copy prometheus.yml to SWARMSTACK_LOCAL_DIR on SWARMJOIN host
+    copy: src=../../prometheus/conf/prometheus.yml dest={{ SWARMSTACK_LOCAL_DIR }}/prometheus/conf/prometheus.yml owner=root group=root mode="u=rw,g=r,o=r"
+    when: "inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN"
+
+
+### CONFIGURE PASSWORDS IN LOCAL COMPOSE FILE
   - name: Generate admin password hash for portainer
     shell: "htpasswd -nbB admin '{{ADMIN_PASSWORD}}' | cut -d ':' -f 2 | sed 's/\\$/\\$\\$/g'"
     register: portaineradminpw
