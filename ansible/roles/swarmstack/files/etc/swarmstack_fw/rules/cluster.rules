@@ -12,5 +12,5 @@
 -A INPUT -s 10.0.13.16/32 -j ACCEPT                  # swarm02.example.com
 -A INPUT -s 10.0.13.17/32 -j ACCEPT                  # swarm03.example.com
 
-# Allow all traffic from Docker swarm addresses
--A INPUT -s 172.18/16 -j ACCEPT                      # Docker default swarm network
+# Allow all traffic on INPUT chain from swarm addresses (Caddy accesses NetData on host:19999)
+-A INPUT -s 172.0/10 -j ACCEPT                      # docker_gwbridge swarm networks
