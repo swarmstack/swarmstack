@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.3.2"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -51,24 +15,10 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1541698033789,
+  "id": 5,
+  "iteration": 1542414925993,
   "links": [],
   "panels": [
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 25,
-      "panels": [],
-      "repeat": null,
-      "title": "",
-      "type": "row"
-    },
     {
       "columns": [
         {
@@ -78,12 +28,12 @@
       ],
       "datasource": "Prometheus",
       "filterNull": false,
-      "fontSize": "100%",
+      "fontSize": "80%",
       "gridPos": {
-        "h": 6,
-        "w": 6,
+        "h": 5,
+        "w": 7,
         "x": 0,
-        "y": 1
+        "y": 0
       },
       "hideTimeOverride": true,
       "id": 12,
@@ -92,8 +42,8 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 9,
-        "desc": true
+        "col": null,
+        "desc": false
       },
       "styles": [
         {
@@ -227,7 +177,7 @@
       ],
       "targets": [
         {
-          "expr": "sort_desc(px_volume_halevel)",
+          "expr": "sort(px_volume_halevel)",
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
@@ -242,20 +192,15 @@
       "type": "table"
     },
     {
-      "columns": [
-        {
-          "text": "Current",
-          "value": "current"
-        }
-      ],
+      "columns": [],
       "datasource": "Prometheus",
       "filterNull": false,
-      "fontSize": "100%",
+      "fontSize": "80%",
       "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 6,
-        "y": 1
+        "h": 5,
+        "w": 10,
+        "x": 7,
+        "y": 0
       },
       "hideTimeOverride": true,
       "id": 9,
@@ -265,8 +210,8 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 9,
-        "desc": true
+        "col": 8,
+        "desc": false
       },
       "styles": [
         {
@@ -382,6 +327,7 @@
           "unit": "short"
         },
         {
+          "alias": "",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -390,15 +336,16 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 0,
-          "pattern": "/.*/",
+          "mappingType": 1,
+          "pattern": "Value",
           "thresholds": [],
           "type": "number",
-          "unit": "bytes"
+          "unit": "decbytes"
         }
       ],
       "targets": [
         {
-          "expr": "sort_desc(px_volume_capacity_bytes)",
+          "expr": "px_volume_capacity_bytes",
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
@@ -422,12 +369,12 @@
       "datasource": "Prometheus",
       "description": "",
       "filterNull": false,
-      "fontSize": "100%",
+      "fontSize": "80%",
       "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 1
+        "h": 5,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "hideTimeOverride": true,
       "id": 23,
@@ -587,20 +534,6 @@
       "type": "table"
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 7
-      },
-      "id": 26,
-      "panels": [],
-      "repeat": null,
-      "title": "",
-      "type": "row"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -608,10 +541,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 5
       },
       "id": 16,
       "legend": {
@@ -640,17 +573,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, px_volume_writethroughput{volumeid=~\"$volumeid\"})",
+          "expr": "topk(5, px_volume_writethroughput{volumename=~\"$volumename\"})",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "Write: {{volumename}}",
           "refId": "A",
           "step": 20
         },
         {
-          "expr": "bottomk(5, px_volume_readthroughput{volumeid=~\"$volumeid\"})",
+          "expr": "bottomk(5, px_volume_readthroughput{volumename=~\"$volumename\"})",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "Read: {{volumename}}",
           "refId": "B",
           "step": 20
@@ -704,10 +637,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 5
       },
       "hideTimeOverride": true,
       "id": 13,
@@ -715,9 +648,9 @@
         "alignAsTable": false,
         "avg": false,
         "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
+        "hideEmpty": false,
+        "hideZero": false,
+        "max": false,
         "min": false,
         "show": false,
         "sort": "current",
@@ -739,9 +672,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, px_volume_depth_io{volumeid=~\"$volumeid\"})",
+          "expr": "topk(5, px_volume_depth_io{volumename=~\"$volumename\"})",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "{{volumename}}",
           "refId": "A",
           "step": 10
@@ -795,10 +728,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 9
       },
       "id": 24,
       "legend": {
@@ -825,9 +758,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, px_volume_iops{volumeid=~\"$volumeid\"}) ",
+          "expr": "topk(5, px_volume_iops{volumename=~\"$volumename\"}) ",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "{{volumename}}",
           "refId": "A",
           "step": 20
@@ -881,10 +814,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 11
       },
       "id": 19,
       "legend": {
@@ -917,7 +850,7 @@
         {
           "expr": "topk(5, (px_volume_usage_bytes/px_volume_capacity_bytes)*100 )",
           "format": "time_series",
-          "intervalFactor": 4,
+          "intervalFactor": 1,
           "legendFormat": "{{volumename}}",
           "refId": "A",
           "step": 10
@@ -971,10 +904,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 7,
+        "h": 4,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 13
       },
       "id": 15,
       "legend": {
@@ -1005,17 +938,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, px_volume_vol_read_latency_seconds{volumeid=~\"$volumeid\"})",
+          "expr": "topk(5, px_volume_vol_read_latency_seconds{volumename=~\"$volumename\"})",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "Read: {{volumename}}",
           "refId": "A",
           "step": 10
         },
         {
-          "expr": "- bottomk(5, px_volume_vol_write_latency_seconds{volumeid=~\"$volumeid\"})",
+          "expr": "- bottomk(5, px_volume_vol_write_latency_seconds{volumename=~\"$volumename\"})",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "legendFormat": "Write: {{volumename}}",
           "refId": "B"
         }
@@ -1071,15 +1004,21 @@
     "list": [
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "tags": [],
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": "Prometheus",
         "hide": 0,
         "includeAll": true,
-        "label": "VolumeID",
+        "label": "Volume Name",
         "multi": true,
-        "name": "volumeid",
+        "name": "volumename",
         "options": [],
-        "query": "label_values(px_volume_usage_bytes,volumeid)",
+        "query": "label_values(px_volume_usage_bytes,volumename)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1124,5 +1063,5 @@
   "timezone": "browser",
   "title": "Portworx Volume Status",
   "uid": "19tJy65iz",
-  "version": 2
+  "version": 4
 }
