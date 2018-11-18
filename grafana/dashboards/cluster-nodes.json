@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1542565811954,
+  "iteration": 1542568503700,
   "links": [],
   "panels": [
     {
@@ -561,7 +561,7 @@
       "id": 24,
       "legend": {
         "alignAsTable": false,
-        "avg": true,
+        "avg": false,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
@@ -883,7 +883,8 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "decimals": 2,
+          "format": "decgbytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -3393,7 +3394,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -3424,5 +3425,5 @@
   "timezone": "",
   "title": "Cluster Nodes",
   "uid": "BPlb-Sgik",
-  "version": 2
+  "version": 3
 }
