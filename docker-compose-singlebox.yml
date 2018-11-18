@@ -118,8 +118,8 @@ configs:
     file: ./grafana/dashboards/cluster-nodes.json
   grafana_dashboard_prometheus-2-stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
-  grafana_dashboard_docker-containers:
-    file: ./grafana/dashboards/docker-containers.json
+  grafana_dashboard_containers:
+    file: ./grafana/dashboards/containers.json
 
   prometheus-conf:
     file: ./prometheus/conf/prometheus-singlebox.yml
@@ -271,8 +271,8 @@ services:
     configs:
       - source: grafana_dashboard-cluster-nodes
         target: /etc/grafana/dashboards/cluster-nodes.json
-      - source: grafana_dashboard_docker-containers
-        target: /etc/grafana/dashboards/docker-containers.json
+      - source: grafana_dashboard_containers
+        target: /etc/grafana/dashboards/containers.json
       - source: grafana_dashboard_prometheus-2-stats
         target: /etc/grafana/dashboards/prometheus-2-stats.json
       - source: grafana_provisioning_dashboards
