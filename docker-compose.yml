@@ -73,8 +73,8 @@ configs:
     file: ./grafana/dashboards/prometheus-2-stats.json
   grafana_dashboard_containers:
     file: ./grafana/dashboards/containers.json
-  grafana_dashboard_portworx-cluster-dash:
-    file: ./grafana/dashboards/portworx-cluster-dash.json
+  grafana_dashboard_portworx-cluster-status:
+    file: ./grafana/dashboards/portworx-cluster-status.json
   grafana_dashboard_portworx-volumes-status:
     file: ./grafana/dashboards/portworx-volumes-status.json
   grafana_dashboard_etcd-dash:
@@ -252,8 +252,8 @@ services:
         target: /etc/grafana/dashboards/cluster-nodes.json
       - source: grafana_dashboard_containers
         target: /etc/grafana/dashboards/containers.json
-      - source: grafana_dashboard_portworx-cluster-dash
-        target: /etc/grafana/dashboards/portworx-cluster-dash.json
+      - source: grafana_dashboard_portworx-cluster-status
+        target: /etc/grafana/dashboards/portworx-cluster-status.json
       - source: grafana_dashboard_portworx-volumes-status
         target: /etc/grafana/dashboards/portworx-volumes-status.json
       - source: grafana_dashboard_prometheus-2-stats
