@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 9,
-  "iteration": 1542647021994,
+  "iteration": 1542650103320,
   "links": [],
   "panels": [
     {
@@ -778,7 +778,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[1m]) ) ) by (instance)",
+          "expr": "sum(ceil(irate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) ) by (instance)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1350,8 +1350,6 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -1378,7 +1376,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -1409,5 +1407,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 1
+  "version": 2
 }

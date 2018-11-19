@@ -96,8 +96,6 @@ services:
 
   alertmanager:
     image: prom/alertmanager:v0.15.2
-    networks:
-      - net
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -107,8 +105,6 @@ services:
     configs:
       - source: alertmanager_config
         target: /etc/alertmanager/alertmanager.yml
-    volumes:
-      - alertmanager:/alertmanager
     deploy:
       mode: replicated
       replicas: 1
@@ -121,11 +117,18 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
+      interval: 15s
+      timeout: 2s
+      retries: 3
+    networks:
+      - net
+    volumes:
+      - alertmanager:/alertmanager
 
   alertmanagerB:
     image: prom/alertmanager:v0.15.2
-    networks:
-      - net
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -135,8 +138,6 @@ services:
     configs:
       - source: alertmanager_config
         target: /etc/alertmanager/alertmanager.yml
-    volumes:
-      - alertmanagerB:/alertmanager
     deploy:
       mode: replicated
       replicas: 1
@@ -149,34 +150,18 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
+      interval: 15s
+      timeout: 2s
+      retries: 3
+    networks:
+      - net
+    volumes:
+      - alertmanagerB:/alertmanager
 
   caddy:
     image: swarmstack/caddy:no-stats.0.11.1
-    ports:
-      - "80:80"
-      - "443:443"
-      - "3000:3000"
-      - "9000:9000"
-      - "9090:9090"
-      - "9091:9091"
-      - "9093:9093"
-      - "9094:9094"
-      - "9095:9093"
-      - "19998:19999"
-    networks:
-      - net
-    environment:
-      - ADMIN_USER=${ADMIN_USER:-admin}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - CADDY_CERT=${CADDY_CERT:-self_signed}
-      - CADDY_KEY=${CADDY_KEY:-}
-      - CADDY_URL=${CADDY_URL:-}
-      - CADDYPATH=/etc/caddycerts
-      - PUSH_USER=${PUSH_USER:-pushuser}
-      - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
-      #- http_proxy=http://proxy.example.com:80
-      #- https_proxy=https://proxy.example.com:443
-      #- no_proxy=10.0.0.0/8,.example.com
     configs:
       - source: caddy_config
         target: /etc/Caddyfile
@@ -186,8 +171,6 @@ services:
       #  target: /caddy/caddycerts/cert.pem
       #- source: caddy_key
       #  target: /caddy/caddycerts/key.pem
-    volumes:
-      - caddycerts:/etc/caddycerts
     deploy:
       mode: replicated
       replicas: 1
@@ -200,18 +183,37 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    environment:
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - CADDY_CERT=${CADDY_CERT:-self_signed}
+      - CADDY_KEY=${CADDY_KEY:-}
+      - CADDY_URL=${CADDY_URL:-}
+      - CADDYPATH=/etc/caddycerts
+      - PUSH_USER=${PUSH_USER:-pushuser}
+      - PUSH_PASSWORD=${PUSH_PASSWORD:-pushpass}
+      #- http_proxy=http://proxy.example.com:80
+      #- https_proxy=https://proxy.example.com:443
+      #- no_proxy=10.0.0.0/8,.example.com
+    networks:
+      - net
+    ports:
+      - "80:80"
+      - "443:443"
+      - "3000:3000"
+      - "9000:9000"
+      - "9090:9090"
+      - "9091:9091"
+      - "9093:9093"
+      - "9094:9094"
+      - "9095:9093"
+      - "19998:19999"
+    volumes:
+      - caddycerts:/etc/caddycerts
 
   cadvisor:
     image: google/cadvisor:v0.31.0
-    networks:
-      - net
     command: -logtostderr -docker_only
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /:/rootfs:ro
-      - /var/run:/var/run
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
     deploy:
       mode: global
       labels:
@@ -223,28 +225,17 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    networks:
+      - net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
 
   grafana:
     image: grafana/grafana:5.3.4
-    networks:
-      - net
-    environment:
-      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
-      - GF_USERS_ALLOW_SIGN_UP=false
-      #- GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
-      #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL:-localhost}
-      #- GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
-      #- GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS:-grafana@test.com}
-      #- GF_SMTP_FROM_NAME=${GF_SMTP_FROM_NAME:-Grafana}
-      #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
-      #- GF_SMTP_USER=${GF_SMTP_USER}
-      #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
-      #- http_proxy=http://proxy.example.com:80
-      #- https_proxy=https://proxy.example.com:443
-      #- no_proxy=10.0.0.0/8,.example.com
-    volumes:
-      - grafana:/var/lib/grafana
     configs:
       - source: grafana_dashboard_etcd-dash
         target: /etc/grafana/dashboards/etcd-dash.json
@@ -274,40 +265,62 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      #- GF_PATHS_PROVISIONING=/etc/grafana/provisioning/
+      #- GF_SERVER_ROOT_URL=${GF_SERVER_ROOT_URL:-localhost}
+      #- GF_SMTP_ENABLED=${GF_SMTP_ENABLED:-false}
+      #- GF_SMTP_FROM_ADDRESS=${GF_SMTP_FROM_ADDRESS:-grafana@test.com}
+      #- GF_SMTP_FROM_NAME=${GF_SMTP_FROM_NAME:-Grafana}
+      #- GF_SMTP_HOST=${GF_SMTP_HOST:-smtp:25}
+      #- GF_SMTP_USER=${GF_SMTP_USER}
+      #- GF_SMTP_PASSWORD=${GF_SMTP_PASSWORD}
+      #- http_proxy=http://proxy.example.com:80
+      #- https_proxy=https://proxy.example.com:443
+      #- no_proxy=10.0.0.0/8,.example.com
+    healthcheck:
+      test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
+      interval: 15s
+      timeout: 2s
+      retries: 3
+    networks:
+      - net
+    volumes:
+      - grafana:/var/lib/grafana
 
   portainer:
     image: portainer/portainer:1.19.2
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
-    volumes:
-      - portainer_data:/data
-      - portainer_certs:/certs
-    networks:
-      - net
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints: [node.role == manager]
+    networks:
+      - net
+    volumes:
+      - portainer_data:/data
+      - portainer_certs:/certs
 
   portainer-agent:
     image: portainer/agent:1.1.2
-    environment:
-      - AGENT_CLUSTER_ADDR=tasks.portainer-agent
-      - LOG_LEVEL=warn
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-    networks:
-      - net
     deploy:
       mode: global
       placement:
         constraints: [node.platform.os == linux]
+    environment:
+      - AGENT_CLUSTER_ADDR=tasks.portainer-agent
+      - LOG_LEVEL=warn
+    networks:
+      - net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
 
   prometheus:
     image: prom/prometheus:v2.5.0
-    networks:
-      - net
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
@@ -315,9 +328,6 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--storage.tsdb.retention=48h'
       - '--web.enable-admin-api'
-    volumes:
-      - prometheus:/prometheus
-      - swarm-endpoints:/etc/swarm-endpoints/:ro
     configs:
       - source: prometheus-conf
         target: /etc/prometheus/prometheus.yml
@@ -339,11 +349,19 @@ services:
           memory: 2048M
         reservations:
           memory: 1024M
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:9090/status -O /dev/null > /dev/null 2>&1"
+      interval: 15s
+      timeout: 2s
+      retries: 3
+    networks:
+      - net
+    volumes:
+      - prometheus:/prometheus
+      - swarm-endpoints:/etc/swarm-endpoints/:ro
 
   pushgateway:
     image: prom/pushgateway:v0.6.0
-    networks:
-      - net
     deploy:
       mode: replicated
       replicas: 1
@@ -356,27 +374,32 @@ services:
           memory: 512M
         reservations:
           memory: 128M
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:9091/ -O /dev/null > /dev/null 2>&1"
+      interval: 15s
+      timeout: 2s
+      retries: 3
+    networks:
+      - net
 
   swarm-discovery-server:
     image: jmendiara/prometheus-swarm-discovery:0.2.0
-    networks:
-      - net
     command:
       - server
       - -l=warn
-    ports:
-      - '8080:8080'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     deploy:
       placement:
         constraints:
           - node.role == manager
+    networks:
+      - net
+    ports:
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   swarm-discovery-client:
     image: jmendiara/prometheus-swarm-discovery:0.2.0
-    networks:
-      - net
     command:
       - client
       - -i=5
@@ -384,6 +407,8 @@ services:
       - -o=/swarm-endpoints/swarm-endpoints.json
       - -p=swarmstack_prometheus
       - -l=warn
+    networks:
+      - net
     volumes:
       - swarm-endpoints:/swarm-endpoints/
 
@@ -392,10 +417,6 @@ services:
     configs:
       - source: unsee-conf
         target: /unsee.yaml
-    networks:
-      - net
-    environment:
-      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
     deploy:
       mode: replicated
       replicas: 1
@@ -403,3 +424,7 @@ services:
         prometheus.enable: "true"
         prometheus.port: "8080"
         prometheus.path: "/metrics"
+    environment:
+      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
+    networks:
+      - net
