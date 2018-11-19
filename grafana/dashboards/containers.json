@@ -753,7 +753,7 @@
         "alignAsTable": false,
         "avg": false,
         "current": false,
-        "hideEmpty": false,
+        "hideEmpty": true,
         "hideZero": false,
         "max": true,
         "min": false,
@@ -1378,7 +1378,7 @@
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
