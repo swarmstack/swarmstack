@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1542567131893,
+  "id": 9,
+  "iteration": 1542647021994,
   "links": [],
   "panels": [
     {
@@ -778,17 +778,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(engine_daemon_health_checks_total{job=~\"dockerd-($node_id)\"}) by (instance)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "intervalFactor": 4,
-          "legendFormat": "{{instance}} healthchecks",
-          "refId": "A",
-          "step": 10
-        },
-        {
-          "expr": "- bottomk(5, sum(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}) by (instance) )",
+          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[1m]) ) ) by (instance)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -801,7 +791,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Health Checks",
+      "title": "Failed Health Checks",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1360,8 +1350,12 @@
       {
         "allValue": null,
         "current": {
+          "selected": true,
+          "tags": [],
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Prometheus",
         "hide": 0,
@@ -1384,7 +1378,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -1415,5 +1409,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 3
+  "version": 1
 }
