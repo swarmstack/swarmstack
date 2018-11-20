@@ -55,7 +55,7 @@
     register: localrole
     when: "inventory_hostname == SWARMJOIN"
 
-  - name: move swarmstack role to CLUSTER if CLUSTER doesn't already exist on SWARMJOIN
+  - name: move roles/swarmstack to roles/CLUSTER if directory doesn't exist on SWARMJOIN host
     command: mv {{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/swarmstack {{ SWARMSTACK_LOCAL_DIR }}/ansible/roles/{{ CLUSTER }}
     when: "CLUSTER != 'swarmstack' and inventory_hostname == SWARMJOIN and ANSIBLE_HOST != SWARMJOIN and not localrole.stat.exists"
 
@@ -158,6 +158,7 @@
       regexp: '^    ldap url=.*$'
       replace: "    ldap url={{ (LDAP_USE_SSL == 'true') | ternary('ldaps','ldap') }}://{{LDAP_HOST}}:{{LDAP_PORT}},insecure={{LDAP_INSECURE}},timeout=5s,username={{LDAP_BIND_DN}},password={{LDAP_BIND_PASSWORD}},base=\"{{LDAP_SEARCH_BASE_DNS}}\",filter=\"{{LDAP_SEARCH_FILTER}}\""
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
+    ignore_errors: true
 
   - name: Add LDAP settings to grafana/ldap.toml
     lineinfile:
@@ -176,6 +177,7 @@
       - { regexp: '^username =', line: "username = \"{{LDAP_ATTRIBUTE_USERNAME}}\"" }
       - { regexp: '^group_dn =', line: "group_dn = \"{{LDAP_GROUP_DN}}\"" }
     when: "inventory_hostname == SWARMJOIN and LDAP_ENABLED == 'true'"
+    ignore_errors: true
 
   - name: Update docker-compose.yml with caddy settings
     lineinfile:
@@ -246,6 +248,7 @@
               - targets: ['{{item}}:19999']
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
   - name: Add docker to local Prometheus scrapes
     blockinfile:
@@ -260,6 +263,7 @@
               - targets: ['{{item}}:9323']
     with_items: "{{groups['swarm']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
   - name: Add etcd to local Prometheus scrapes
     blockinfile:
@@ -274,6 +278,7 @@
               - targets: ['{{item}}:2379']
     with_items: "{{groups['etcd']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
   - name: Add Portworx to local Prometheus scrapes
     blockinfile:
@@ -288,10 +293,10 @@
               - targets: ['{{item}}:9001']
     with_items: "{{groups['portworx']}}"
     when: "inventory_hostname == SWARMJOIN"
-
+    ignore_errors: true
 
 ### MODIFY CADDY CONFIGS
-  - name: Add all hosts to javascript 
+  - name: Add all hosts to caddy/index.html javascript 
     blockinfile:
       marker_begin: "//SWARMSTACK_BEGIN js {{item}}"
       marker_end: "//SWARMSTACK_END js {{item}}"
@@ -302,8 +307,9 @@
         document.getElementById('{{hostvars[item]['inventory_hostname']}}').href = window.location.protocol + '//' + window.location.hostname + ':19998/{{hostvars[item]['inventory_hostname']}}/';
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
-  - name: Add all hosts to HTML
+  - name: Add all hosts to caddy/index.html BODY 
     blockinfile:
       marker_begin: "<!-- SWARMSTACK_BEGIN html {{item}} -->"
       marker_end: "<!-- SWARMSTACK_END html {{item}} -->"
@@ -317,6 +323,7 @@
         </div>
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
   - name: Add NetData proxy for all hosts to Caddyfile
     blockinfile:
@@ -331,6 +338,7 @@
           }
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
   - name: Add NetData proxy for all hosts to Caddyfile.ldap example
     blockinfile:
@@ -345,19 +353,25 @@
           }
     with_items: "{{groups['all']}}"
     when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
 
 
-### BRING UP SWARMSTACK IF NOT ALREADY RUNNING
+### BOUNCE SWARMSTACK IF ALREADY RUNNING
   - name: Check if swarmstack is running
-    shell: docker service ls | grep swarmstack_caddy; if [ $? -eq 1 ]; then echo 'notrunning'; else echo 'running'; fi
+    shell: docker service ls | grep swarmstack_caddy; if [ $? -eq 1 ]; then echo 'notrunning'; else echo 'isrunning'; fi
     ignore_errors: true
     changed_when: false
     register: swarmstackrunning
     when: "inventory_hostname == SWARMJOIN"
    
+  - name: Bring down swarmstack
+    shell: "docker stack rm swarmstack; sleep 10"
+    ignore_errors: true
+    when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('isrunning') != -1"
+   
   - name: Bring up swarmstack
     shell: "ADMIN_PASSWORD={{ADMIN_PASSWORD}} CADDY_CERT={{CADDY_CERT}} CADDY_KEY={{CADDY_KEY}} CADDY_URL={{CADDY_URL}} PUSH_USER={{PUSH_USER}} PUSH_PASSWORD={{PUSH_PASSWORD}} docker stack deploy -c {{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml swarmstack"
     ignore_errors: true
-    when: "inventory_hostname == SWARMJOIN and swarmstackrunning.stdout.find('notrunning') != -1"
+    when: "inventory_hostname == SWARMJOIN"
 
 ...
