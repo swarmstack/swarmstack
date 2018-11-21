@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 
 networks:
   net:
@@ -119,9 +119,9 @@ services:
           memory: 64M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
@@ -152,9 +152,9 @@ services:
           memory: 64M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
@@ -212,7 +212,7 @@ services:
       - caddycerts:/etc/caddycerts
 
   cadvisor:
-    image: google/cadvisor:v0.31.0
+    image: google/cadvisor:v0.32.0
     command: -logtostderr -docker_only
     deploy:
       mode: global
@@ -225,14 +225,19 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    healthcheck:
+      test: "/usr/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/rootfs:ro
-      - /var/run:/var/run
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run:/var/run
 
   grafana:
     image: grafana/grafana:5.3.4
@@ -262,9 +267,9 @@ services:
         prometheus.path: "/metrics"
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
-          memory: 64M
+          memory: 128M
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
@@ -282,9 +287,9 @@ services:
       #- no_proxy=10.0.0.0/8,.example.com
     healthcheck:
       test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 120s
     networks:
       - net
     volumes:
@@ -301,8 +306,8 @@ services:
     networks:
       - net
     volumes:
-      - portainer_data:/data
       - portainer_certs:/certs
+      - portainer_data:/data
 
   portainer-agent:
     image: portainer/agent:1.1.2
@@ -316,8 +321,8 @@ services:
     networks:
       - net
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
     image: prom/prometheus:v2.5.0
@@ -351,9 +356,9 @@ services:
           memory: 1024M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9090/status -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 60s
     networks:
       - net
     volumes:
@@ -376,9 +381,9 @@ services:
           memory: 128M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9091/ -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
 

@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.4"
 
 #  This "singlebox" stack will use LOCAL storage and expects to be deployed to
 #  a single Docker swarm host so that the volumes will always be available on
@@ -154,9 +154,9 @@ services:
           memory: 64M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
@@ -183,9 +183,9 @@ services:
           memory: 64M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9093/metrics -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
@@ -193,6 +193,15 @@ services:
 
   caddy:
     image: swarmstack/caddy:no-stats.0.11.1
+    configs:
+      - source: caddy_config
+        target: /etc/Caddyfile
+      - source: caddy_www
+        target: /www/index.html
+      #- source: caddy_cert
+      #  target: /caddy/caddycerts/cert.pem
+      #- source: caddy_key
+      #  target: /caddy/caddycerts/key.pem
     deploy:
       mode: replicated
       replicas: 1
@@ -213,15 +222,6 @@ services:
       #- http_proxy=http://proxy.example.com:80
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
-    configs:
-      - source: caddy_config
-        target: /etc/Caddyfile
-      - source: caddy_www
-        target: /www/index.html
-      #- source: caddy_cert
-      #  target: /caddy/caddycerts/cert.pem
-      #- source: caddy_key
-      #  target: /caddy/caddycerts/key.pem
     networks:
       - net
     ports:
@@ -239,7 +239,7 @@ services:
       - caddycerts:/etc/caddycerts
 
   cadvisor:
-    image: google/cadvisor:v0.31.0
+    image: google/cadvisor:v0.32.0
     command: -logtostderr -docker_only
     deploy:
       mode: global
@@ -248,14 +248,19 @@ services:
           memory: 128M
         reservations:
           memory: 64M
+    healthcheck:
+      test: "/usr/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/rootfs:ro
-      - /var/run:/var/run
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run:/var/run
 
   grafana:
     image: grafana/grafana:5.3.4
@@ -275,9 +280,9 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
-          memory: 64M
+          memory: 128M
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
@@ -295,9 +300,9 @@ services:
       #- no_proxy=10.0.0.0/8,.example.com
     healthcheck:
       test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 120s
     networks:
       - net
     volumes:
@@ -358,9 +363,9 @@ services:
           memory: 1024M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9090/status -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 60s
     networks:
       - net
     volumes:
@@ -378,9 +383,9 @@ services:
           memory: 128M
     healthcheck:
       test: "/bin/wget -q -Y off http://localhost:9091/ -O /dev/null > /dev/null 2>&1"
-      interval: 15s
-      timeout: 2s
-      retries: 3
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
 
