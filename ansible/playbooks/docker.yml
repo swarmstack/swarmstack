@@ -137,7 +137,7 @@
   - name: yum output
     debug:
       msg={{ yumupdate.results[0].split('\n') }}
-    when: yumupdate.changed == True
+    when: yumupdate is changed
     changed_when: False
 
   - name: Check for reboot hint
@@ -176,7 +176,7 @@
 
   - name: pause while docker loads
     pause: seconds=20
-    when: "'swarm' in group_names and DockerStarted.changed == True"
+    when: "'swarm' in group_names and DockerStarted is changed"
 
   handlers:
 

@@ -130,7 +130,7 @@
   - name: stop fail2ban if config changed
     systemd: name=fail2ban state=stopped
     ignore_errors: true
-    when: fail2ban_config.changed == true
+    when: fail2ban_config is changed
 
   - name: enable fail2ban in systemd
     systemd: name=fail2ban state=started masked=no enabled=yes
