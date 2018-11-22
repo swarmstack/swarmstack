@@ -118,12 +118,19 @@
       block: |
         [DEFAULT]
         bantime = 600
+        maxretry = 10
 
         # Override /etc/fail2ban/jail.d/00-firewalld.conf:
         banaction = iptables-multiport
 
         [sshd]
         enabled = true
+    register: fail2ban_config
+
+  - name: stop fail2ban if config changed
+    systemd: name=fail2ban state=stopped
+    ignore_errors: true
+    when: fail2ban_config.changed == true
 
   - name: enable fail2ban in systemd
     systemd: name=fail2ban state=started masked=no enabled=yes

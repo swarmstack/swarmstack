@@ -107,11 +107,14 @@ services:
         target: /etc/alertmanager/alertmanager.yml
     deploy:
       mode: replicated
-      replicas: 1
       labels:
         prometheus.enable: "true"
         prometheus.port: "9093"
         prometheus.path: "/metrics"
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
+      replicas: 1
       resources:
         limits:
           memory: 128M
@@ -140,11 +143,14 @@ services:
         target: /etc/alertmanager/alertmanager.yml
     deploy:
       mode: replicated
-      replicas: 1
       labels:
         prometheus.enable: "true"
         prometheus.port: "9093"
         prometheus.path: "/metrics"
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
+      replicas: 1
       resources:
         limits:
           memory: 128M
@@ -168,9 +174,9 @@ services:
       - source: caddy_www
         target: /www/index.html
       #- source: caddy_cert
-      #  target: /caddy/caddycerts/cert.pem
+      #  target: /etc/caddycerts/cert.pem
       #- source: caddy_key
-      #  target: /caddy/caddycerts/key.pem
+      #  target: /etc/caddycerts/key.pem
     deploy:
       mode: replicated
       replicas: 1
@@ -178,6 +184,9 @@ services:
         prometheus.enable: "true"
         prometheus.port: "9180"
         prometheus.path: "/metrics"
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
       resources:
         limits:
           memory: 128M
@@ -265,6 +274,9 @@ services:
         prometheus.enable: "true"
         prometheus.port: "3000"
         prometheus.path: "/metrics"
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
       resources:
         limits:
           memory: 256M
@@ -302,7 +314,9 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.role == manager
+          - node.Labels.storagegroup==RED
     networks:
       - net
     volumes:
@@ -349,6 +363,9 @@ services:
         prometheus.enable: "true"
         prometheus.port: "9090"
         prometheus.path: "/metrics"
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
       resources:
         limits:
           memory: 2048M
@@ -412,6 +429,10 @@ services:
       - -o=/swarm-endpoints/swarm-endpoints.json
       - -p=swarmstack_prometheus
       - -l=warn
+    deploy:
+      placement:
+        constraints:
+          - node.Labels.storagegroup==RED
     networks:
       - net
     volumes:

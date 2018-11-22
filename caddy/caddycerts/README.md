@@ -6,20 +6,20 @@ Place your own separate cert.pem and key.pem files in this directory within your
 
 ## swarmstack HA users:
 
-- un-comment all the related caddy_key and caddy_cert config lines in your local docker-compose.yml
+- un-comment and edit all the related caddy_key and caddy_cert config lines in your local docker-compose.yml
 
-- set CADDY_CERT, CADDY_KEY, and CADDY_URL as commented in your local ansible/clusters/_cluster-file_ before running swarmstack.yml playbook
+- set CADDY_CERT, CADDY_KEY, and CADDY_URL as noted in your local ansible/clusters/_cluster-file_ before running swarmstack.yml playbook
 
 ---
 
 ## swarmstack singlebox users:
 
-- un-comment all related caddy_key and caddy_cert config lines in your local docker-compose-singlebox.yml
+- un-comment and edit all related caddy_key and caddy_cert config lines in your local docker-compose-singlebox.yml
 
 ```
 ADMIN_PASSWORD='changeme!42' \
-CADDY_URL='fqdn.example.com' \
-CADDY_CERT='/etc/caddycerts/cert.pem' \
-CADDY_KEY=' /etc/caddycerts/key.pem' #NOTE leading space \
+CADDY_URL=fqdn.example.com \
+CADDY_CERT=/etc/caddycerts/cert.pem' \
+CADDY_KEY=/etc/caddycerts/key.pem \
 docker stack deploy -c docker-compose-singlebox.yml swarmstack
 ```

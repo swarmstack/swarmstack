@@ -24,15 +24,11 @@ version: "3.4"
 #CERTIFICATES
 #  You can optionally install your own certificates into Caddy by consulting
 #  ./caddy/caddycerts/README.md and manually uncommenting the related lines
-#  in this file pertaining to caddy_cert and caddy_key. You'll need to add
-#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also 
-#  CADDY_CERT='/etc/caddycerts/cert.pem' and CADDY_KEY='/etc/caddycerts/key.pem'
-#
-#  Insert CADDY_URL, CADDY_CERT, and CADDY_KEY ahead of ADMIN_PASSWORD below.
+#  in this file pertaining to caddy_cert and caddy_key.
 #
 #  You can instead use Let's Encrypt certificates by adding
-#  CADDY_URL='*.example.com' or CADDY_URL='fqdn.example.com' and also
-#  CADDY_CERT='user@example.com' both ahead of ADMIN_PASSWORD below.
+#  CADDY_URL=fqdn.example.com' or CADDY_URL=fqdn.example.com and also
+#  CADDY_CERT=user@example.com in addition to ADMIN_PASSWORD below.
 
 
 #macOS
@@ -199,9 +195,9 @@ services:
       - source: caddy_www
         target: /www/index.html
       #- source: caddy_cert
-      #  target: /caddy/caddycerts/cert.pem
+      #  target: /etc/caddycerts/cert.pem
       #- source: caddy_key
-      #  target: /caddy/caddycerts/key.pem
+      #  target: /etc/caddycerts/key.pem
     deploy:
       mode: replicated
       replicas: 1

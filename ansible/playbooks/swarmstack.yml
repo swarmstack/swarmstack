@@ -355,6 +355,22 @@
     when: "inventory_hostname == SWARMJOIN"
     ignore_errors: true
 
+  - name: Add CADDY_KEY template to Caddyfile if defined
+    replace:
+      path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile"
+      regexp: 'CADDY_CERT'
+      replace: '  tls {$CADDY_CERT} {$CADDY_KEY}'
+    ignore_errors: true
+    when: "inventory_hostname == SWARMJOIN and CADDY_KEY != ''"
+
+  - name: Add CADDY_KEY template to Caddyfile.ldap if defined
+    replace:
+      path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile.ldap"
+      regexp: '^.*CADDY_CERT.*$'
+      replace: '  tls {$CADDY_CERT} {$CADDY_KEY}'
+    ignore_errors: true
+    when: "inventory_hostname == SWARMJOIN and CADDY_KEY != ''"
+
 
 ### BOUNCE SWARMSTACK IF ALREADY RUNNING
   - name: Check if swarmstack is running

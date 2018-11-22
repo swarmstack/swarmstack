@@ -4,7 +4,7 @@
 }
 
 {$CADDY_URL}:443 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -12,7 +12,7 @@
 }
 
 {$CADDY_URL}:3000 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   proxy / grafana:3000 {
@@ -22,7 +22,7 @@
 }
 
 {$CADDY_URL}:9000 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   proxy / portainer:9000 {
@@ -32,7 +32,7 @@
 }
 
 {$CADDY_URL}:9090 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -42,7 +42,7 @@
 }
 
 {$CADDY_URL}:9091 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -57,7 +57,7 @@
 }
 
 {$CADDY_URL}:9093 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -67,7 +67,7 @@
 }
 
 {$CADDY_URL}:9094 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -77,7 +77,7 @@
 }
 
 {$CADDY_URL}:9095 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -96,7 +96,7 @@
 }
 
 {$CADDY_URL}:19999 {
-  tls {$CADDY_CERT}{$CADDY_KEY}
+  tls {$CADDY_CERT}
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
