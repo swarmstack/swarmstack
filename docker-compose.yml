@@ -77,8 +77,8 @@ configs:
     file: ./grafana/dashboards/portworx-cluster-status.json
   grafana_dashboard_portworx-volumes-status:
     file: ./grafana/dashboards/portworx-volumes-status.json
-  grafana_dashboard_etcd-dash:
-    file: ./grafana/dashboards/etcd-dash.json
+  grafana_dashboard_etcd-cluster:
+    file: ./grafana/dashboards/etcd-cluster.json
 
   prometheus-conf:
     file: ./prometheus/conf/prometheus.yml
@@ -251,12 +251,12 @@ services:
   grafana:
     image: grafana/grafana:5.3.4
     configs:
-      - source: grafana_dashboard_etcd-dash
-        target: /etc/grafana/dashboards/etcd-dash.json
       - source: grafana_dashboard-cluster-nodes
         target: /etc/grafana/dashboards/cluster-nodes.json
       - source: grafana_dashboard_containers
         target: /etc/grafana/dashboards/containers.json
+      - source: grafana_dashboard_etcd-cluster
+        target: /etc/grafana/dashboards/etcd-cluster.json
       - source: grafana_dashboard_portworx-cluster-status
         target: /etc/grafana/dashboards/portworx-cluster-status.json
       - source: grafana_dashboard_portworx-volumes-status

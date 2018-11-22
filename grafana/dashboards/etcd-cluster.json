@@ -16,6 +16,7 @@
   "editable": true,
   "gnetId": 3070,
   "graphTooltip": 0,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -38,7 +39,7 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 0
       },
@@ -124,8 +125,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 8,
-        "x": 8,
+        "w": 6,
+        "x": 6,
         "y": 0
       },
       "id": 42,
@@ -160,14 +161,14 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
           "expr": "max(etcd_server_leader_changes_seen_total)",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "refId": "A",
           "step": 600
         }
@@ -205,8 +206,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 8,
-        "x": 16,
+        "w": 6,
+        "x": 12,
         "y": 0
       },
       "id": 43,
@@ -241,20 +242,101 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": false
+        "show": true
       },
       "tableColumn": "",
       "targets": [
         {
           "expr": "max(etcd_server_leader_changes_seen_total)",
           "format": "time_series",
-          "intervalFactor": 2,
+          "intervalFactor": 1,
           "refId": "A",
           "step": 600
         }
       ],
       "thresholds": "",
       "title": "The total number of failed proposals seen",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": null,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 46,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "count(etcd_server_is_leader)",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "title": "Cluster Size",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -370,6 +452,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -468,7 +551,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": null,
+      "decimals": 2,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -517,7 +600,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "DB Size",
+      "title": "Database Size",
       "tooltip": {
         "msResolution": false,
         "shared": true,
@@ -534,7 +617,8 @@
       },
       "yaxes": [
         {
-          "format": "bytes",
+          "decimals": 0,
+          "format": "decbytes",
           "logBase": 1,
           "max": null,
           "min": null,
@@ -559,6 +643,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -593,7 +678,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[5m])) by (instance, le))",
+          "expr": "topk(5, histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[5m])) by (instance, le)))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -603,7 +688,7 @@
           "step": 120
         },
         {
-          "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket[5m])) by (instance, le))",
+          "expr": "- topk(5,histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket[5m])) by (instance, le)))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} DB fsync",
@@ -615,7 +700,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Disk Sync Duration",
+      "title": "Top Disk Sync Duration",
       "tooltip": {
         "msResolution": false,
         "shared": true,
@@ -690,7 +775,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes",
+          "expr": "topk(10,sort_desc(process_resident_memory_bytes))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} Resident Memory",
@@ -702,7 +787,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Memory",
+      "title": "Top etcd Memory Usage",
       "tooltip": {
         "msResolution": false,
         "shared": true,
@@ -808,7 +893,8 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "decimals": 0,
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -897,6 +983,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "Bps",
           "label": null,
           "logBase": 1,
@@ -924,6 +1011,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 2,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -986,6 +1074,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "Bps",
           "label": null,
           "logBase": 1,
@@ -999,7 +1088,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -1013,7 +1102,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": null,
+      "decimals": 2,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -1079,6 +1168,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "Bps",
           "logBase": 1,
           "max": null,
@@ -1104,6 +1194,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "editable": true,
       "error": false,
       "fill": 0,
@@ -1137,7 +1228,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(etcd_server_proposals_failed_total[5m]))",
+          "expr": "ceil(sum(rate(etcd_server_proposals_failed_total[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Proposal Failure Rate",
@@ -1146,7 +1237,7 @@
           "step": 60
         },
         {
-          "expr": "sum(etcd_server_proposals_pending)",
+          "expr": "ceil(sum(etcd_server_proposals_pending))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Proposal Pending Total",
@@ -1155,7 +1246,7 @@
           "step": 60
         },
         {
-          "expr": "sum(rate(etcd_server_proposals_committed_total[5m]))",
+          "expr": "ceil(sum(rate(etcd_server_proposals_committed_total[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Proposal Commit Rate",
@@ -1164,7 +1255,7 @@
           "step": 60
         },
         {
-          "expr": "sum(rate(etcd_server_proposals_applied_total[5m]))",
+          "expr": "ceil(sum(rate(etcd_server_proposals_applied_total[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Proposal Apply Rate",
@@ -1192,6 +1283,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "short",
           "label": "",
           "logBase": 1,
@@ -1311,6 +1403,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "description": "proposals_committed_total records the total number of consensus proposals committed. This gauge should increase over time if the cluster is healthy. Several healthy members of an etcd cluster may have different total committed proposals at once. This discrepancy may be due to recovering from peers after starting, lagging behind the leader, or being the leader and therefore having the most commits. It is important to monitor this metric across all the members in the cluster; a consistently large lag between a single member and its leader indicates that member is slow or unhealthy.\n\nproposals_applied_total records the total number of consensus proposals applied. The etcd server applies every committed proposal asynchronously. The difference between proposals_committed_total and proposals_applied_total should usually be small (within a few thousands even under high load). If the difference between them continues to rise, it indicates that the etcd server is overloaded. This might happen when applying expensive queries like heavy range queries or large txn operations.",
       "fill": 1,
       "gridPos": {
@@ -1345,7 +1438,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(etcd_server_proposals_committed_total[5m]))",
+          "expr": "ceil(sum(rate(etcd_server_proposals_committed_total[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "total number of consensus proposals committed",
@@ -1354,7 +1447,7 @@
           "step": 60
         },
         {
-          "expr": "sum(rate(etcd_server_proposals_applied_total[5m]))",
+          "expr": "ceil(sum(rate(etcd_server_proposals_applied_total[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "total number of consensus proposals applied",
@@ -1382,6 +1475,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1395,7 +1489,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -1491,7 +1585,7 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
@@ -1506,13 +1600,14 @@
       "legend": {
         "avg": false,
         "current": false,
+        "hideEmpty": true,
         "max": false,
         "min": false,
         "show": true,
         "total": false,
         "values": false
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
@@ -1526,7 +1621,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(etcd_disk_wal_fsync_duration_seconds_sum[1m]))",
+          "expr": "ceil(sum(rate(etcd_disk_wal_fsync_duration_seconds_sum[1m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "\tThe latency distributions of fsync called by wal",
@@ -1534,7 +1629,7 @@
           "step": 30
         },
         {
-          "expr": "sum(rate(etcd_disk_backend_commit_duration_seconds_sum[1m]))",
+          "expr": "ceil(sum(rate(etcd_disk_backend_commit_duration_seconds_sum[1m])))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "The latency distributions of commit called by backend",
@@ -1561,6 +1656,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1574,7 +1670,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -1691,13 +1787,14 @@
       },
       "id": 9,
       "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
         "min": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -1724,7 +1821,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Snapshot duration",
+      "title": "Top Snapshot Duration",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1740,7 +1837,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "ms",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1800,7 +1897,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Etcd by Prometheus",
+  "title": "etcd Cluster",
   "uid": "70DZintik",
   "version": 1
 }

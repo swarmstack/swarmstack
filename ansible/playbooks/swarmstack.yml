@@ -214,7 +214,7 @@
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 3 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 3 of 4"
       path: "{{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml"
-      insertbefore: '      - source: grafana_dashboard_etcd-dash'
+      insertbefore: '      - source: grafana_dashboard_cluster-nodes'
       block: |2
               - source: grafana_configuration
                 target: /etc/grafana/grafana.ini
@@ -225,7 +225,7 @@
       marker_begin: "SWARMSTACK_BEGIN Grafana LDAP 4 of 4"
       marker_end: "SWARMSTACK_END Grafana LDAP 4 of 4"
       path: "{{SWARMSTACK_LOCAL_DIR}}/docker-compose.yml"
-      insertbefore: '      - source: grafana_dashboard_etcd-dash'
+      insertbefore: '      - source: grafana_dashboard_cluster-nodes'
       block: |2
               - source: grafana_ldap
                 target: /etc/grafana/ldap.toml
