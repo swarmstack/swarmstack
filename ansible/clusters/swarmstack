@@ -8,7 +8,7 @@ SWARMJOIN=swarm01.example.com
 # Define a manager node for swarmstack to use
 
 EXTERNAL_ENDPOINT=external.example.com
-# This URL will be used for email or webhook links generated in Alertmanager, Karma, and Prometheus
+# This URL will be used for email or webhook links generated in Alertmanager, karma, and Prometheus
 
 ADMIN_PASSWORD=changeme!42
 # Will set the initial admin password for all tools
