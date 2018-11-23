@@ -73,6 +73,13 @@ scrape_configs:
 #      type: 'A'
 #      port: 3000
 #
+#  - job_name: 'karma'
+#    dns_sd_configs:
+#    - names:
+#      - 'tasks.karma'
+#      type: 'A'
+#      port: 8080
+#
 #  - job_name: 'pushgateway'
 #    honor_labels: true
 #    dns_sd_configs:
@@ -80,13 +87,6 @@ scrape_configs:
 #      - 'tasks.pushgateway'
 #      type: 'A'
 #      port: 9091
-#
-#  - job_name: 'unsee'
-#    dns_sd_configs:
-#    - names:
-#      - 'tasks.unsee'
-#      type: 'A'
-#      port: 8080
 
 
 # EXAMPLE MANUAL SCRAPE CONFIG, COPY EACH STANZA FOR EACH OF YOUR NODES

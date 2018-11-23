@@ -71,7 +71,7 @@
   errors stderr
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
-  proxy / unsee:8080 {
+  proxy / karma:8080 {
     transparent
   }
 }

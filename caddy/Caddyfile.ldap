@@ -88,7 +88,7 @@
     path /
     ldap url=ldaps://ldap.example.com:636,insecure=true,timeout=5s,username=ldap_binduser,password=ldap_bindpw,base="o=example.com",filter="(&(memberOf=CN=some_group,OU=groups,O=example.com)(objectClass=user)(uid=%s))"
   }
-  proxy / unsee:8080 {
+  proxy / karma:8080 {
     transparent
   }
 }

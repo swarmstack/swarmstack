@@ -106,9 +106,6 @@ configs:
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
 
-  karma-conf:
-    file: ./karma/karma.yaml
-
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
@@ -119,6 +116,9 @@ configs:
     file: ./grafana/dashboards/prometheus-2-stats.json
   grafana_dashboard_containers:
     file: ./grafana/dashboards/containers.json
+
+  karma-conf:
+    file: ./karma/karma.yaml
 
   prometheus-conf:
     file: ./prometheus/conf/prometheus-singlebox.yml
@@ -259,26 +259,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/run:/var/run
 
-  karma:
-    image: swarmstack/karma:healthcheck
-    configs:
-      - source: karma-conf
-        target: /karma.yaml
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels:
-        prometheus.enable: "true"
-        prometheus.port: "8080"
-        prometheus.path: "/metrics"
-    healthcheck:
-      test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
-      interval: 25s
-      timeout: 3s
-      start_period: 30s
-    networks:
-      - net
-
   grafana:
     image: grafana/grafana:5.3.4
     configs:
@@ -324,6 +304,26 @@ services:
       - net
     volumes:
       - grafana:/var/lib/grafana
+
+  karma:
+    image: swarmstack/karma:healthcheck
+    configs:
+      - source: karma-conf
+        target: /karma.yaml
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
+    networks:
+      - net
 
   portainer:
     image: portainer/portainer:1.19.2

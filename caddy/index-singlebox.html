@@ -6,11 +6,11 @@ function setHref() {
   document.getElementById('alertmanager').href = window.location.protocol + "//" + window.location.hostname + ":9093";
   document.getElementById('alertmanagerB').href = window.location.protocol + "//" + window.location.hostname + ":9095";
   document.getElementById('grafana').href = window.location.protocol + "//" + window.location.hostname + ":3000";
+  document.getElementById('karma').href = window.location.protocol + "//" + window.location.hostname + ":9094";
   document.getElementById('netdata1').href = window.location.protocol + "//" + window.location.hostname + ":19998/swarmhost1/";
   document.getElementById('portainer').href = window.location.protocol + "//" + window.location.hostname + ":9000";
   document.getElementById('prometheus').href = window.location.protocol + "//" + window.location.hostname + ":9090";
   document.getElementById('pushgateway').href = window.location.protocol + "//" + window.location.hostname + ":9091";
-  document.getElementById('unsee').href = window.location.protocol + "//" + window.location.hostname + ":9094";
 }
 </script>
 <style>
@@ -89,6 +89,10 @@ a:link, a:visited, a:hover, a:active {
    <div class="box">Query, visualize, alert on and understand your metrics no matter where they are stored</div>
 </div>
 <div class="boxes">
+   <div class="linkbox"><a target="_blank" href="" id="karma"><h3>Karma</h3></a></div>
+   <div class="box">Alert dashboard for Prometheus Alertmanager(s)</div>
+</div>
+<div class="boxes">
    <div class="linkbox"><a target="_blank" href="" id="netdata1"><h3>NetData - swarmhost1</h3></a></div>
    <div class="box">Everything happening on your systems and applications</div>
 </div>
@@ -103,10 +107,6 @@ a:link, a:visited, a:hover, a:active {
 <div class="boxes">
    <div class="linkbox"><a target="_blank" href="" id="pushgateway"><h3>Prometheus Pushgateway</h3></a></div>
    <div class="box">Push acceptor for ephemeral and batch jobs metrics to be scraped by Prometheus</div>
-</div>
-<div class="boxes">
-   <div class="linkbox"><a target="_blank" href="" id="unsee"><h3>Unsee</h3></a></div>
-   <div class="box">Alert dashboard for Prometheus Alertmanager(s)</div>
 </div>
 
 </body>

@@ -37,10 +37,6 @@ scrape_configs:
       type: 'A'
       port: 9180
 
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
   - job_name: 'cadvisor'
     dns_sd_configs:
     - names:
@@ -55,6 +51,17 @@ scrape_configs:
       type: 'A'
       port: 3000
 
+  - job_name: 'karma'
+    dns_sd_configs:
+    - names:
+      - 'tasks.karma'
+      type: 'A'
+      port: 8080
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
   - job_name: 'pushgateway'
     honor_labels: true
     dns_sd_configs:
@@ -62,13 +69,6 @@ scrape_configs:
       - 'tasks.pushgateway'
       type: 'A'
       port: 9091
-
-  - job_name: 'unsee'
-    dns_sd_configs:
-    - names:
-      - 'tasks.unsee'
-      type: 'A'
-      port: 8080
 
   - job_name: 'netdata-swarmhost1'
     metrics_path: '/api/v1/allmetrics'
