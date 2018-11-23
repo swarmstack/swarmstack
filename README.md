@@ -1,6 +1,6 @@
 # swarmstack
 
-A Docker swarm-based starting point for monitoring highly-available containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, optional Errbot, and other high-availability features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
+A starting point for the installation, maintenance, and monitoring of highly-available Docker swarm-based containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, dynamic swarm service discovery, optional Errbot, and other HA and enterprise-grade features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
 
 [![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg)
  
@@ -253,9 +253,9 @@ Below is mainly for documentation. After installing swarmstack, just connect to 
 DevOps Tools    | Connection URL<br>(proxied by Caddy) | Source / Image 
 --------------- | --------------------------------- | --------------
 [Alertmanager](https://prometheus.io/docs/alerting/alertmanager/) | https://swarmhost:9093<br>https://swarmhost:9095 | Source:[https://github.com/prometheus/alertmanager](https://github.com/prometheus/alertmanager)<br>Image:[https://hub.docker.com/r/prom/alertmanager](https://hub.docker.com/r/prom/alertmanager) v0.15.2
-[Karma](https://github.com/prymitive/karma/blob/master/README.md) | https://swarmhost:9094 | Source:[https://github.com/swarmstack/karma](https://github.com/swarmstack/karma)<br>Image:[https://hub.docker.com/r/swarmstack/karma:healthcheck](https://hub.docker.com/r/swarmstack/karma) latest
+[Karma](https://github.com/prymitive/karma/blob/master/README.md) | https://swarmhost:9094 | Source:[https://github.com/swarmstack/karma](https://github.com/swarmstack/karma)<br>Image:[https://hub.docker.com/r/swarmstack/karma](https://hub.docker.com/r/swarmstack/karma) healthcheck
 [Grafana](https://grafana.com) | https://swarmhost:3000 | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana)<br>Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 5.3.2
-[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml)
+[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) latest
 [Portainer](https://portainer.io) | https://swarmhost:9000 | Source:[https://github.com/portainer/portainer](https://github.com/portainer/portainer)<br>Image:[https://hub.docker.com/r/portainer/portainer](https://hub.docker.com/r/portainer/portainer) 1.19.2
 [Prometheus](https://prometheus.io/) | https://swarmhost:9090 | Source:[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)<br>Image:[https://hub.docker.com/r/prom/prometheus](https://hub.docker.com/r/prom/prometheus) v2.5.0
 [Pushgateway](https://prometheus.io/docs/practices/pushing/) | https://swarmhost:9091 | Source:[https:/github.com/prometheus/pushgateway](https:/github.com/prometheus/pushgateway)<br>Image:[https://hub.docker.com/r/prom/pushgateway](https://hub.docker.com/r/prom/pushgateway) v0.6.0
@@ -268,7 +268,7 @@ Security | Notes | Source / Image
 [fail2ban](https://www.fail2ban.org) | Brute-force prevention | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
 [iptables](https://en.wikipedia.org/wiki/Iptables) | Firewall management | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
 [Portainer Agent](https://portainer.io) | no monitoring, contacts Portainer | Source:[https://github.com/portainer/portainer](https://github.com/portainer/portainer)<br>Image:[https://hub.docker.com/r/portainer/portainer](https://hub.docker.com/r/portainer/portainer) 1.1.2
-[swarm-discovery-server](https://github.com/jmendiara/prometheus-swarm-discovery) | server: swarmstack_net:8080<br>client: no monitoring, contacts server and writes to volume | Source:[https://github.com/jmendiara/prometheus-swarm-discovery](https://github.com/jmendiara/prometheus-swarm-discovery) 0.2.0
+[swarm-discovery-server](https://github.com/jmendiara/prometheus-swarm-discovery) | server: swarmstack_net:8080<br>client: no monitoring, contacts server and writes to a volume shared with Prometheus | Source:[https://github.com/jmendiara/prometheus-swarm-discovery](https://github.com/jmendiara/prometheus-swarm-discovery) 0.2.0
 
 ---
 
@@ -278,8 +278,8 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 [Docker Swarm](https://docs.docker.com/engine/swarm/) | Docker Node IP:<br>http://swarmhost:9323/metrics | [ansible/playbooks/docker.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/docker.yml)
 [etcd3](https://github.com/etcd-io/etcd) | Docker Node IP:<br>http://swarmhost:2379/metrics | [ansible/playbooks/etcd.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/etcd.yml)
 [Grafana](https://grafana.com) | Docker overlay network:<br>http://grafana:3000/metrics | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana)<br>Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 5.3.4
-[NetData](https://my-netdata.io/) | Docker Node IP:<br>http://swarmhost:19999/api/v1/allmetrics | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml)
-[Portworx](https://portworx.com) | Docker Node IP:<br>http://swarmhost:9001/metrics | [ansible/playbooks/portworx.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/portworx.yml)
+[NetData](https://my-netdata.io/) | Docker Node IP:<br>http://swarmhost:19999/api/v1/allmetrics | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) latest
+[Portworx](https://portworx.com) | Docker Node IP:<br>http://swarmhost:9001/metrics | [ansible/playbooks/portworx.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/portworx.yml) px-dev or px-enterprise
 [Prometheus](https://prometheus.io) | Docker overlay network:<br>http://prometheus:9090/metrics | Source:[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)<br>Image:[https://hub.docker.com/r/prom/prometheus](https://hub.docker.com/r/prom/prometheus) v2.5.0
 [Pushgateway](https://prometheus.io/docs/practices/pushing/) | Docker overlay network:<br>https://pushgateway:9091/metrics | Source:[https:/github.com/prometheus/pushgateway](https:/github.com/prometheus/pushgateway)<br>Image:[https://hub.docker.com/r/prom/pushgateway](https://hub.docker.com/r/prom/pushgateway) v0.6.0
 
