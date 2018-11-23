@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1542650103320,
+  "id": 7,
+  "iteration": 1543011144594,
   "links": [],
   "panels": [
     {
@@ -41,7 +41,7 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
+        "w": 4,
         "x": 0,
         "y": 0
       },
@@ -127,8 +127,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
-        "x": 6,
+        "w": 5,
+        "x": 4,
         "y": 0
       },
       "hideTimeOverride": true,
@@ -213,8 +213,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
-        "x": 12,
+        "w": 5,
+        "x": 9,
         "y": 0
       },
       "hideTimeOverride": true,
@@ -299,8 +299,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 6,
-        "x": 18,
+        "w": 5,
+        "x": 14,
         "y": 0
       },
       "hideTimeOverride": true,
@@ -351,6 +351,88 @@
       "thresholds": "",
       "timeFrom": "1m",
       "title": "Containers",
+      "transparent": true,
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": null,
+      "decimals": 0,
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 19,
+        "y": 0
+      },
+      "id": 40,
+      "interval": null,
+      "links": [],
+      "mappingType": 2,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(ceil(irate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) )",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A"
+        }
+      ],
+      "thresholds": "1,2",
+      "title": "Failed Health Checks",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -558,7 +640,7 @@
       "decimals": 2,
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 0,
         "y": 7
@@ -651,7 +733,7 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 12,
         "y": 7
@@ -739,28 +821,23 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 12
       },
-      "id": 32,
+      "id": 38,
       "legend": {
-        "alignAsTable": false,
         "avg": false,
-        "current": false,
+        "current": true,
         "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
+        "max": false,
         "min": false,
-        "rightSide": false,
         "show": false,
-        "sort": "current",
-        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -778,23 +855,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(irate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) ) by (instance)",
+          "expr": "topk(5, irate(container_fs_reads_bytes_total{id!~\"/|/docker|/system.slice.*|/user.slice.*\", instance=~\"($node_id)\"}[1m]))",
           "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "intervalFactor": 4,
-          "legendFormat": "{{instance}} failed",
-          "refId": "B",
-          "step": 10
+          "intervalFactor": 1,
+          "legendFormat": "Read: {{instance}} {{id}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Failed Health Checks",
+      "title": "Top Disk IO Reads by Container",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -808,7 +882,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "none",
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -838,10 +912,10 @@
       "decimals": 2,
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 12
       },
       "id": 17,
       "legend": {
@@ -929,28 +1003,23 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": null,
       "decimals": 0,
-      "fill": 5,
+      "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 17
       },
-      "id": 12,
+      "id": 41,
       "legend": {
-        "alignAsTable": false,
-        "avg": true,
+        "avg": false,
         "current": true,
-        "hideEmpty": false,
-        "hideZero": false,
+        "hideEmpty": true,
         "max": false,
         "min": false,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
+        "show": false,
         "total": false,
         "values": true
       },
@@ -964,26 +1033,25 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "count(sum(label_replace(container_tasks_state{state=\"running\",container_label_com_docker_swarm_service_name=~\".+\"}, \"node_id\", \"$1\", \"container_label_com_docker_swarm_node_id\", \"(.*)\") * on(node_id) group_left(state) swarm_node_info{job=~\"dockerd-($node_id)\"}) by (container_label_com_docker_swarm_service_id) )",
+          "expr": "- topk(5, irate(container_fs_writes_bytes_total{id!~\"/|/docker|/system.slice.*|/user.slice.*\", instance=~\"($node_id)\"}[1m]))",
           "format": "time_series",
           "instant": false,
-          "intervalFactor": 4,
-          "legendFormat": "Running services",
-          "refId": "A",
-          "step": 10
+          "intervalFactor": 1,
+          "legendFormat": "Write: {{instance}} {{id}}",
+          "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Running Docker Services",
+      "title": "Top Disk IO Writes by Container",
       "tooltip": {
         "shared": true,
-        "sort": 1,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -997,7 +1065,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "none",
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1027,10 +1095,10 @@
       "decimals": 2,
       "fill": 1,
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 12,
-        "y": 19
+        "y": 17
       },
       "id": 25,
       "legend": {
@@ -1123,10 +1191,10 @@
       "datasource": "Prometheus",
       "fontSize": "100%",
       "gridPos": {
-        "h": 13,
+        "h": 7,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 22
       },
       "hideTimeOverride": true,
       "id": 28,
@@ -1337,6 +1405,415 @@
       "transform": "table",
       "transparent": true,
       "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 32,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(ceil(irate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) ) by (instance)",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "intervalFactor": 4,
+          "legendFormat": "{{instance}} failed",
+          "refId": "B",
+          "step": 10
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Failed Health Checks",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "columns": [],
+      "datasource": null,
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 36,
+      "links": [],
+      "pageSize": 100,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "hidden"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_stack_namespace",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "__name__",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_swarm_node_id",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_swarm_service_id",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_swarm_task_id",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Docker Swarm Service Name",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_swarm_service_name",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_com_docker_swarm_task_name",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "/container_label_org_.*/",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "job",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "name",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "state",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "container_label_maintainer",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "task",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "image",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Container ID",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "id",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Node",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "container_tasks_state{id!~\"/|/docker|/system.slice.*|/user.slice.*\", instance=~\"$node_id\" ,state=\"running\"}",
+          "format": "table",
+          "instant": true,
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Running Docker and OCI Containers",
+      "transform": "table",
+      "type": "table"
     }
   ],
   "refresh": "30s",
@@ -1350,6 +1827,7 @@
       {
         "allValue": null,
         "current": {
+          "tags": [],
           "text": "All",
           "value": [
             "$__all"
