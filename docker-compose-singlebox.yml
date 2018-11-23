@@ -106,6 +106,9 @@ configs:
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
 
+  karma-conf:
+    file: ./karma/karma.yaml
+
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
@@ -124,8 +127,6 @@ configs:
   prometheus-docker_containers:
     file: ./prometheus/rules/docker_containers.yml
 
-  unsee-conf:
-    file: ./unsee/unsee.yaml
 
 services:
 
@@ -258,6 +259,26 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/run:/var/run
 
+  karma:
+    image: swarmstack/karma:healthcheck
+    configs:
+      - source: karma-conf
+        target: /karma.yaml
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
+    networks:
+      - net
+
   grafana:
     image: grafana/grafana:5.3.4
     configs:
@@ -384,16 +405,3 @@ services:
       start_period: 30s
     networks:
       - net
-
-  unsee:
-    image: cloudflare/unsee:v0.9.2
-    configs:
-      - source: unsee-conf
-        target: /unsee.yaml
-    networks:
-      - net
-    environment:
-      - "ALERTMANAGER_URIS=alertmanager:http://alertmanager:9093 alertmanagerB:http://alertmanagerB:9093"
-    deploy:
-      mode: replicated
-      replicas: 1
