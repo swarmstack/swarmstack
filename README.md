@@ -136,8 +136,6 @@ You may want to perform installation from a host outside the cluster, as running
 
 There is a [docker-compose-singlebox.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose-singlebox.yml) stack that can be used to evaluate swarmstack on a single Docker swarm host without requiring etcd and Portworx or other persistent storage. This stack will save persistent named volumes to the single swarm host instead. Please see the file for installation instructions and _skip all other steps below_.
 
----
-
 Edit these (4) files: | |
 ---- | - |
 [clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack) | _Configure all of your cluster nodes and storage devices_ |
@@ -145,7 +143,7 @@ Edit these (4) files: | |
 [roles/swarmstack/files/etc/swarmstack_fw/rules/cluster.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/cluster.rules) | _Used to permit traffic to the hosts themselves_ |
 [roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules](https://github.com/swarmstack/swarmstack/blob/master/ansible/roles/swarmstack/files/etc/swarmstack_fw/rules/docker.rules) | _Used to limit access to Docker service ports_ |
 
-All of the playbooks below are idempotent and can be re-run as needed when making firewall changes or adding Docker or storage nodes to your clusters.
+All of the playbooks below are idempotent, will only take actions on hosts  where necessary, and can be safely re-run as needed, such as when changing cluster parameters or adding storage or additional nodes.
 
 After execution of the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD set in [ansible/clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack). You can update the ADMIN_PASSWORD later by executing _docker stack rm swarmstack_ (persistent data volumes will be preserved) and then re-running the swarmstack.yml playbook. 
 
@@ -161,7 +159,7 @@ ansible-playbook -i clusters/swarmstack [playbooks/firewall.yml](https://github.
 
 ansible-playbook -i clusters/swarmstack [playbooks/docker.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/docker.yml) -k
 
-* _(optional)_ Use this playbook if you haven't already brought up a Docker swarm, or just need to add swarm nodes to a new or existing Docker cluster. This playbook will also update all packages on the system using yum on each node when run (edit /etc/yum.conf and set _'exclude='_ if you want to inhibit certain packages from being upgraded, even kernels), and will take down serially proceed through each node in the _[swarm]_ group and upgrade Docker and reboot each host serially if kernels are updated. You should develop a process to perform this type of update maintenance on your hosts regularly just by running this playbook again.
+* _(optional)_ Use this playbook if you haven't already brought up a Docker swarm, or just need to add swarm nodes to a new or existing Docker cluster. This playbook can also be used to maintain your Docker swarm nodes, and will serially work through each _[swarm]_ node in the cluster to update all packages using yum (edit /etc/yum.conf and set _'exclude='_ if you want to inhibit certain packages from being upgraded, even kernels), and will only take down and upgrade Docker on each node if Docker or kernel updates are available. You should develop a process to run this maintenance on your hosts regularly by simply running this playbook again.
 
 ---
 
