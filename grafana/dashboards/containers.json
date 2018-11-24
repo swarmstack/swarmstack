@@ -1518,8 +1518,8 @@
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 0,
-        "desc": true
+        "col": 18,
+        "desc": false
       },
       "styles": [
         {
