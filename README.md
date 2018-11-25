@@ -52,7 +52,7 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 ## WHY? 
 
-A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how applications perform over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails, but Prometheus also brings with it an easier way to configure alerts based on aggregated time-series data, for example:
+A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how applications perform over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails via alerts, but Prometheus also brings with it an easier way for you and your team to create alerts for their applications, based on aggregated time-series data. For example:
 
 ```
 alert: node_disk_fill_rate_6h
@@ -66,9 +66,15 @@ annotations:
   summary: Disk fill alert for Swarm node '{{ $labels.node_name }}'
 ```
 
-![](https://raw.githubusercontent.com/portworx/px-dev/master/images/mysql.png "Portworx replicating volumes")
+Learn how to add your own application metrics and alerts here: [How to Export Prometheus Metrics from Just About Anything - Matt Layher, DigitalOcean](https://www.youtube.com/watch?v=Zk09Mbu0YQk)
 
-Portworx provides a high-availability storage solution that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
+Grafana lets you visualize the metrics being collected into the Prometheus TSDB. You can build new chart/graph/table visualizations of your own application metrics using the same Prometheus data-source. Some default visualizations in Grafana are provided to help your team stay aware of the Docker swarm cluster health, and to dig into and explore what your containers and their volumes are doing:
+
+![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/Cluster_Nodes.png)
+
+Portworx provides a high-availability storage solution for containers that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
+
+![](https://raw.githubusercontent.com/portworx/px-dev/master/images/mysql.png "Portworx replicating volumes")
 
 ---
 
@@ -77,11 +83,11 @@ Portworx provides a high-availability storage solution that seeks to eliminate "
 A set of ansible playbooks and a docker-compose stack that:
 
 - Tunes EL7 sysctls for optimal network performance
-- _optional:docker_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
-- _optional:docker_ Automatically prunes unused Docker containers / volumes / images from nodes
-- _optional:storage_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
-- _optional:storage_ Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
-- _swarmstack:DevOps_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, and Portainer to manage the Docker swarm via GUI. All tools are secured using HTTPS by a Caddy reverse proxy. Optional [Errbot](https://github.com/swarmstack/errbot-docker) to connect alerts to social rooms to not natively supported by Alertmanager
+- _(optional: docker)_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
+- _(optional: docker)_ Automatically prunes unused Docker containers / volumes / images from nodes
+- _(optional: storage)_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
+- _(optional: storage)_ Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
+- _(swarmstack: devops)_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, karma, and Portainer containers, and also installs NetData under systemd on each host. All tools are secured using HTTPS by a Caddy reverse proxy. Optional [Errbot](https://github.com/swarmstack/errbot-docker) to connect alerts to social rooms to not natively supported by Alertmanager
 
 ---
 
@@ -342,9 +348,7 @@ Thanks to Mark Sullivan at Cisco for his work on the Cisco Webex Teams backend f
 
 Thanks goes to the team at Portworx for their excellent storage product and support.
 
-Thanks to Shannon Wynter for Caddy re-authentition fixes for LDAP.
-
-
+Thanks to Shannon Wynter for Caddy re-authentication fixes for LDAP.
 
 ---
 
