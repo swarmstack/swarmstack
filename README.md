@@ -1,8 +1,7 @@
-# swarmstack
+[![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg)
 
 A starting point for the installation, maintenance, and monitoring of highly-available Docker swarm-based containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, dynamic swarm service discovery, optional Errbot, and other HA and enterprise-grade features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
 
-[![swarmstack](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png "swarmstack")](https://youtu.be/3FpTcVnvfRg)
  
 <!-- TOC -->
 
