@@ -216,7 +216,7 @@ px_volume_currhalevel
 count(up)
 ```
 
-See [Querying Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/) for the basics of PromQL syntax. The limited video playlist at the top of this page is an excellent resource to understand the tools deeper.
+See [Querying Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/) for the basics of PromQL syntax. The limited video playlist in the VIDEOS section of this page is an excellent resource to understand the tools deeper.
 
 ### Alerting
 
