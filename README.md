@@ -7,7 +7,6 @@ A starting point for the installation, maintenance, and monitoring of highly-ava
 <!-- TOC -->
 
 - [swarmstack introduction video](https://youtu.be/3FpTcVnvfRg)
-- [swarmstack playlist videos](https://www.youtube.com/playlist?list=PLffspZ58HP-Nv8tDHGJoawAZQStkNzA7u)
     - [WHY?](#why)
     - [FEATURES](#features)
     - [REQUIREMENTS](#requirements)
@@ -33,6 +32,7 @@ A starting point for the installation, maintenance, and monitoring of highly-ava
         - [Prometheus - Graphs](#prometheus---graphs)
         - [Prometheus - Alerts](#prometheus---alerts)
         - [Prometheus - Targets](#prometheus---targets)
+    - [VIDEOS](#videos)
     - [CREDITS](#credits)
     - [FILETREE](#filetree)
 
@@ -195,7 +195,7 @@ networks:
       name: swarmstack_net
 ```
 
-You'll need to expose your metrics in a Prometheus-compatible format on an HTTP port (traffic on the swarmstack_net overlay network is encrypted), and add the following labels to your service so that Prometheus will quickly start to scrape it. See [swarmstack/swarmstack/docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml) for examples of services requesting to be monitored by Prometheus:
+You'll need to expose your metrics in a [Prometheus-compatible](https://www.youtube.com/watch?v=Zk09Mbu0YQk) format on an HTTP port (traffic on the swarmstack_net overlay network is encrypted), and add the following labels to your service so that Prometheus will quickly start to scrape it. See [swarmstack/swarmstack/docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml) for examples of services announcing they wish to be monitored by Prometheus:
 
 ```
     deploy:
@@ -246,7 +246,7 @@ As your needs for this stack grow, you may find yourself replacing some of the s
 
 ## NETWORK URLs
 
-Below is mainly for documentation. After installing swarmstack, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links below
+Below is mainly for documentation. After installing swarmstack, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links:
 
 DevOps Tools    | Connection URL<br>(proxied by Caddy) | Source / Image 
 --------------- | --------------------------------- | --------------
@@ -318,15 +318,33 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 
 ---
 
+## VIDEOS
+
+* [swarmstack introduction video](https://youtu.be/3FpTcVnvfRg)
+* [How to Export Prometheus Metrics from Just About Anything - Matt Layher, DigitalOcean](https://www.youtube.com/watch?v=Zk09Mbu0YQk)
+* [Monitoring, the Prometheus way](https://www.youtube.com/watch?v=PDxcEzu62jk)
+* [How Prometheus Revolutionized Monitoring at SoundCloud](https://youtu.be/hhZrOHKIxLw).
+* [Prometheus Monitoring for DevOps teams playlist](https://www.youtube.com/playlist?list=PLffspZ58HP-Nv8tDHGJoawAZQStkNzA7u)
+
+---
+
 ## CREDITS
 
 Credit is due to the excellent DevOps stack proposed and maintained by [Stefan Prodan](https://stefanprodan.com/) and his project [swarmprom](https://github.com/stefanprodan/swarmprom).
 
+Thank you Carl Bergquist for Grafana golang updates.
+
+Thank you Guillaume Binet and the [Errbot community](https://gitter.im/errbotio/errbot) for [assistance](https://stackoverflow.com/questions/tagged/errbot) with plugins.
+
+Thanks Łukasz Mierzwa for [karma](https://github.com/prymitive/karma/blob/master/README.md) fixes and updates.
+
 Thanks to Mark Sullivan at Cisco for his work on the Cisco Webex Teams backend for Errbot.
 
-Thank you Carl Bergquist at Grafana Labs for the golang updates.
-
 Thanks goes to the team at Portworx for their excellent storage product and support.
+
+Thanks to Shannon Wynter for Caddy re-authentition fixes for LDAP.
+
+
 
 ---
 
