@@ -191,6 +191,8 @@ ansible-playbook -i clusters/swarmstack [playbooks/swarmstack.yml](https://githu
 
 The Grafana _Cluster Nodes_ dashboard will provide the best visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _karma_ (which watches both Alertmanager instances in one place), or your email/IM channels, and you'll receive links back to the Prometheus rules being alerted on. Advanced Prometheus users might add runbook links to alert messages, possibly using a ChatOps process through a bot and attempt automatic remediation of the Prometheus condition or dimension being alerted on (reboot the host, kill the container, signal the application, etc).
 
+Various Prometheus [exporters](https://prometheus.io/docs/instrumenting/exporters/) are available for common services such as PostgreSQL.
+
 To attach your own applications into Prometheus monitoring, you'll need to make sure you deploy your services to attach to the swarmstack monitoring network in your own docker-compose files. See [swarmstack/errbot-docker/docker-compose-swarmstack.yml](https://github.com/swarmstack/errbot-docker/blob/master/docker-compose-swarmstack.yml) to see an example service attaching to swarmstack_net with:
 
 ```
