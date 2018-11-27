@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1543093757829,
+  "iteration": 1543288638726,
   "links": [],
   "panels": [
     {
@@ -83,8 +83,9 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, netdata_system_uptime_seconds_average * on(job) group_left(instance) netdata_info{job=~\"netdata-($node_id)\"} )",
+          "expr": "bottomk(1, netdata_system_uptime_seconds_average{instance=~\"($node_id)\"} )",
           "format": "time_series",
+          "instant": false,
           "intervalFactor": 10,
           "legendFormat": "{{job}}",
           "refId": "A",
@@ -254,8 +255,9 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_cpu_cpu_percentage_average{dimension=\"idle\"} * on(job) group_left(instance) netdata_info{job=~\"netdata-($node_id)\"})",
+          "expr": "count(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"})",
           "format": "time_series",
+          "instant": false,
           "intervalFactor": 10,
           "legendFormat": "",
           "refId": "A",
@@ -288,7 +290,7 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "datasource": "Prometheus",
-      "decimals": 1,
+      "decimals": 0,
       "format": "decmbytes",
       "gauge": {
         "maxValue": 100,
@@ -341,8 +343,9 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "round(sum(netdata_system_ram_MB_average * on(instance) group_left(job) netdata_info{job=~\"netdata-($node_id)\"}),1000)",
+          "expr": "sum(netdata_system_ram_MB_average{instance=~\"($node_id)\"})",
           "format": "time_series",
+          "instant": false,
           "intervalFactor": 10,
           "legendFormat": "",
           "refId": "A",
@@ -363,7 +366,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "current"
     },
     {
       "cacheTimeout": null,
@@ -455,7 +458,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 2,
+      "decimals": 0,
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -469,14 +472,14 @@
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
-        "max": false,
-        "min": false,
+        "max": true,
+        "min": true,
         "show": true,
         "total": false,
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -497,7 +500,7 @@
           "step": 4
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\"})",
+          "expr": "bottomk(1, sum(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\"}))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Sent",
@@ -514,6 +517,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -622,7 +626,7 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
+          "decimals": null,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -666,9 +670,11 @@
         "hideEmpty": true,
         "hideZero": false,
         "max": true,
-        "min": true,
+        "min": false,
         "rightSide": true,
-        "show": false,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -686,10 +692,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_load_load_average{dimension=\"load1\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "{dimension=\"load1\",instance=~\"($node_id)\"}",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "{{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 2
         }
@@ -750,7 +756,7 @@
       },
       "id": 46,
       "legend": {
-        "avg": false,
+        "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
@@ -774,10 +780,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail\",instance=~\"($node_id)\"}",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
+          "intervalFactor": 10,
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -790,6 +796,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -838,14 +845,16 @@
       },
       "id": 72,
       "legend": {
+        "alignAsTable": false,
         "avg": false,
         "current": false,
         "hideEmpty": true,
-        "max": false,
-        "min": false,
+        "max": true,
+        "min": true,
+        "rightSide": false,
         "show": false,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 2,
@@ -877,6 +886,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -972,10 +982,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"}) by (job) )",
+          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"}) by (job) )",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 10,
+          "intervalFactor": 4,
           "legendFormat": "",
           "refId": "A",
           "step": 2
@@ -1055,13 +1065,13 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "job",
+      "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "bottomk(1, sum(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\".*\"}) by (instance))",
           "format": "table",
           "instant": true,
-          "intervalFactor": 1,
+          "intervalFactor": 4,
           "legendFormat": "",
           "refId": "A"
         }
@@ -1148,7 +1158,7 @@
           "format": "time_series",
           "hide": false,
           "instant": true,
-          "intervalFactor": 10,
+          "intervalFactor": 4,
           "legendFormat": "{{job}}",
           "refId": "A",
           "step": 20
@@ -1226,10 +1236,10 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "job",
+      "tableColumn": "instance",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(label_replace(netdata_system_ram_MB_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") )by (job) * sum(label_replace(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MB_average{instance=~\"($node_id)\"}) by (instance) * sum(netdata_system_ram_MB_average{dimension=~\"free|cached\",instance=~\"($node_id)\"}) by (instance) ) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1311,10 +1321,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-($node_id)\"}) by (job) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-($node_id)\"} ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) ) )",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 10,
+          "intervalFactor": 4,
           "legendFormat": "{{job}}",
           "refId": "A",
           "step": 20
@@ -1392,10 +1402,10 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "job",
+      "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(label_replace(netdata_disk_space_GB_average{family=\"/\", job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) * sum(label_replace(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1423,7 +1433,7 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 2,
-      "fill": 0,
+      "fill": 1,
       "gridPos": {
         "h": 5,
         "w": 12,
@@ -1452,21 +1462,21 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"received\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"received\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Received: {{job}}",
+          "legendFormat": "Received: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "label_replace(netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"sent\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "Sent: {{job}}",
+          "legendFormat": "Sent: {{instance}}",
           "refId": "B"
         }
       ],
@@ -1502,7 +1512,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -1539,7 +1549,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
       "percentage": false,
@@ -1552,18 +1562,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Reads {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Reads {{instance}}",
           "refId": "A",
           "step": 2
         },
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Writes {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Writes {{instance}}",
           "refId": "B",
           "step": 2
         }
@@ -1624,15 +1634,17 @@
       },
       "id": 14,
       "legend": {
-        "alignAsTable": false,
+        "alignAsTable": true,
         "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
-        "rightSide": false,
-        "show": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -1650,10 +1662,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "100 - (avg(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"idle\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"}) by (instance) )",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "{{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 2
         }
@@ -1705,7 +1717,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
@@ -1725,7 +1737,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -1735,20 +1747,20 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Reads {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Reads {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "sum(label_replace(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_await_ms_per_operation_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Write {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Write {{instance}}",
           "refId": "B"
         }
       ],
@@ -1822,7 +1834,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -1835,10 +1847,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"used\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_system_ram_MB_average{dimension=\"used\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 4,
-          "legendFormat": "{{job}}",
+          "legendFormat": "Memory: {{instance}}",
           "refId": "A",
           "step": 2
         }
@@ -1914,7 +1926,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
       "percentage": false,
@@ -1927,10 +1939,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 2
         }
@@ -2003,7 +2015,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -2016,10 +2028,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_system_ram_MB_average{dimension=\"cached\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_system_ram_MB_average{dimension=\"cached\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 4,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2072,7 +2084,7 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 0,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2105,10 +2117,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_files_open_files_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_apps_files_open_files_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2162,7 +2174,7 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 0,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2195,10 +2207,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_apps_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2251,7 +2263,7 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 0,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2284,10 +2296,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_apps_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_sockets_open_sockets_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_apps_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_users_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) + sum(label_replace(netdata_groups_pipes_open_pipes_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_apps_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"($node_id)\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2536,7 +2548,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
@@ -2550,19 +2562,21 @@
       },
       "id": 70,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
-        "current": false,
+        "current": true,
         "hideEmpty": true,
-        "max": false,
+        "max": true,
         "min": false,
-        "show": false,
+        "rightSide": true,
+        "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
-      "lines": false,
-      "linewidth": 1,
+      "lines": true,
+      "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -2570,12 +2584,12 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": true,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
-          "expr": "count(netdata_cgroup_writeback_MB_average{instance=~\"$node_id\"}) by (instance)",
+          "expr": "sort(count(netdata_cgroup_writeback_MB_average{instance=~\"$node_id\"}) by (instance))",
           "format": "time_series",
-          "intervalFactor": 1,
+          "intervalFactor": 4,
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -2583,7 +2597,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Node Containers",
+      "title": "Containers",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2599,8 +2613,301 @@
       },
       "yaxes": [
         {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 45
+      },
+      "id": 26,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(irate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) * 10 ) by (action)",
+          "format": "time_series",
+          "instant": false,
+          "intervalFactor": 10,
+          "legendFormat": "{{action}}",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Docker Network Actions",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
           "decimals": 0,
           "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 45
+      },
+      "id": 28,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "current",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "sum(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) )by (action)",
+          "format": "time_series",
+          "intervalFactor": 10,
+          "legendFormat": "{{action}}",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Docker Container Actions",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "fill": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 50
+      },
+      "id": 17,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",instance=~\"($node_id)\"}) by (instance)",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "IN {{instance}}",
+          "refId": "A",
+          "step": 2
+        },
+        {
+          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",instance=~\"($node_id)\"}) by (instance)",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "OUT {{instance}}",
+          "metric": "",
+          "refId": "B",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Container Network Traffic",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "Kbits",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -2632,111 +2939,8 @@
       "gridPos": {
         "h": 5,
         "w": 12,
-        "x": 0,
-        "y": 45
-      },
-      "id": 17,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 1,
-          "legendFormat": "IN {{job}}",
-          "refId": "A",
-          "step": 2
-        },
-        {
-          "expr": "sum(label_replace(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "intervalFactor": 1,
-          "legendFormat": "OUT {{job}}",
-          "metric": "",
-          "refId": "B",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Docker Container Network Traffic",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "Kbits",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": 0
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "fill": 1,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
         "x": 12,
-        "y": 45
+        "y": 50
       },
       "id": 18,
       "legend": {
@@ -2752,8 +2956,8 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 1,
+      "lines": true,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
       "percentage": false,
@@ -2762,22 +2966,22 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": true,
       "targets": [
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance))",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Reads {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Reads {{instance}}",
           "refId": "A",
           "step": 2
         },
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job) )",
+          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) )",
           "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "Writes {{job}}",
+          "intervalFactor": 1,
+          "legendFormat": "Writes {{instance}}",
           "refId": "B",
           "step": 2
         }
@@ -2791,6 +2995,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -2801,7 +3006,6 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
           "format": "short",
           "label": "",
           "logBase": 1,
@@ -2829,12 +3033,12 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "fill": 0,
+      "fill": 1,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 55
       },
       "id": 38,
       "legend": {
@@ -2849,7 +3053,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -2862,22 +3066,23 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_cgroup_cpu_percent_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{job}}",
+          "intervalFactor": 2,
+          "legendFormat": "CPU: {{instance}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Docker Container CPU Usage",
+      "title": "Container CPU Usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -2911,7 +3116,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
@@ -2921,7 +3126,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 55
       },
       "id": 44,
       "legend": {
@@ -2935,7 +3140,7 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
@@ -2949,17 +3154,17 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance))",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Reads {{job}}",
+          "intervalFactor": 2,
+          "legendFormat": "Reads {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "round(sum(label_replace(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job))",
+          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family=~\"/var.*|/pxd.*\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance))",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Writes {{job}}",
+          "intervalFactor": 2,
+          "legendFormat": "Writes {{instance}}",
           "refId": "B"
         }
       ],
@@ -2972,6 +3177,7 @@
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -3015,7 +3221,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 55
+        "y": 60
       },
       "id": 40,
       "legend": {
@@ -3029,7 +3235,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -3038,26 +3244,27 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(sort(label_replace(netdata_cgroup_mem_MB_average{job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) ) by (job)",
+          "expr": "sum(netdata_cgroup_mem_MB_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "{{job}}",
+          "legendFormat": "Memory: {{instance}}",
           "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Docker Container Memory usage",
+      "title": "Container Memory usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -3091,67 +3298,72 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
+      "decimals": 2,
       "fill": 1,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 55
+        "y": 60
       },
       "id": 42,
       "legend": {
+        "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": false,
+        "sort": "current",
+        "sortDesc": false,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
+      "stack": false,
+      "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"reads\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Reads {{job}}",
+          "intervalFactor": 2,
+          "legendFormat": "Reads {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "sum(label_replace(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"writes\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\") ) by (job)",
+          "expr": "sum(netdata_disk_io_kilobytes_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "Writes {{job}}",
+          "intervalFactor": 2,
+          "legendFormat": "Writes {{instance}}",
           "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Docker Container Disk IO",
+      "title": "Container Disk IO",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
+      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -3162,197 +3374,9 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
           "format": "KBs",
           "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "fill": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 0,
-        "y": 60
-      },
-      "id": 26,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}) by (action)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 10,
-          "legendFormat": "{{action}}",
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Docker Network Actions",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "decimals": 0,
-      "fill": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 12,
-        "y": 60
-      },
-      "id": 28,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}) by (action)",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{action}}",
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Docker Container Actions",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 10,
           "max": null,
           "min": null,
           "show": true
