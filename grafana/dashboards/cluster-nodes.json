@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1543425430261,
+  "id": 1,
+  "iteration": 1543425823957,
   "links": [],
   "panels": [
     {
@@ -87,7 +87,7 @@
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 2
         }
@@ -170,10 +170,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_info{job=~\"netdata-($node_id)\"})",
+          "expr": "count(netdata_info{instance=~\"($node_id)\"})",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
         }
@@ -870,7 +870,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "label_replace(netdata_disk_space_GB_average{family=\"/var/lib/docker\",dimension=~\"avail\",job=~\"netdata-($node_id)\"},\"job\",\"$1\",\"job\",\"netdata-(.*)\")",
+          "expr": "netdata_disk_space_GB_average{family=\"/var/lib/docker\",dimension=~\"avail\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -982,7 +982,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"}) by (job) )",
+          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"}) by (instance) )",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 4,
@@ -1072,7 +1072,7 @@
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1154,12 +1154,12 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MB_average{job=~\"netdata-($node_id)\"} ) by (job) * sum(netdata_system_ram_MB_average{dimension=~\"free|cached\",job=~\"netdata-($node_id)\"} ) by (job) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MB_average{instance=~\"($node_id)\"} ) by (instance) * sum(netdata_system_ram_MB_average{dimension=~\"free|cached\",instance=~\"($node_id)\"} ) by (instance) ) )",
           "format": "time_series",
           "hide": false,
           "instant": true,
           "intervalFactor": 4,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
         }
@@ -1243,6 +1243,7 @@
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1325,7 +1326,7 @@
           "format": "time_series",
           "instant": true,
           "intervalFactor": 4,
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
         }
@@ -1409,6 +1410,7 @@
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1526,7 +1528,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 2,
+      "decimals": 0,
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -1542,7 +1544,7 @@
         "hideEmpty": true,
         "hideZero": false,
         "max": true,
-        "min": true,
+        "min": false,
         "rightSide": false,
         "show": false,
         "total": false,
@@ -1597,6 +1599,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "KBs",
           "label": null,
           "logBase": 1,
@@ -1717,6 +1720,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "decimals": 0,
       "fill": 0,
       "gridPos": {
         "h": 5,
@@ -1784,6 +1788,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "ms",
           "label": null,
           "logBase": 1,
@@ -2696,7 +2701,7 @@
         "sort": 2,
         "value_type": "individual"
       },
-      "transparent": true,
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -2713,7 +2718,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
         },
         {
           "format": "short",
@@ -2790,7 +2795,7 @@
         "sort": 2,
         "value_type": "individual"
       },
-      "transparent": true,
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -2801,13 +2806,13 @@
       },
       "yaxes": [
         {
-          "decimals": 2,
+          "decimals": 0,
           "format": "short",
           "label": "",
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": false
+          "show": true
         },
         {
           "format": "short",
@@ -2970,7 +2975,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance))",
+          "expr": "sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Reads {{instance}}",
@@ -2978,7 +2983,7 @@
           "step": 2
         },
         {
-          "expr": "round(sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) )",
+          "expr": "sum(netdata_disk_ops_operations_persec_average{family!=\"fd0\",family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Writes {{instance}}",
@@ -3006,6 +3011,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "short",
           "label": "",
           "logBase": 1,
@@ -3407,9 +3413,10 @@
       {
         "allValue": ".+",
         "current": {
-          "text": "All",
+          "tags": [],
+          "text": "dna-dev-swarm01.cisco.com",
           "value": [
-            "$__all"
+            "dna-dev-swarm01.cisco.com"
           ]
         },
         "datasource": "Prometheus",
@@ -3433,7 +3440,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -3464,5 +3471,5 @@
   "timezone": "",
   "title": "Cluster Nodes",
   "uid": "BPlb-Sgik",
-  "version": 4
+  "version": 7
 }
