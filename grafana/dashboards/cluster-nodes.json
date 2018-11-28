@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1543425823957,
+  "id": 3,
+  "iteration": 1543427115351,
   "links": [],
   "panels": [
     {
@@ -2683,7 +2683,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) ) ) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id)\"}[1m]) ) ) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
@@ -2778,7 +2778,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) ) ) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id)\"}[1m]) ) ) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -3413,10 +3413,9 @@
       {
         "allValue": ".+",
         "current": {
-          "tags": [],
-          "text": "dna-dev-swarm01.cisco.com",
+          "text": "All",
           "value": [
-            "dna-dev-swarm01.cisco.com"
+            "$__all"
           ]
         },
         "datasource": "Prometheus",
@@ -3471,5 +3470,5 @@
   "timezone": "",
   "title": "Cluster Nodes",
   "uid": "BPlb-Sgik",
-  "version": 7
+  "version": 5
 }
