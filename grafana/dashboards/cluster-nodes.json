@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1543288638726,
+  "iteration": 1543425430261,
   "links": [],
   "panels": [
     {
@@ -2655,7 +2655,7 @@
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": true,
         "show": true,
@@ -2678,7 +2678,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) * 10 ) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) ) ) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
@@ -2750,7 +2750,7 @@
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": true,
         "show": true,
@@ -2773,7 +2773,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) )by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id):9323\"}[1m]) ) ) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -3407,7 +3407,6 @@
       {
         "allValue": ".+",
         "current": {
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -3465,5 +3464,5 @@
   "timezone": "",
   "title": "Cluster Nodes",
   "uid": "BPlb-Sgik",
-  "version": 3
+  "version": 4
 }
