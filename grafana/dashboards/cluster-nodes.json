@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1543427293518,
+  "iteration": 1543438331997,
   "links": [],
   "panels": [
     {
@@ -172,7 +172,7 @@
         {
           "expr": "count(netdata_info{instance=~\"($node_id)\"})",
           "format": "time_series",
-          "intervalFactor": 10,
+          "intervalFactor": 4,
           "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
@@ -429,12 +429,12 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_cgroup_writeback_MB_average{instance=~\"$node_id\"})",
+          "expr": "count(netdata_cgroup_writeback_MB_average{instance=~\"($node_id)\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
-          "intervalFactor": 10,
-          "legendFormat": "{{instance}}",
+          "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A",
           "step": 20
         }
@@ -518,7 +518,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -529,6 +529,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "Kbits",
           "label": null,
           "logBase": 1,
@@ -710,6 +711,7 @@
         "sort": 2,
         "value_type": "individual"
       },
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -797,7 +799,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -887,7 +889,7 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
+      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1435,7 +1437,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 2,
+      "decimals": 1,
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -1458,7 +1460,7 @@
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -1502,6 +1504,7 @@
       },
       "yaxes": [
         {
+          "decimals": 0,
           "format": "Kbits",
           "label": null,
           "logBase": 1,
@@ -1529,7 +1532,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
+      "decimals": 1,
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -1562,7 +1565,7 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
           "expr": "sum(netdata_disk_io_kilobytes_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\",instance=~\"($node_id)\"}) by (instance)",
@@ -1910,7 +1913,7 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 2,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
@@ -1942,7 +1945,7 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
           "expr": "sum(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",instance=~\"($node_id)\"}) by (instance)",
@@ -2110,7 +2113,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -2200,7 +2203,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -2289,7 +2292,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -2356,7 +2359,7 @@
       "datasource": "Prometheus",
       "fontSize": "100%",
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 24,
         "x": 0,
         "y": 35
@@ -2364,7 +2367,7 @@
       "hideTimeOverride": true,
       "id": 20,
       "links": [],
-      "pageSize": 3,
+      "pageSize": 6,
       "scroll": true,
       "showHeader": true,
       "sort": {
@@ -2564,7 +2567,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 42
       },
       "id": 70,
       "legend": {
@@ -2652,7 +2655,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 45
+        "y": 47
       },
       "id": 26,
       "legend": {
@@ -2684,7 +2687,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"($node_id)\"}[1m]) ) ) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]) ) ) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
@@ -2718,7 +2721,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -2747,7 +2750,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 45
+        "y": 47
       },
       "id": 28,
       "legend": {
@@ -2779,7 +2782,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"($node_id)\"}[1m]) ) ) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]) ) ) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -2812,7 +2815,7 @@
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -2835,13 +2838,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
+      "decimals": 1,
       "fill": 1,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 52
       },
       "id": 17,
       "legend": {
@@ -2858,7 +2861,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
       "percentage": false,
@@ -2871,22 +2874,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",instance=~\"($node_id)\"}) by (instance)",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"received\",instance=~\"($node_id)\"}) by (chart, instance)",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": "IN {{instance}}",
+          "legendFormat": "IN {{instance}} {{chart}}",
           "refId": "A",
           "step": 2
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",instance=~\"($node_id)\"}) by (instance)",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{family=~\"veth.*\",dimension=\"sent\",instance=~\"($node_id)\"}) by (chart, instance)",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": "OUT {{instance}}",
+          "legendFormat": "OUT {{instance}} {{chart}}",
           "metric": "",
           "refId": "B",
           "step": 2
@@ -2931,7 +2934,7 @@
       ],
       "yaxis": {
         "align": false,
-        "alignLevel": null
+        "alignLevel": 0
       }
     },
     {
@@ -2941,12 +2944,12 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 0,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 52
       },
       "id": 18,
       "legend": {
@@ -3040,12 +3043,12 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 55
+        "y": 57
       },
       "id": 38,
       "legend": {
@@ -3060,7 +3063,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -3128,12 +3131,12 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 0,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 55
+        "y": 57
       },
       "id": 44,
       "legend": {
@@ -3148,7 +3151,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -3228,7 +3231,7 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 60
+        "y": 62
       },
       "id": 40,
       "legend": {
@@ -3244,7 +3247,7 @@
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "percentage": false,
       "pointradius": 5,
       "points": false,
@@ -3252,7 +3255,7 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
           "expr": "sum(netdata_cgroup_mem_MB_average{instance=~\"($node_id)\"}) by (instance)",
@@ -3310,12 +3313,12 @@
       "dashes": false,
       "datasource": "Prometheus",
       "decimals": 2,
-      "fill": 1,
+      "fill": 0,
       "gridPos": {
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 60
+        "y": 62
       },
       "id": 42,
       "legend": {
@@ -3334,7 +3337,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
       "percentage": false,
@@ -3414,6 +3417,7 @@
       {
         "allValue": ".+",
         "current": {
+          "tags": [],
           "text": "All",
           "value": [
             "$__all"
