@@ -1,0 +1,61 @@
+groups:
+
+- name: containers
+
+  rules:
+
+  - alert: container_healthchecks_failing_10m
+    expr: sum(ceil(rate(engine_daemon_health_checks_failed_total[30m]) * 1800) ) > 1
+    for: 10m
+    annotations:
+      description: '{{ humanize $value }} container healthchecks have failed for longer than 10 minutes.'
+      summary: Container healthchecks have failed for longer than 10 minutes
+
+  - alert: container_high_cpu_usage_50
+    expr: sum(rate(container_cpu_usage_seconds_total{name!~"", container_label_com_docker_swarm_task_name!~""}[1m]) * 60 ) by (name, instance) > 50
+    for: 1m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_task_name }} on ''{{ $labels.instance }}'' CPU usage is at {{ humanize $value }}%.'
+      summary: CPU alert for task '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.instance }}'
+
+  - alert: container_high_memory_usage_3g
+    expr: sum(container_memory_rss{name!~"", container_label_com_docker_swarm_task_name!~""}) by (name,instance) > 3e+09
+    for: 1m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_task_name }} on ''{{ $labels.instance }}'' memory usage is {{ humanize $value }}.'
+      summary: Memory alert for task '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.instance }}'
+
+  - alert: service_high_memory_usage_9g
+    expr: sum(container_memory_rss{name!~"", container_label_com_docker_swarm_service_name!~""}) by (container_label_com_docker_swarm_service_name) > 9e+09
+    for: 1m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_service_name }} memory usage is {{ humanize $value }}.'
+      summary: Memory alert for service '{{ $labels.container_label_com_docker_swarm_service_name }}'
+
+  - alert: container_high_network_receive_2GB_5m
+    expr: sum(rate(container_network_receive_bytes_total{name!~"", container_label_com_docker_swarm_task_name!~""}[1m]) * 60 ) by (name,instance) > 2e+09
+    for: 5m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_task_name }} on ''{{ $labels.instance }}'' network usage is {{ humanize $value }}.'
+      summary: Network alert for task '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.instance }}'
+
+  - alert: container_high_network_transmit_2GB_5m
+    expr: sum(rate(container_network_transmit_bytes_total{name!~"", container_label_com_docker_swarm_task_name!~""}[1m]) * 60 ) by (name,instance) > 2e+09
+    for: 5m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_task_name }} on ''{{ $labels.instance }}'' network usage is {{ humanize $value }}.'
+      summary: Network alert for task '{{ $labels.container_label_com_docker_swarm_task_name }}' on '{{ $labels.instance }}'
+
+  - alert: service_high_network_receive_10GB_5m
+    expr: sum(rate(container_network_receive_bytes_total{name!~"", container_label_com_docker_swarm_service_name!~""}[1m]) * 60) by (container_label_com_docker_swarm_service_name) > 10e+09
+    for: 5m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_service_name }} network usage is {{ humanize $value }}.'
+      summary: Network alert for service '{{ $labels.container_label_com_docker_swarm_service_name }}'
+
+  - alert: service_high_network_transmit_10GB_5m
+    expr: sum(rate(container_network_transmit_bytes_total{name!~"", container_label_com_docker_swarm_service_name!~""}[1m]) * 60) by (container_label_com_docker_swarm_service_name) > 10e+09
+    for: 5m
+    annotations:
+      description: '{{ $labels.container_label_com_docker_swarm_service_name }} network usage is {{ humanize $value }}.'
+      summary: Network alert for service '{{ $labels.container_label_com_docker_swarm_service_name }}'

@@ -189,7 +189,7 @@ ansible-playbook -i clusters/swarmstack [playbooks/swarmstack.yml](https://githu
 
 ### Monitoring
 
-The Grafana _Cluster Nodes_ dashboard will provide the best visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _karma_ (which watches both Alertmanager instances in one place), or your email/IM channels, and you'll receive links back to the Prometheus rules being alerted on. Advanced Prometheus users might add runbook links to alert messages, possibly using a ChatOps process through a bot and attempt automatic remediation of the Prometheus condition or dimension being alerted on (reboot the host, kill the container, signal the application, etc).
+The Grafana dashboards will help you pin-point issues, and provides good visual indicators if something goes off the rails, but your DevOps team will want to keep an eye on _karma_ (which watches both Alertmanager instances in one place), or your pager/email/IM channels, and you'll receive links back to the Prometheus rules being alerted on. Advanced Prometheus users might add runbook links to alert messages, possibly using a ChatOps process through a bot and attempt automatic remediation of the Prometheus condition or dimension being alerted on (reboot the host, kill the container, signal the application, etc).
 
 Various Prometheus [exporters](https://prometheus.io/docs/instrumenting/exporters/) are available for common services such as PostgreSQL.
 
@@ -457,8 +457,8 @@ Thanks to Shannon Wynter for Caddy re-authentication fixes for LDAP.
 │       └── swarmstack-diagram.png
 ├── grafana
 │   ├── dashboards
-│   │   ├── cluster-nodes.json
-│   │   ├── docker-containers.json
+│   │   ├── nodes.json
+│   │   ├── containers.json
 │   │   ├── etcd-dash.json
 │   │   ├── portworx-cluster-dash.json
 │   │   ├── portworx-volumes-dash.json
@@ -476,8 +476,8 @@ Thanks to Shannon Wynter for Caddy re-authentication fixes for LDAP.
 │   │   ├── prometheus-singlebox.yml
 │   │   └── prometheus.yml
 │   └── rules
-│       ├── container_nodes.yml
-│       ├── docker_containers.yml
+│       ├── nodes.yml
+│       ├── containers.yml
 │       └── portworx.yml
 ├──karma 
 │   └── karma.yaml

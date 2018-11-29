@@ -1,5 +1,5 @@
 groups:
-- name: portworx.rules
+- name: portworx
 
   rules:
   - alert: PortworxVolumeUsageCritical

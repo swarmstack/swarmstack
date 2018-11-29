@@ -6,8 +6,8 @@ global:
     monitor: 'swarmstack'
 
 rule_files:
-  - "container_nodes.yml"
-  - "docker_containers.yml"
+  - "nodes.yml"
+  - "containers.yml"
   - "portworx.yml"
 
 alerting:

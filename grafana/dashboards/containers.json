@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1543453744815,
+  "id": 7,
+  "iteration": 1543521594094,
   "links": [],
   "panels": [
     {
@@ -425,7 +425,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[3m]) ) )",
+          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[30m]) * 1800 ) )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -1335,7 +1335,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[1m]) ) ) by (job)",
+          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[30m]) * 1800 ) ) by (job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1938,8 +1938,6 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"

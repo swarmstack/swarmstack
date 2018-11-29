@@ -63,33 +63,34 @@ configs:
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
 
+  grafana_dashboards_nodes:
+    file: ./grafana/dashboards/nodes.json
+  grafana_dashboards_containers:
+    file: ./grafana/dashboards/containers.json
+  grafana_dashboards_etcd-cluster:
+    file: ./grafana/dashboards/etcd-cluster.json
+  grafana_dashboards_portworx-cluster-status:
+    file: ./grafana/dashboards/portworx-cluster-status.json
+  grafana_dashboard_portworx-volumes-status:
+    file: ./grafana/dashboards/portworx-volumes-status.json
+  grafana_dashboards_prometheus-2-stats:
+    file: ./grafana/dashboards/prometheus-2-stats.json
+
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
     file: ./grafana/dashboards.yml
-  grafana_dashboard-cluster-nodes:
-    file: ./grafana/dashboards/cluster-nodes.json
-  grafana_dashboard_prometheus-2-stats:
-    file: ./grafana/dashboards/prometheus-2-stats.json
-  grafana_dashboard_containers:
-    file: ./grafana/dashboards/containers.json
-  grafana_dashboard_portworx-cluster-status:
-    file: ./grafana/dashboards/portworx-cluster-status.json
-  grafana_dashboard_portworx-volumes-status:
-    file: ./grafana/dashboards/portworx-volumes-status.json
-  grafana_dashboard_etcd-cluster:
-    file: ./grafana/dashboards/etcd-cluster.json
 
   karma-conf:
     file: ./karma/karma.yaml
 
   prometheus-conf:
     file: ./prometheus/conf/prometheus.yml
-  prometheus-container_nodes:
-    file: ./prometheus/rules/container_nodes.yml
-  prometheus-docker_containers:
-    file: ./prometheus/rules/docker_containers.yml
-  prometheus-portworx:
+  prometheus_rules_nodes:
+    file: ./prometheus/rules/nodes.yml
+  prometheus_rules_containers:
+    file: ./prometheus/rules/containers.yml
+  prometheus_rules_portworx:
     file: ./prometheus/rules/portworx.yml
 
 services:
@@ -251,17 +252,17 @@ services:
   grafana:
     image: grafana/grafana:5.3.4
     configs:
-      - source: grafana_dashboard-cluster-nodes
-        target: /etc/grafana/dashboards/cluster-nodes.json
-      - source: grafana_dashboard_containers
+      - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
-      - source: grafana_dashboard_etcd-cluster
+      - source: grafana_dashboards_etcd-cluster
         target: /etc/grafana/dashboards/etcd-cluster.json
-      - source: grafana_dashboard_portworx-cluster-status
+      - source: grafana_dashboards_nodes
+        target: /etc/grafana/dashboards/nodes.json
+      - source: grafana_dashboards_portworx-cluster-status
         target: /etc/grafana/dashboards/portworx-cluster-status.json
-      - source: grafana_dashboard_portworx-volumes-status
+      - source: grafana_dashboards_portworx-volumes-status
         target: /etc/grafana/dashboards/portworx-volumes-status.json
-      - source: grafana_dashboard_prometheus-2-stats
+      - source: grafana_dashboards_prometheus-2-stats
         target: /etc/grafana/dashboards/prometheus-2-stats.json
       - source: grafana_provisioning_dashboards
         target: /etc/grafana/provisioning/dashboards/dashboards.yml
@@ -370,11 +371,11 @@ services:
     configs:
       - source: prometheus-conf
         target: /etc/prometheus/prometheus.yml
-      - source: prometheus-container_nodes
-        target: /etc/prometheus/container_nodes.yml
-      - source: prometheus-docker_containers
-        target: /etc/prometheus/docker_containers.yml
-      - source: prometheus-portworx
+      - source: prometheus_rules_nodes
+        target: /etc/prometheus/nodes.yml
+      - source: prometheus_rules_containers
+        target: /etc/prometheus/containers.yml
+      - source: prometheus_portworx
         target: /etc/prometheus/portworx.yml
     deploy:
       mode: replicated
