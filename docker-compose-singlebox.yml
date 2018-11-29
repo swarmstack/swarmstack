@@ -318,11 +318,11 @@ services:
         prometheus.enable: "true"
         prometheus.port: "8080"
         prometheus.path: "/metrics"
-    healthcheck:
-      test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
-      interval: 25s
-      timeout: 3s
-      start_period: 30s
+    #healthcheck:
+    #  test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+    #  interval: 25s
+    #  timeout: 3s
+    #  start_period: 30s
     networks:
       - net
 
