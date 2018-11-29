@@ -106,12 +106,12 @@ configs:
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
 
+  grafana_dashboards_containers:
+    file: ./grafana/dashboards/containers.json
   grafana_dashboards_nodes:
     file: ./grafana/dashboards/nodes.json
   grafana_dashboards_prometheus-2-stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
-  grafana_dashboards_containers:
-    file: ./grafana/dashboards/containers.json
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml

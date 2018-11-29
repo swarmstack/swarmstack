@@ -375,7 +375,7 @@ services:
         target: /etc/prometheus/nodes.yml
       - source: prometheus_rules_containers
         target: /etc/prometheus/containers.yml
-      - source: prometheus_portworx
+      - source: prometheus_rules_portworx
         target: /etc/prometheus/portworx.yml
     deploy:
       mode: replicated
