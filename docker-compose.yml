@@ -71,7 +71,7 @@ configs:
     file: ./grafana/dashboards/etcd-cluster.json
   grafana_dashboards_portworx-cluster-status:
     file: ./grafana/dashboards/portworx-cluster-status.json
-  grafana_dashboard_portworx-volumes-status:
+  grafana_dashboards_portworx-volumes-status:
     file: ./grafana/dashboards/portworx-volumes-status.json
   grafana_dashboards_prometheus-2-stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
