@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1543521594094,
+  "id": 9,
+  "iteration": 1543536030889,
   "links": [],
   "panels": [
     {
@@ -350,7 +350,7 @@
       ],
       "thresholds": "",
       "timeFrom": "1m",
-      "title": "Containers",
+      "title": "Running Containers",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -433,7 +433,7 @@
         }
       ],
       "thresholds": "1,2",
-      "title": "Failed Container Health Checks",
+      "title": "Failed Containers",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1348,7 +1348,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Failed Container Health Checks",
+      "title": "Failed Containers",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1995,5 +1995,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 7
+  "version": 9
 }

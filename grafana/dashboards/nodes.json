@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1543517176084,
+  "id": 12,
+  "iteration": 1543535671896,
   "links": [],
   "panels": [
     {
@@ -129,7 +129,7 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 2,
+        "w": 3,
         "x": 6,
         "y": 0
       },
@@ -214,7 +214,7 @@
       "gridPos": {
         "h": 2,
         "w": 3,
-        "x": 8,
+        "x": 9,
         "y": 0
       },
       "hideTimeOverride": true,
@@ -302,7 +302,7 @@
       "gridPos": {
         "h": 2,
         "w": 4,
-        "x": 11,
+        "x": 12,
         "y": 0
       },
       "hideTimeOverride": true,
@@ -388,8 +388,8 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 5,
-        "x": 15,
+        "w": 4,
+        "x": 16,
         "y": 0
       },
       "id": 7,
@@ -440,7 +440,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Docker Containers",
+      "title": "Running Containers",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -525,7 +525,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Failed Container Health Checks",
+      "title": "Failed Containers",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -3564,5 +3564,5 @@
   "timezone": "",
   "title": "Nodes",
   "uid": "BPlb-Sgik",
-  "version": 8
+  "version": 1
 }
