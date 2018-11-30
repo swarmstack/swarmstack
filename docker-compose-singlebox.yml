@@ -14,7 +14,8 @@ version: "3.4"
 #  as a POC before building out further.
 
 
-#NETDATA
+# NETDATA
+#
 #  You'll need to install NetData on your host for Prometheus and Grafana.
 #  singlebox stack has been tested on CentOS7 and macOS.
 #  See https://docs.netdata.cloud/installer/#one-line-installation or
@@ -22,7 +23,7 @@ version: "3.4"
 #  installing NetData on your OS.
 
 
-#CERTIFICATES
+# CERTIFICATES
 #
 #  swarmstack configures the reverse-proxy Caddy to generate self-signed HTTPS
 #  certificates, in order to protect the DevOps tools. It will automatically
@@ -32,12 +33,13 @@ version: "3.4"
 #  ./caddy/caddycerts/README.md and manually uncommenting the related lines
 #  in this file pertaining to caddy_cert and caddy_key.
 #
-#  You can instead use Let's Encrypt certificates by adding
-#  CADDY_URL=fqdn.example.com' or CADDY_URL=fqdn.example.com and also
-#  CADDY_CERT=user@example.com in addition to ADMIN_PASSWORD below.
+#  You can instead use Let's Encrypt certificates by prepending the following
+#  to your 
+#  CADDY_URL=fqdn.example.com CADDY_CERT=user@example.com 
 
 
-#macOS
+# macOS
+#
 #  With brew installed, install NetData with 'brew install netdata'.
 #  You'll then need to edit:
 #
@@ -56,7 +58,8 @@ version: "3.4"
 #  "overlay2" before clicking "Apply & Restart".
 
 
-#INSTALL
+# INSTALL
+#
 #  All singlebox users will need to edit the 2 files below and add your host's
 #  IP address; replace all occurances of the 10.0.13.2 IP with your host IP so
 #  that Caddy and Prometheus can access your Docker and NetData installations:
@@ -75,13 +78,18 @@ version: "3.4"
 #  You should then be able to surf to http://127.0.0.1 and access each tool as
 #  'admin' and the ADMIN_PASSWORD you've set.
 
-#UNINSTALL
+# UNINSTALL
+#
 #  docker stack rm swarmstack && docker volume prune
 
-#RE-INITIALIZE A SERVICE
+# RE-INITIALIZE A SERVICE
+#
 #  docker stack rm swarmstack && docker volume rm swarmstack_grafana &&
 #  (deploy as above ADMIN_PASSWORD=' CADDY_... docker stack deploy -c...)
 
+
+# Below is the docker compose file, you should only need to edit all caddy_key
+# and caddy_cert occurances below if using certificates or Let's Encrypt.
 
 networks:
   net:
