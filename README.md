@@ -71,7 +71,7 @@ Grafana lets you visualize the metrics being collected into the Prometheus TSDB.
 
 ![](https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/screens/Cluster_Nodes.png)
 
-Portworx provides a high-availability storage solution for containers that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with some other block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
+Portworx provides a high-availability storage solution for containers that seeks to eliminate "ERROR: volume still attached to another node" situations that can be encountered with block device pooling storage solutions, [situations can arise](https://portworx.com/ebs-stuck-attaching-state-docker-containers/) such as RexRay or EBS volumes getting stuck detaching from the old node and can't be mounted to the new node that a container moved to. Portworx replicates volumes across nodes in real-time so the data is already present on the new node when the new container starts up, speeding service recovery and reconvergence times.
 
 ![](https://raw.githubusercontent.com/portworx/px-dev/master/images/mysql.png "Portworx replicating volumes")
 

@@ -17,11 +17,17 @@ version: "3.4"
 #NETDATA
 #  You'll need to install NetData on your host for Prometheus and Grafana.
 #  singlebox stack has been tested on CentOS7 and macOS.
-#  See https://github.com/netdata/netdata/wiki/Installation for futher
-#  assistance installing NetData on your OS.
+#  See https://docs.netdata.cloud/installer/#one-line-installation or
+#  https://github.com/netdata/netdata/wiki/Installation for further assistance
+#  installing NetData on your OS.
 
 
 #CERTIFICATES
+#
+#  swarmstack configures the reverse-proxy Caddy to generate self-signed HTTPS
+#  certificates, in order to protect the DevOps tools. It will automatically
+#  rotate this cert every 7 days.
+#
 #  You can optionally install your own certificates into Caddy by consulting
 #  ./caddy/caddycerts/README.md and manually uncommenting the related lines
 #  in this file pertaining to caddy_cert and caddy_key.
