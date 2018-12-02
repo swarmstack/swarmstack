@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 7,
-  "iteration": 1543710021195,
+  "iteration": 1543711887252,
   "links": [],
   "panels": [
     {
@@ -1416,14 +1416,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"received\",instance=~\"($node_id)\"}) by (instance) * 8 > 0",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"received\",instance=~\"($node_id)\"}) by (instance) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"sent\",instance=~\"($node_id)\"}) by (instance) * 8 < 0",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"sent\",instance=~\"($node_id)\"}) by (instance) < 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
@@ -1450,7 +1450,7 @@
       },
       "yaxes": [
         {
-          "format": "KBs",
+          "format": "Kbits",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1495,7 +1495,7 @@
         "total": false,
         "values": false
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
@@ -1509,14 +1509,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, rate(container_network_receive_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 60 > 0 )",
+          "expr": "topk(1, rate(container_network_receive_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 8 > 0 )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}} {{task}}",
           "refId": "A"
         },
         {
-          "expr": "- topk(1, rate(container_network_transmit_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 60  > 0 )",
+          "expr": "- topk(1, rate(container_network_transmit_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 8 > 0 )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}} {{task}}",
@@ -1544,7 +1544,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "Bps",
+          "format": "bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1785,7 +1785,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -1799,7 +1799,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 60 > 20000 ) by (container_label_com_docker_swarm_service_name,instance)) ",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 8 > 20000 ) by (container_label_com_docker_swarm_service_name,instance)) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1810,7 +1810,7 @@
           "step": 2
         },
         {
-          "expr": "- topk(1, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 60 > 20000 ) by (container_label_com_docker_swarm_service_name,instance))",
+          "expr": "- topk(1, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 8 > 20000 ) by (container_label_com_docker_swarm_service_name,instance))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1839,7 +1839,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "Bps",
+          "format": "bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -2547,11 +2547,8 @@
         "allValue": null,
         "current": {
           "selected": true,
-          "tags": [],
           "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "value": "$__all"
         },
         "datasource": "Prometheus",
         "hide": 0,
@@ -2574,7 +2571,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -2605,5 +2602,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 11
+  "version": 12
 }
