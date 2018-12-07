@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 12,
-  "iteration": 1543776250948,
+  "iteration": 1544199214818,
   "links": [],
   "panels": [
     {
@@ -514,7 +514,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[30m]) * 1800 ) )",
+          "expr": "sum(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -4328,5 +4328,5 @@
   "timezone": "",
   "title": "Nodes",
   "uid": "BPlb-Sgik",
-  "version": 5
+  "version": 6
 }
