@@ -276,7 +276,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:5.3.4
+    image: grafana/grafana:5.4.0
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
@@ -327,12 +327,12 @@ services:
       - source: karma-conf
         target: /karma.yaml
     deploy:
-      mode: replicated
-      replicas: 1
       labels:
         prometheus.enable: "true"
         prometheus.port: "8080"
         prometheus.path: "/metrics"
+      mode: replicated
+      replicas: 1
     #healthcheck:
     #  test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
     #  interval: 25s

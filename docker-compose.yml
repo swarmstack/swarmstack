@@ -250,7 +250,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:5.3.4
+    image: grafana/grafana:5.4.0
     configs:
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json

@@ -1,12 +1,19 @@
 :80 {
-  tls off
-  redir https://{hostonly}{uri}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 80
+  }
+  tls off
+
+  redir https://{hostonly}{uri}
 }
 
 {$CADDY_URL}:443 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 443
+  }
+  tls {$CADDY_CERT}
 
   reauth {
     path /
@@ -16,8 +23,11 @@
 }
 
 {$CADDY_URL}:3000 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 3000
+  }
+  tls {$CADDY_CERT}
 
   proxy / grafana:3000 {
     transparent
@@ -26,8 +36,11 @@
 }
 
 {$CADDY_URL}:9000 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 9000
+  }
+  tls {$CADDY_CERT}
 
   proxy / portainer:9000 {
     transparent
@@ -36,8 +49,11 @@
 }
 
 {$CADDY_URL}:9090 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 9090
+  }
+  tls {$CADDY_CERT}
 
   reauth {
     path /
@@ -50,7 +66,15 @@
 
 {$CADDY_URL}:9091 {
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 9091
+  }
   tls {$CADDY_CERT}
+
+  basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
+  proxy /metrics/job/ pushgateway:9091 {
+    transparent
+  }
 
   reauth {
     path /
@@ -60,15 +84,13 @@
   proxy / pushgateway:9091 {
     transparent
   }
-
-  basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
-  proxy /metrics/job/ pushgateway:9091 {
-    transparent
-  }
 }
 
 {$CADDY_URL}:9093 {
   tls {$CADDY_CERT}
+  prometheus 0.0.0.0:9180 {
+    hostname 9093
+  }
   errors stderr
 
   reauth {
@@ -81,8 +103,11 @@
 }
 
 {$CADDY_URL}:9094 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 9094
+  }
+  tls {$CADDY_CERT}
 
   reauth {
     path /
@@ -94,8 +119,11 @@
 }
 
 {$CADDY_URL}:9095 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 9095
+  }
+  tls {$CADDY_CERT}
 
   reauth {
     path /
@@ -106,18 +134,12 @@
   }
 }
 
-:9180 {
-  tls off
-  errors stderr
-
-  prometheus {
-    use_caddy_addr
-  }
-}
-
 {$CADDY_URL}:19999 {
-  tls {$CADDY_CERT}
   errors stderr
+  prometheus 0.0.0.0:9180 {
+    hostname 19999
+  }
+  tls {$CADDY_CERT}
 
   reauth {
     path /
@@ -125,6 +147,9 @@
   }
 
 ##SWARMSTACK MARKER
+
+# Examples of adding addititional NetData hosts:
+#
 #  proxy /swarmhost1 swarmhost1:19999/ {
 #    without /swarmhost1
 #    transparent
