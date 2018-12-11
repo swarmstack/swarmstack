@@ -147,7 +147,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.15.2
+    image: prom/alertmanager:v0.15.3
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -158,6 +158,10 @@ services:
       - source: alertmanager_config
         target: /etc/alertmanager/alertmanager.yml
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9093"
+        prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
       resources:
@@ -176,7 +180,7 @@ services:
       - alertmanager:/alertmanager
 
   alertmanagerB:
-    image: prom/alertmanager:v0.15.2
+    image: prom/alertmanager:v0.15.3
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -187,6 +191,10 @@ services:
       - source: alertmanager_config
         target: /etc/alertmanager/alertmanager.yml
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9093"
+        prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
       resources:
@@ -216,6 +224,10 @@ services:
       #- source: caddy_key
       #  target: /etc/caddycerts/key.pem
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9180"
+        prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
       resources:
@@ -255,6 +267,10 @@ services:
     image: google/cadvisor:v0.32.0
     command: -logtostderr -docker_only
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"
       mode: global
       resources:
         limits:
@@ -262,7 +278,7 @@ services:
         reservations:
           memory: 64M
     healthcheck:
-      test: "/usr/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      test: "/usr/bin/wget -q -Y off http://localhost:8080/healthz -O /dev/null > /dev/null 2>&1"
       interval: 25s
       timeout: 3s
       start_period: 30s
@@ -276,7 +292,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:5.4.0
+    image: grafana/grafana:5.4.1
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
@@ -289,6 +305,10 @@ services:
       - source: grafana_provisioning_datasources
         target: /etc/grafana/provisioning/datasources/prometheus.yaml
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "3000"
+        prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
       resources:
@@ -322,7 +342,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: swarmstack/karma:healthcheck
+    image: swarmstack/karma:healthcheck-v0.18
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -333,11 +353,11 @@ services:
         prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
-    #healthcheck:
-    #  test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
-    #  interval: 25s
-    #  timeout: 3s
-    #  start_period: 30s
+    healthcheck:
+      test: "/bin/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
 
@@ -387,6 +407,10 @@ services:
       - source: prometheus_rules_containers
         target: /etc/prometheus/containers.yml
     deploy:
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "9090"
+        prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
       resources:
@@ -405,7 +429,7 @@ services:
       - prometheus:/prometheus
 
   pushgateway:
-    image: prom/pushgateway:v0.6.0
+    image: prom/pushgateway:v0.7.0
     deploy:
       mode: replicated
       replicas: 1
