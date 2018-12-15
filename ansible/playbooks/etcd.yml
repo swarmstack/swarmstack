@@ -10,9 +10,11 @@
 
   - name: install or update etcd
     yum: name=etcd state=latest
+    when: "'etcd' in group_names"
 
   - name: enable etcd service to create systemd file
     systemd: name=etcd enabled=yes 
+    when: "'etcd' in group_names"
 
   - name: remove default ExecStart from systemd
     lineinfile:
@@ -21,6 +23,13 @@
       line: '#EXECSTART'
       backrefs: yes
     notify: systemctl-etcd
+    when: "'etcd' in group_names"
+
+  - name: Check for existing cluster
+    shell: grep existing /etc/systemd/system/multi-user.target.wants/etcd.service; if [ $? == 0 ]; then echo 'existing'; else echo 'new'; fi
+    changed_when: false
+    ignore_errors: true
+    register: new_or_existing
 
   - name: update /etc/systemd/system/multi-user.target.wants/etcd.service
     blockinfile:
@@ -35,10 +44,20 @@
           --advertise-client-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 \
           --listen-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
           --initial-advertise-peer-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2380 \
-          --initial-cluster {% for host in groups['etcd'] %}etcd-{{ hostvars[host].inventory_hostname}}=http://{{ hostvars[host].inventory_hostname }}:2380{{ '' if loop.last else ','}}{% endfor %} \
+          --initial-cluster {% for host in groups['etcd'] %}etcd-{{ hostvars[host].inventory_hostname}}=http://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:2380{{ '' if loop.last else ','}}{% endfor %} \
           --initial-cluster-token etcd-token \
-          --initial-cluster-state new
+          --initial-cluster-state {{ item }}
+    with_items: "{{ new_or_existing.stdout }}"
+    when: "'etcd' in group_names"
     notify: systemctl-etcd
+
+  - name: process systemd changes immediately
+    meta: flush_handlers
+
+  - name: set cluster to existing
+    shell: sed -i 's/new/existing/' /etc/systemd/system/multi-user.target.wants/etcd.service
+    when: new_or_existing.stdout.find("new") != -1
+    notify: systemctl-daemon-reload
 
   handlers:
 
@@ -49,5 +68,9 @@
       enabled: yes
       masked: no
       name: etcd
+
+  - name: systemctl-daemon-reload
+    systemd:
+      daemon_reload: yes
 
 ...
