@@ -30,6 +30,7 @@
     changed_when: false
     ignore_errors: true
     register: new_or_existing
+    when: "'etcd' in group_names"
 
   - name: update /etc/systemd/system/multi-user.target.wants/etcd.service
     blockinfile:
@@ -56,7 +57,7 @@
 
   - name: set cluster to existing
     shell: sed -i 's/new/existing/' /etc/systemd/system/multi-user.target.wants/etcd.service
-    when: new_or_existing.stdout.find("new") != -1
+    when: "'etcd' in group_names and new_or_existing.stdout.find("new") != -1"
     notify: systemctl-daemon-reload
 
   handlers:
