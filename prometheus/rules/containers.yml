@@ -4,12 +4,12 @@ groups:
 
   rules:
 
-  - alert: container_healthchecks_failing_5m
-    expr: sum(ceil(rate(engine_daemon_health_checks_failed_total[5m]) * 300) ) > 1
-    for: 5m
+  - alert: container_healthchecks_failing_10m
+    expr: sum(ceil(increase(engine_daemon_health_checks_failed_total[5m]) ) ) > 1
+    for: 10m
     annotations:
-      description: '{{ humanize $value }} container healthchecks have failed for longer than 5 minutes.'
-      summary: Container healthchecks have failed for longer than 5 minutes
+      description: '{{ humanize $value }} container healthchecks have failed for longer than 10 minutes.'
+      summary: Container healthchecks have failed for longer than 10 minutes
 
   - alert: container_high_cpu_usage_50
     expr: sum(rate(container_cpu_usage_seconds_total{name!~"", container_label_com_docker_swarm_task_name!~""}[1m]) * 60 ) by (name, instance) > 50
