@@ -118,7 +118,7 @@
       block: |
         [DEFAULT]
         bantime = 600
-        maxretry = 10
+        maxretry = 15
 
         # Override /etc/fail2ban/jail.d/00-firewalld.conf:
         banaction = iptables-multiport

@@ -2,6 +2,9 @@
 - hosts: all
   gather_facts: true
   remote_user: root
+  vars:
+    NETDATA_VERSION: netdata 1.11.1_rolling
+    NETDATA_BRANCH: v1.11.1
 
   roles:
   - ../roles/common
@@ -12,14 +15,22 @@
     yum: name=ansible,git,httpd-tools state=latest
     when: "inventory_hostname == SWARMJOIN"
 
-### INSTALL NETDATA ON ALL HOSTS
-  - name: Always (re)install NetData (bug in netdata-updater.sh if moving between v10 and v11)
-    shell: bash <(curl -Ss https://my-netdata.io/kickstart.sh) all --dont-wait
+### INSTALL/UPDATE NETDATA ON ALL HOSTS
+  - name: Determine if NetData is currently installed and version
+    shell: if [ -f /sbin/netdata ]; then /sbin/netdata -v; else echo "not-installed"; fi
+    args:
+      executable: /bin/bash
+    register: netdata_installed
+    changed_when: False
+
+  - name: Install or update NetData
+    shell: rm -rf /tmp/netdata-install; mkdir -p /tmp/netdata-install; (cd /tmp/netdata-install; git clone --single-branch --branch {{NETDATA_BRANCH}} https://github.com/netdata/netdata.git --depth=1 && cd netdata; ./netdata-installer.sh --dont-wait) && rm -rf /tmp/netdata-install
     args:
       warn: no
       executable: /bin/bash
     ignore_errors: true
     changed_when: False
+    when: "netdata_installed.stdout != NETDATA_VERSION"
 
   - name: Ensure NetData is enabled and started
     systemd: name=netdata state=started enabled=yes masked=no
