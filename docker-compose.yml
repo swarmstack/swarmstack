@@ -309,7 +309,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: swarmstack/karma:healthcheck-v0.18
+    image: swarmstack/karma:healthcheck-v0.20
     configs:
       - source: karma-conf
         target: /karma.yaml
