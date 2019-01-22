@@ -1,9 +1,9 @@
 #!/bin/bash
 
-/bin/docker container prune -f > /dev/null 2>&1
-sleep 10
-/bin/docker volume prune -f > /dev/null 2>&1
-sleep 10
-/bin/docker image prune -a -f > /dev/null 2>&1
-sleep 10
+#/bin/docker container prune -f > /dev/null 2>&1
+#/bin/docker volume prune -f > /dev/null 2>&1
+#/bin/docker image prune -a -f > /dev/null 2>&1
+/bin/docker system prune -a -f > /dev/null 2>&1
 rm -rf /var/lib/osd/log/* >/dev/null 2>&1
+rm -rf /var/spool/abrt/vmcore* > /dev/null 2>&1
+rm -rf /var/crash/127* > /dev/null 2>&1
