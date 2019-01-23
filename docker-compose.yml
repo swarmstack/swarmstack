@@ -96,7 +96,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.15.3
+    image: prom/alertmanager:v0.16.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -309,7 +309,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: swarmstack/karma:healthcheck-v0.20
+    image: swarmstack/karma:healthcheck-v0.21
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -360,7 +360,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.5.0
+    image: prom/prometheus:v2.7.0-rc.1
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
