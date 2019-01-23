@@ -320,11 +320,11 @@ services:
         prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
-    healthcheck:
-      test: "/busybox/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
-      interval: 25s
-      timeout: 3s
-      start_period: 30s
+    #healthcheck:
+    #  test: "/busybox/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
+    #  interval: 25s
+    #  timeout: 3s
+    #  start_period: 30s
     networks:
       - net
 

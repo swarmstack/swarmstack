@@ -331,11 +331,11 @@ services:
       #- http_proxy=http://proxy.example.com:80
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
-    healthcheck:
-      test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
-      interval: 25s
-      timeout: 3s
-      start_period: 120s
+    #healthcheck:
+    #  test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
+    #  interval: 25s
+    #  timeout: 3s
+    #  start_period: 120s
     networks:
       - net
     volumes:
