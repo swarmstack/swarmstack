@@ -292,7 +292,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:5.4.2
+    image: grafana/grafana:5.4.3
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
