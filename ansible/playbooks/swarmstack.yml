@@ -369,7 +369,7 @@
   - name: Add CADDY_KEY template to Caddyfile if defined
     replace:
       path: "{{SWARMSTACK_LOCAL_DIR}}/caddy/Caddyfile"
-      regexp: 'CADDY_CERT'
+      regexp: '^.*CADDY_CERT.*$'
       replace: '  tls {$CADDY_CERT} {$CADDY_KEY}'
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN and CADDY_KEY != ''"
