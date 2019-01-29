@@ -585,7 +585,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[30m]) * 1800 ) ) by (job)",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[15m]) ) ) by (job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
