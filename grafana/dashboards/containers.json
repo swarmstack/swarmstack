@@ -16,8 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1544199484750,
+  "iteration": 1548780112276,
   "links": [],
   "panels": [
     {
@@ -372,7 +371,6 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -425,7 +423,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) )",
+          "expr": "sum(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -501,6 +499,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top CPU Usage by Docker Service",
       "tooltip": {
@@ -597,6 +596,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Node Failed Containers",
       "tooltip": {
@@ -690,6 +690,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Memory Usage by Docker Service",
       "tooltip": {
@@ -784,6 +785,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top CPU Usage by Container",
       "tooltip": {
@@ -878,6 +880,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Container Node Disk Read IO",
       "tooltip": {
@@ -923,7 +926,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "gridPos": {
@@ -966,6 +968,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Container Storage Read FS",
       "tooltip": {
@@ -1060,6 +1063,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Container Node Disk Write IO",
       "tooltip": {
@@ -1105,7 +1109,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "gridPos": {
@@ -1149,6 +1152,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Container Storage Write FS",
       "tooltip": {
@@ -1243,6 +1247,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Node CPU Usage",
       "tooltip": {
@@ -1313,7 +1318,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
@@ -1338,6 +1343,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Memory Usage by Container",
       "tooltip": {
@@ -1383,7 +1389,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "gridPos": {
@@ -1402,7 +1407,7 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
@@ -1432,6 +1437,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Node Container Network Traffic",
       "tooltip": {
@@ -1476,7 +1482,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "gridPos": {
@@ -1525,6 +1530,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Network Usage by Container",
       "tooltip": {
@@ -1619,6 +1625,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Docker Container Actions",
       "tooltip": {
@@ -1715,6 +1722,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Node LAN Network Traffic",
       "tooltip": {
@@ -1820,6 +1828,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top Network Usage by Docker Service",
       "tooltip": {
@@ -1915,6 +1924,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Docker Network Actions",
       "tooltip": {
@@ -2222,7 +2232,6 @@
     },
     {
       "columns": [],
-      "datasource": null,
       "fontSize": "100%",
       "gridPos": {
         "h": 50,
@@ -2552,6 +2561,7 @@
           ]
         },
         "datasource": "Prometheus",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": "Node",
@@ -2572,7 +2582,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -2603,5 +2613,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 15
+  "version": 24
 }
