@@ -96,7 +96,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.15.3
+    image: prom/alertmanager:v0.16.1
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -132,7 +132,7 @@ services:
       - alertmanager:/alertmanager
 
   alertmanagerB:
-    image: prom/alertmanager:v0.15.3
+    image: prom/alertmanager:v0.16.1
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -168,7 +168,7 @@ services:
       - alertmanagerB:/alertmanager
 
   caddy:
-    image: swarmstack/caddy:no-stats.0.11.1
+    image: swarmstack/caddy:no-stats-0.11.3
     configs:
       - source: caddy_config
         target: /etc/Caddyfile
@@ -309,7 +309,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: swarmstack/karma:healthcheck-v0.21
+    image: lmierzwa/karma:v0.24
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -329,7 +329,7 @@ services:
       - net
 
   portainer:
-    image: portainer/portainer:1.20.0
+    image: portainer/portainer:1.20.1
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     deploy:
       mode: replicated
@@ -360,7 +360,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.7.0
+    image: prom/prometheus:v2.7.1
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
@@ -436,8 +436,6 @@ services:
           - node.role == manager
     networks:
       - net
-    ports:
-      - '8080:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
