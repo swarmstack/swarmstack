@@ -247,6 +247,11 @@ services:
       #- http_proxy=http://proxy.example.com:80
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
+    healthcheck:
+      test: "/usr/bin/wget -q -Y off http://localhost:9180/metrics -O /dev/null > /dev/null 2>&1"
+      interval: 25s
+      timeout: 3s
+      start_period: 30s
     networks:
       - net
     ports:
