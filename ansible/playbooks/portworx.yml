@@ -19,7 +19,7 @@
     when: "'portworx' in group_names"
 
   - name: install Portworx OCI bundle
-    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_INSTALL }}
+    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_LICENSE }}:{{ PORTWORX_VERSION }}
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_installed.stat.exists == False"
@@ -34,6 +34,21 @@
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_configured.stat.exists == False"
+    notify: systemctl-restart-portworx
+
+  - name: check installed Portworx version if it was already installed
+    shell: /opt/pwx/bin/pxctl --version
+    args:
+      warn: no
+    changed_when: False
+    register: portworx_rev
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == True"
+
+  - name: upgrade Portworx if the PORTWORX_VERSION is different than already installed
+    shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_LICENSE }}:{{ PORTWORX_VERSION }} --upgrade
+    args:
+      warn: no
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
     notify: systemctl-restart-portworx
 
   handlers:

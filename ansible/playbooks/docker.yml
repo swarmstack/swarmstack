@@ -9,6 +9,24 @@
 
   - import_tasks: includes/tasks/sysctl_el7.yml
 
+  - name: mkdir /etc/tuned/custom
+    file:
+      path: /etc/tuned/custom
+      state: directory
+    register: tunedcustom
+
+  - name: copy tuned - tuned.conf
+    copy: src=../roles/common/files/etc/tuned/custom/tuned.conf dest=/src=../roles/common/files/etc/tuned/custom/tuned.conf owner=root group=root mode="u=rw,g=r,o=r"
+    when: tunedcustom.changed == True
+
+  - name: copy tuned - script.sh
+    copy: src=../roles/common/files/etc/tuned/custom/script.sh dest=/src=../roles/common/files/etc/tuned/custom/script.sh owner=root group=root mode="u=rwx,g=rx,o=rx"
+    when: tunedcustom.changed == True
+
+  - name: set tuned profile to custom
+    shell: tuned-adm profile custom
+    when: tunedcustom.changed == True
+
   - name: set hostname from ansible inventory
     hostname:
       name: "{{ inventory_hostname }}"

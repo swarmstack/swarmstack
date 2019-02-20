@@ -43,8 +43,9 @@ LDAP_ENABLED=false
 # See https://github.com/swarmstack/swarmstack/blob/master/documentation/Using%20LDAP.md
 # Also see https://github.com/freman/caddy-reauth and http://docs.grafana.org/installation/ldap/
 
-PORTWORX_INSTALL=px-dev
-# Set to px-enterprise:1.5.1 to start 30 day eval of their Enterprise version, later downgrade to px-dev not possible
+# Set PORTWORX_LICENSE to px-enterprise to start a 30 day evaluation of Portworx's enterprise version, later downgrade to px-dev is not possible
+PORTWORX_LICENSE=px-dev
+PORTWORX_VERSION=2.0.2.1
 
 PROXY_ENABLED=false
 #PROXY_HTTP=http://proxy.example.com:80
