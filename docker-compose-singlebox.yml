@@ -297,7 +297,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:5.4.3
+    image: grafana/grafana:6.0.0
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
@@ -347,7 +347,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.24
+    image: lmierzwa/karma:v0.26
     configs:
       - source: karma-conf
         target: /karma.yaml
