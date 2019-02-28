@@ -57,7 +57,7 @@
 
   - name: set cluster to existing
     shell: sed -i 's/new/existing/' /etc/systemd/system/multi-user.target.wants/etcd.service
-    when: "'etcd' in group_names and new_or_existing.stdout.find("new") != -1"
+    when: "'etcd' in group_names and new_or_existing.stdout.find('new') != -1"
     notify: systemctl-daemon-reload
 
   handlers:
