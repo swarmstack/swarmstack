@@ -340,7 +340,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(sum(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}) by (chart,instance))",
+          "expr": "count(sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (chart,instance))",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",
@@ -774,7 +774,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart,instance) ) > 0.1",
+          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart,instance) ) > 0.1",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1332,7 +1332,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_mem_MB_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") * 60 ) by (chart,instance) ) > 850",
+          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") * 60 ) by (chart,instance) ) > 850",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2201,7 +2201,7 @@
           "step": 2
         },
         {
-          "expr": "count(sum(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}) by (instance,chart)) by (instance)",
+          "expr": "count(sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (instance,chart)) by (instance)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2217,7 +2217,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}) by (instance)",
+          "expr": "sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,

@@ -430,7 +430,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_cgroup_writeback_MB_average{instance=~\"($node_id)\"})",
+          "expr": "count(netdata_cgroup_writeback_MiB_average{instance=~\"($node_id)\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2371,7 +2371,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "avg(netdata_cgroup_cpu_percent_average{instance=~\"($node_id)\"}) by (instance)",
+          "expr": "avg(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": " {{instance}}",
@@ -2553,7 +2553,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(netdata_cgroup_mem_MB_average{instance=~\"($node_id)\"}) by (instance)",
+          "expr": "sum(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{instance}}",
@@ -3572,7 +3572,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sort(count(netdata_cgroup_writeback_MB_average{instance=~\"$node_id\"}) by (instance))",
+          "expr": "sort(count(netdata_cgroup_writeback_MiB_average{instance=~\"$node_id\"}) by (instance))",
           "format": "time_series",
           "intervalFactor": 4,
           "legendFormat": "{{instance}}",
@@ -4266,7 +4266,7 @@
           "step": 2
         },
         {
-          "expr": "count(sum(netdata_cgroup_cpu_percent_average{job=~\"netdata-($node_id)\"}) by (instance,chart)) by (instance)",
+          "expr": "count(sum(netdata_cgroup_cpu_percentage_average{job=~\"netdata-($node_id)\"}) by (instance,chart)) by (instance)",
           "format": "table",
           "hide": false,
           "instant": true,
