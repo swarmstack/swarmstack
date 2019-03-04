@@ -678,7 +678,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail\",instance=~\"($node_id)\"}",
+          "expr": "netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{instance}}",
@@ -768,7 +768,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "netdata_disk_space_GB_average{family=\"/var/lib/docker\",dimension=~\"avail\",instance=~\"($node_id)\"}",
+          "expr": "netdata_disk_space_GiB_average{family=\"/var/lib/docker\",dimension=~\"avail\",instance=~\"($node_id)\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1763,7 +1763,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) ) )",
+          "expr": "floor( bottomk(1, 100 / sum(netdata_disk_space_GiB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) ) )",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 4,
@@ -1847,7 +1847,7 @@
       "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(netdata_disk_space_GB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) )",
+          "expr": "bottomk(1, 100 / sum(netdata_disk_space_GiB_average{family=\"/\", instance=~\"($node_id)\"}) by (instance) * sum(netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"($node_id)\"} ) by (instance) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
