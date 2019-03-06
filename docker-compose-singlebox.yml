@@ -269,7 +269,7 @@ services:
       - caddycerts:/etc/caddycerts
 
   cadvisor:
-    image: google/cadvisor:v0.32.0
+    image: google/cadvisor:v0.33.0
     command: -logtostderr -docker_only
     deploy:
       labels:
@@ -297,7 +297,7 @@ services:
       - /var/run:/var/run
 
   grafana:
-    image: grafana/grafana:6.0.0
+    image: grafana/grafana:6.0.1
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
@@ -347,7 +347,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.26
+    image: lmierzwa/karma:v0.27
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -367,7 +367,7 @@ services:
       - net
 
   portainer:
-    image: portainer/portainer:1.20.1
+    image: portainer/portainer:1.20.2
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     deploy:
       mode: replicated
