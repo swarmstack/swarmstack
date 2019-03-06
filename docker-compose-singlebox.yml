@@ -213,7 +213,7 @@ services:
       - alertmanagerB:/alertmanager
 
   caddy:
-    image: swarmstack/caddy:no-stats-0.11.4
+    image: swarmstack/caddy:no-stats-0.11.5
     configs:
       - source: caddy_config
         target: /etc/Caddyfile
