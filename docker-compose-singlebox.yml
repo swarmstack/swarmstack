@@ -282,19 +282,15 @@ services:
           memory: 128M
         reservations:
           memory: 64M
-    healthcheck:
-      test: "/usr/bin/wget -q -Y off http://localhost:8080/healthz -O /dev/null > /dev/null 2>&1"
-      interval: 25s
-      timeout: 3s
-      start_period: 30s
     networks:
       - net
     volumes:
       - /:/rootfs:ro
+      - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/run:/var/run
 
   grafana:
     image: grafana/grafana:6.0.1
