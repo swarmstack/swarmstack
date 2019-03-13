@@ -59,7 +59,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1551891147528,
+  "iteration": 1552505719717,
   "links": [],
   "panels": [
     {
@@ -466,7 +466,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) )",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{job}}",
@@ -628,7 +628,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[15m]) ) ) by (job)",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) ) by (job)",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -818,7 +818,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") ) by (chart,instance) ) > 0.1",
+          "expr": "topk(2, sum(label_replace(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*).cpu\") ) by (chart,instance) ) > 0.1",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1381,7 +1381,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(label_replace(rate(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}[1m]), \"chart\", \"$2\", \"chart\", \"(cgroup_system.slice_portworx.|cgroup_)([a-zA-Z0-9_-]+).*\") * 60 ) by (chart,instance) ) > 850",
+          "expr": "topk(2, sum(label_replace(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*).mem\") ) by (chart,instance) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1666,7 +1666,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]) ) ) by (action)",
+          "expr": "sum(ceil(increase(engine_daemon_container_actions_seconds_count[5m]) ) ) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -1964,7 +1964,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]) ) ) by (action)",
+          "expr": "sum(ceil(increase(engine_daemon_network_actions_seconds_count[5m]) ) ) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
@@ -2658,5 +2658,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 49
+  "version": 4
 }

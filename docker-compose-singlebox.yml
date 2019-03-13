@@ -392,7 +392,7 @@ services:
       - /var/lib/docker/volumes:/var/lib/docker/volumes
 
   prometheus:
-    image: prom/prometheus:v2.7.2
+    image: prom/prometheus:v2.8.0
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'

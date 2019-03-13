@@ -557,7 +557,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) )",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -4001,7 +4001,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]) ) ) by (action)",
+          "expr": "sum(ceil(increase(engine_daemon_container_actions_seconds_count[5m]) ) ) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -4096,7 +4096,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]) ) ) by (action)",
+          "expr": "sum(ceil(increase(engine_daemon_network_actions_seconds_count[5m]) ) ) by (action)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 10,
