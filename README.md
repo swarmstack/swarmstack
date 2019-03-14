@@ -98,9 +98,8 @@ There is a [docker-compose-singlebox.yml](https://github.com/swarmstack/swarmsta
 
 Using the [Portworx PX-Developer](https://github.com/portworx/px-dev) version by default, we'll install a storage cluster for each set of (3) hosts added to the cluster, which must provide a minimum 40GB (needed by swarmstack) up to the Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. Adding 1TB drives/partitions from each node would be optimal to fill out the 1TB of replicated space. You can contribute unused block device(s) or partition(s), adding more smaller SSDs on bare-metal or cloud-provider high-IOPS block devices would provide Portworx faster storage, but Portworx functions even across 3 VMs on the same machine each contributing storage from a single shared USB2 NAS, so scale your storage depending on your expected persistent-storage workloads. Block devices or partitions larger than 1TB can be contributed, but only 1TB of persistent storage will be available without licensing the PX-Enterprise version.
 
-Only a subset of your application services will require persistent storage and will require manual pinning, including swarmstack, if you deploy more than 3 nodes. The Portworx storage space is available for your applications to use. Containers not requiring persistent storage can be scheduled across the entire swarm cluster.
  
-When deploying the default Portworx PX-Developer version, or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use _constraints_ such as _- node.label.storagegroup == RED_ to pin your individual services requiring persistent storage to one particular group of 3 hosts within the larger swarm cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. When choosing [Portworx PX-Enterprise](https://portworx.com/) during installation, or when bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster without regards to pinning them to certain nodes as when using the Portworx PX-Developer version.
+When deploying the default Portworx PX-Developer version, or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use _constraints_ such as _- node.label.storagegroup == RED_ to pin your individual services requiring persistent storage to one particular group of 3 hosts within the larger swarm cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. When choosing [Portworx PX-Enterprise](https://portworx.com/) during installation, or when bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster without regards to pinning them to certain nodes as when using the Portworx PX-Developer version. Only a subset of your application services will require persistent storage and will require manual pinning, including swarmstack, if you deploy more than 3 nodes. The Portworx storage space is available for your applications to use. Containers not requiring persistent storage can be scheduled across the entire swarm cluster.
 
  ---
  
@@ -130,7 +129,7 @@ You may want to perform installation from a host outside the cluster, as running
 
 # cd /usr/local/src/
 
-# git clone https://github.com/swarmstack/swarmstack.git
+# git clone https://github.com/swarmstack/swarmstack
 
 # rsync -aq --exclude=.git --exclude=.gitignore swarmstack/ localswarmstack/
 
