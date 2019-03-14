@@ -4,11 +4,11 @@
 
 # You can also choose to do nothing here, in which case all of the swarmstack tools will be accessible by anyone that can route to your Docker swarm cluster. It's also important to note that these same rules should be applied to all hosts within your Docker swarm cluster, as they will each accept and proxy traffic for each other to any exposed ports from Docker services.
 
-#-A DOCKER-USER -p tcp -m tcp -s 10.0.13.28/32 --dport 3000 -j  # allow grafana access from a single IP
-#-A DOCKER-USER -p tcp -m tcp -s 10.0.14.0/24 --dport 3000 -j   # also permit this /24 subnet
+#-A DOCKER-USER -p tcp -m tcp -s 10.0.13.28/32 --dport 3000 -j ACCEPT  # allow grafana access from a single IP
+#-A DOCKER-USER -p tcp -m tcp -s 10.0.14.0/24 --dport 3000 -j ACCEPT   # also permit this /24 subnet
 #-A DOCKER-USER -p tcp -m tcp --dport 3000 -j DROP  # drop all others
 
-#-A DOCKER-USER -p tcp -m tcp -s 10.0.13.28/32 --dport 9090 -j  # Prometheus listens on 9090
+#-A DOCKER-USER -p tcp -m tcp -s 10.0.13.28/32 --dport 9090 -j ACCEPT  # Prometheus listens on 9090
 #-A DOCKER-USER -p tcp -m tcp --dport 9090 -j DROP  # drop all others
 
 # Default action
