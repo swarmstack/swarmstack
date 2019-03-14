@@ -81,7 +81,7 @@ Portworx provides a high-availability storage solution for containers that seeks
 
 A set of ansible playbooks and a docker-compose stack that:
 
-- Tunes EL7 sysctls for optimal network performance
+- Tunes EL7 [sysctls](https://raw.githubusercontent.com/swarmstack/swarmstack/master/ansible/playbooks/includes/tasks/sysctl_el7.yml) for optimal network performance
 - _(optional: docker)_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
 - _(optional: docker)_ Automatically prunes unused Docker containers / volumes / images from nodes
 - _(optional: storage)_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
