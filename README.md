@@ -285,7 +285,7 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 [Portworx](https://portworx.com) | Docker Node IP:<br>http://swarmhost:9001/metrics | [ansible/playbooks/portworx.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/portworx.yml) px-dev or px-enterprise 2.0.3.2
 [Prometheus](https://prometheus.io) | Docker overlay network:<br>http://prometheus:9090/metrics | Source:[https://github.com/prometheus/prometheus](https://github.com/prometheus/prometheus)<br>Image:[https://hub.docker.com/r/prom/prometheus](https://hub.docker.com/r/prom/prometheus) v2.8.0
 [Prometheus Pushgateway](https://prometheus.io/docs/practices/pushing/) | Docker overlay network:<br>http://pushgateway:9091/metrics | Source:[https:/github.com/prometheus/pushgateway](https:/github.com/prometheus/pushgateway)<br>Image:[https://hub.docker.com/r/prom/pushgateway](https://hub.docker.com/r/prom/pushgateway) v0.7.0
-[swarm-discovery-server](https://github.com/jmendiara/prometheus-swarm-discovery) | server: swarmstack_net:8080<br>client: no monitoring, contacts server and writes to a volume shared with Prometheus | Source:[https://github.com/jmendiara/prometheus-swarm-discovery](https://github.com/jmendiara/prometheus-swarm-discovery) 0.2.0
+[swarm-discovery-server](https://github.com/jmendiara/prometheus-swarm-discovery) | No Prometheus monitoring<br>server: http://swarm-discovery-server:8080<br>client: contacts server and also writes to a volume shared with Prometheus container | Source:[https://github.com/jmendiara/prometheus-swarm-discovery](https://github.com/jmendiara/prometheus-swarm-discovery) 0.2.0
 
 ---
 
