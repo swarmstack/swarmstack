@@ -252,7 +252,7 @@ services:
 
 
   grafana:
-    image: grafana/grafana:6.0.1
+    image: grafana/grafana:6.0.2
     configs:
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
@@ -311,7 +311,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.29
+    image: lmierzwa/karma:v0.30
     configs:
       - source: karma-conf
         target: /karma.yaml
