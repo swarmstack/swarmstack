@@ -254,7 +254,7 @@ DevOps Tool | Browser URL<br>(proxied by Caddy)
 [Alertmanager](https://prometheus.io/docs/alerting/alertmanager/) | https://swarmhost:9093<br>https://swarmhost:9095
 [karma](https://github.com/prymitive/karma/blob/master/README.md) | https://swarmhost:9094
 [Grafana](https://grafana.com) | https://swarmhost:3000
-[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) v1.12.2
+[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) v1.13.0
 [Portainer](https://portainer.io) | https://swarmhost:9000
 [Prometheus](https://prometheus.io/) | https://swarmhost:9090
 [Prometheus Pushgateway](https://prometheus.io/docs/practices/pushing/) | https://swarmhost:9091
