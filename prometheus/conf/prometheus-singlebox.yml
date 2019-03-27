@@ -3,7 +3,7 @@ global:
   evaluation_interval: 15s
 
   external_labels:
-    monitor: 'swarmstack'
+    cluster: 'swarmstack'
 
 rule_files:
   - "nodes.yml"

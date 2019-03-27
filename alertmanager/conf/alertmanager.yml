@@ -15,6 +15,10 @@
 
 route:
 
+  group_by: ['alertname']
+  group_wait: 45s
+  group_interval: 10m
+  repeat_interval: 6h
   receiver: 'first-responders'
 
 receivers:
