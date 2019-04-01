@@ -362,7 +362,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.8.0
+    image: prom/prometheus:v2.8.1
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
