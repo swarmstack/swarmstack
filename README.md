@@ -38,7 +38,7 @@ Easily deploy and update Docker swarm nodes as you scale up from at least (3) ba
 
 Manage one or more Docker swarm host clusters via ansible playbooks that can _(optionally)_ help you install and maintain Docker swarm clusters and their nodes, automatically install [Portworx](https://portworx.com) Developer or Enterprise persistent storage for your application's HA container volumes replicated across your swarm nodes, and also automatically update firewall configurations on all of your nodes.
 
-swarmstack includes a modern DevOps workflow for monitoring and alerting about your containerized applications running within Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). swarmstack also provides an optional automatic installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or local volumes and add placement constraints to _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_) 
+swarmstack includes a modern DevOps workflow for monitoring and alerting about your containerized applications running within Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). swarmstack also provides an optional installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or use local host volumes and add placement constraints to _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_) 
 
 The included Grafana dashboards will help you examine the health of the cluster, and the same metrics pipeline can easily be used by your own applications and visualized in Grafana and/or alerted upon via Prometheus rules and sent to redundant Alertmanagers to perform slack/email/etc notifications.
 
@@ -48,7 +48,7 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 
 ## WHY? 
 
-A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how applications perform over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails via alerts, but Prometheus also brings with it an easier way for you and your team to create alerts for their applications, based on aggregated time-series data. For example:
+A modern data-driven monitoring and alerting solution helps even the smallest of DevOps teams to develop and support containerized applications, and provides an ability to observe how applications perform over time, correlated to events occuring on the platform running them as well. Data-driven alerting makes sure the team knows when things go off-the-rails via alerts, but Prometheus also brings with it an easier way for you and your team to create alerts for applications, based on aggregated time-aware queries. For example:
 
 ```
 alert: node_disk_fill_rate_6h
@@ -249,15 +249,15 @@ As your needs for this stack grow, you may find yourself replacing some of the s
 
 Below is mainly for documentation. After installing swarmstack, just connect to https://swarmhost of any Docker swarm node and authenticate with your ADMIN_PASSWORD to view the links:
 
-DevOps Tool | Browser URL<br>(proxied by Caddy)
------------ | ---------------------------------
-[Alertmanager](https://prometheus.io/docs/alerting/alertmanager/) | https://swarmhost:9093<br>https://swarmhost:9095
-[karma](https://github.com/prymitive/karma/blob/master/README.md) | https://swarmhost:9094
-[Grafana](https://grafana.com) | https://swarmhost:3000
-[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) v1.13.0
-[Portainer](https://portainer.io) | https://swarmhost:9000
-[Prometheus](https://prometheus.io/) | https://swarmhost:9090
-[Prometheus Pushgateway](https://prometheus.io/docs/practices/pushing/) | https://swarmhost:9091
+DevOps Tool | Browser URL<br>(proxied by Caddy) | Purpose
+----------- | --------------------------------- | -------
+[Alertmanager](https://prometheus.io/docs/alerting/alertmanager/) | https://swarmhost:9093<br>https://swarmhost:9095 | Receives alerts from Prometheus and relays them to slack, email, etc
+[karma](https://github.com/prymitive/karma/blob/master/README.md) | https://swarmhost:9094 | Alert dashboard for Prometheus Alertmanager(s)
+[Grafana](https://grafana.com) | https://swarmhost:3000 | Query, visualize, alert on and understand your metrics no matter where they are stored
+[NetData](https://my-netdata.io/) | https://swarmhost:19998/hostname/ | Everything happening on your systems and applications
+[Portainer](https://portainer.io) | https://swarmhost:9000 | Lightweight Docker Swarm management UI
+[Prometheus](https://prometheus.io/) | https://swarmhost:9090 | Open-source monitoring solution
+[Prometheus Pushgateway](https://prometheus.io/docs/practices/pushing/) | https://swarmhost:9091 | Push acceptor for ephemeral and batch jobs metrics to be scraped by Prometheus
 
 ---
 
@@ -275,9 +275,9 @@ Monitoring / Telemetry | Metrics URL | Source / Image
 [cAdvisor](https://github.com/google/cadvisor) | Docker overlay network:<br>http://cadvisor:8080/metrics | Source:[https://github.com/google/cadvisor](https://github.com/google/cadvisor)<br>Image:[https://hub.docker.com/r/google/cadvisor](https://hub.docker.com/r/google/cadvisor) v0.33.0
 [Docker Swarm](https://docs.docker.com/engine/swarm/) | Docker Node IP:<br>http://swarmhost:9323/metrics | [ansible/playbooks/docker.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/docker.yml)
 [etcd3](https://github.com/etcd-io/etcd) | Docker Node IP:<br>http://swarmhost:2379/metrics | [ansible/playbooks/etcd.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/etcd.yml)
-[Grafana](https://grafana.com) | Docker overlay network:<br>http://grafana:3000/metrics | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana)<br>Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 6.0.2
-[karma](https://github.com/prymitive/karma/blob/master/README.md) | Docker overlay network:<br>http://karma:8080/metrics | Source:[https://github.com/prymitive/karma](https://github.com/prymitive/karma)<br>Image:[https://hub.docker.com/r/lmierzwa/karma](https://hub.docker.com/r/lmierzwa/karma) v0.30
-[NetData](https://my-netdata.io/) | Docker Node IP:<br>http://swarmhost:19999/api/v1/allmetrics | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) v1.12.2
+[Grafana](https://grafana.com) | Docker overlay network:<br>http://grafana:3000/metrics | Source:[https://github.com/grafana/grafana](https://github.com/grafana/grafana)<br>Image:[https://hub.docker.com/r/grafana/grafana](https://hub.docker.com/r/grafana/grafana) 6.1.3
+[karma](https://github.com/prymitive/karma/blob/master/README.md) | Docker overlay network:<br>http://karma:8080/metrics | Source:[https://github.com/prymitive/karma](https://github.com/prymitive/karma)<br>Image:[https://hub.docker.com/r/lmierzwa/karma](https://hub.docker.com/r/lmierzwa/karma) v0.32
+[NetData](https://my-netdata.io/) | Docker Node IP:<br>http://swarmhost:19999/api/v1/allmetrics | [ansible/playbooks/swarmstack.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/swarmstack.yml) v1.13.0
 [Portainer](https://portainer.io) | no Prometheus monitoring | Source:[https://github.com/portainer/portainer](https://github.com/portainer/portainer)<br>Image:[https://hub.docker.com/r/portainer/portainer](https://hub.docker.com/r/portainer/portainer) 1.20.2
 [Portainer Agent](https://portainer.io) | no Prometheus monitoring, contacts Portainer | Source:[https://github.com/portainer/portainer](https://github.com/portainer/portainer)<br>Image:[https://hub.docker.com/r/portainer/agent](https://hub.docker.com/r/portainer/agent) 1.2.11
 [Portworx](https://portworx.com) | Docker Node IP:<br>http://swarmhost:9001/metrics | [ansible/playbooks/portworx.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/portworx.yml) px-dev or px-enterprise 2.0.3.2
