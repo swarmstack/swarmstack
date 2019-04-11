@@ -73,11 +73,14 @@ SWARMSTACK_LOCAL_DIR=/usr/local/src/localswarmstack
 # Be sure to change memory-32GB or include additional memory sections and place your hosts in them if host memory sizes vary. These settings tune several EL7 sysctls for optimal performance when the docker.yml playbook is run on a host. It's safe to run the docker.yml playbook against a pre-existing Docker swarm cluster, it will detect that the swarm already exists and will only add any new hosts you've configured below in the [swarm] section to that existing cluster. Be sure to define ALL of your swarm hosts participating in the cluster here, whether or not they were instanciated by swarmstack's docker.yml playbook. Also make sure you set SWARMJOIN above to an EXISTING Docker swarm manager, so that any new nodes you are adding will be joined to it.
 
 [swarmstack:children]
+drain
 etcd
 portworx
 swarm
 memory-32GB
 
+# Place hosts into this group and they will not be made available to the swarm scheduler, facilitates running non-service containers on some hosts where you might still want Portworx installed/upgraded
+[drain]
 
 [etcd]
 swarm01.example.com

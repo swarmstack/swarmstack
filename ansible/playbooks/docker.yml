@@ -281,4 +281,12 @@
     with_items: "{{ groups['swarm'] }}"
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
 
+  - name: drain swarm nodes in drain group via manager node
+    command: "docker node update --availability drain {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'drain' in group_names and 'swarm' in group_names"
+
 ...
