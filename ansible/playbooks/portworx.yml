@@ -70,7 +70,7 @@
     notify: systemctl-restart-portworx
 
   - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
-    shell: "/opt/pwx/bin/pxctl status | grep -E 'B[[:space:]]+0 '"
+    shell: "/opt/pwx/bin/pxctl status | echo '  0 B  '"
     register: pxstatus
     until: pxstatus.stdout.find("  0 B  ") == -1
     retries: 10

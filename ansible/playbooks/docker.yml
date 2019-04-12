@@ -187,14 +187,24 @@
       timeout: "{{ REBOOT_TIMEOUT }}"
     when: reboot_hint.stdout.find("reboot") != -1
 
+  - name: check if Portworx OCI bundle already installed
+    stat: path=/opt/pwx/bin/pxctl
+    register: pxctl_installed
+    when: "'portworx' in group_names"
+
+  - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
+    shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
+    register: pxstatus
+    until: pxstatus.stdout.find("  0 B  ") == -1
+    retries: 10
+    delay: 120
+    ignore_errors: yes
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and reboot_hint.stdout.find('reboot') != -1"
+
   - name: ensure docker service is enabled and started
     systemd: name=docker state=started masked=no enabled=yes
     register: DockerStarted
     when: "'swarm' in group_names"
-
-  - name: pause while docker loads
-    pause: seconds=20
-    when: "'swarm' in group_names and DockerStarted is changed"
 
   handlers:
 
