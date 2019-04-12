@@ -192,6 +192,10 @@
     register: pxctl_installed
     when: "'portworx' in group_names"
 
+  - name: pause while Portworx loads if we rebooted
+    pause: seconds=120
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and reboot_hint.stdout.find('reboot') != -1"
+
   - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
     shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
     register: pxstatus
