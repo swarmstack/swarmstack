@@ -37,6 +37,9 @@
     when: "'portworx' in group_names and pxctl_configured.stat.exists == False"
     notify: systemctl-restart-portworx
 
+  - name: process systemd changes immediately
+    meta: flush_handlers
+
   - name: check installed Portworx version
     shell: /opt/pwx/bin/pxctl --version
     args:
@@ -69,12 +72,15 @@
     when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
     notify: systemctl-restart-portworx
 
+  - name: process systemd changes immediately
+    meta: flush_handlers
+
   - name: pause while Portworx loads if we upgraded
-    pause: seconds=120
+    pause: seconds=10
     when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
 
   - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
-    shell: "/opt/pwx/bin/pxctl status | echo '  0 B  '"
+    shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
     register: pxstatus
     until: pxstatus.stdout.find("  0 B  ") == -1
     retries: 10
