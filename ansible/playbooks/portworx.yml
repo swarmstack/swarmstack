@@ -54,7 +54,7 @@
     when: "'swarm' in group_names and 'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
 
   - name: wait until all containers are stopped on this node or 60 seconds elapse if upgrading Portworx
-    shell: "docker ls | wc"
+    shell: "docker ps | wc"
     register: dockerlines
     until: dockerlines.stdout.find("  1  ") != -1
     retries: 4 
