@@ -192,10 +192,6 @@
     register: pxctl_installed
     when: "'portworx' in group_names"
 
-  - name: pause while Portworx loads if we rebooted
-    pause: seconds=120
-    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and reboot_hint.stdout.find('reboot') != -1"
-
   - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
     shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
     register: pxstatus
@@ -220,6 +216,8 @@
       masked: no
       name: docker
 
+### Initialize SWARMJOIN host, if necessary
+
 - hosts: all
   gather_facts: true
   remote_user: root
@@ -233,35 +231,29 @@
     register: swarm_initialized
     ignore_errors: true
     changed_when: False
-    run_once: true
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
 
   - name: initialize swarm
     command: "docker swarm init --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }}"
-    run_once: true
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN and swarm_initialized is failed"
 
-  - name: determine docker node ls Active nodes on SWARMJOIN host
-    shell: "docker node ls | grep Active"
+- hosts: all
+  gather_facts: true
+  serial: 1
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - name: determine associated docker nodes from the SWARMJOIN host
+    shell: "docker node ls"
     register: swarm_node_ls
+    delegate_to: "{{SWARMJOIN}}"
     changed_when: False
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+    when: "'swarm' in group_names and inventory_hostname != SWARMJOIN"
 
-  - name: retrieve swarm join-token manager
-    command: docker swarm join-token manager --quiet
-    register: swarm_token_manager
-    changed_when: False
-    run_once: true
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
-
-  - name: retrieve swarm join-token worker
-    command: docker swarm join-token worker --quiet
-    register: swarm_token_worker
-    changed_when: False
-    run_once: true
-    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
-
-  - name: determine Swarm status on NON-SWARMJOIN hosts
+  - name: determine Swarm status on other swarm host nodes
     shell: "docker info | grep 'Swarm: ' || exit 0"
     register: swarm_status
     changed_when: False
@@ -273,34 +265,56 @@
     changed_when: False
     when: "'swarm' in group_names and inventory_hostname != SWARMJOIN and swarm_status.stdout.find('Swarm: active') != -1"
 
-  - name: leave an old swarm on other active swarm hosts if this swarm_node_id not Active in swarm_node_ls
+  - name: leave an old swarm on other active swarm hosts if this swarm_node_id not in SWARMJOIN node's docker node ls
     command: docker swarm leave -f
     ignore_errors: true
-    when: "'swarm' in group_names and inventory_hostname != SWARMJOIN and swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and hostvars[SWARMJOIN]['swarm_node_ls'].stdout.find(swarm_node_id.stdout) == -1"
+    when: "'swarm' in group_names and inventory_hostname != SWARMJOIN and swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and swarm_node_ls.stdout.find(swarm_node_id.stdout) == -1"
 
-  - name: join manager nodes to swarm
-    command: "docker swarm join --token {{hostvars[SWARMJOIN]['swarm_token_manager'].stdout}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
+  - name: retrieve swarm join-token for manager nodes if this is a manager node
+    command: docker swarm join-token manager --quiet
+    register: swarm_token_manager
+    delegate_to: "{{SWARMJOIN}}"
+    changed_when: False
+    when: "'swarm' in group_names and ROLE is defined and ROLE == 'manager' and inventory_hostname != SWARMJOIN and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and swarm_node_ls.stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
+
+  - name: join manager nodes to SWARMJOIN node if necessary
+    command: "docker swarm join --token {{item}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
     ignore_errors: true
-    when: "'swarm' in group_names and ROLE is defined and ROLE == 'manager' and inventory_hostname != SWARMJOIN and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and hostvars[SWARMJOIN]['swarm_node_ls'].stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
+    with_items: "{{ swarm_token_manager.stdout }}"
+    when: "'swarm' in group_names and ROLE is defined and ROLE == 'manager' and inventory_hostname != SWARMJOIN and swarm_token_manager is not skipped and swarm_token_manager.stdout != '' and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and swarm_node_ls.stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
 
-  - name: join worker nodes to swarm
-    command: "docker swarm join --token {{hostvars[SWARMJOIN]['swarm_token_worker'].stdout}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
+  - name: retrieve swarm join-token for worker nodes if this is a worker node
+    command: docker swarm join-token worker --quiet
+    register: swarm_token_worker
+    delegate_to: "{{SWARMJOIN}}"
+    changed_when: False
+    when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and swarm_node_ls.stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
+
+  - name: join worker nodes to SWARMJOIN node if necessary
+    command: "docker swarm join --token {{item}} --advertise-addr {{hostvars[inventory_hostname]['DOCKER_MGT']}} --data-path-addr {{ hostvars[inventory_hostname]['DOCKER_DATA'] }} {{SWARMJOIN}}:2377"
     ignore_errors: true
-    when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and hostvars[SWARMJOIN]['swarm_node_ls'].stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
+    with_items: "{{ swarm_token_worker.stdout }}"
+    when: "'swarm' in group_names and ROLE is not defined and inventory_hostname != SWARMJOIN and swarm_token_worker is not skipped and swarm_token_worker.stdout != '' and ( (swarm_status.stdout.find('Swarm: active') != -1 and swarm_node_id is not skipped and swarm_node_id.stdout != '' and swarm_node_ls.stdout.find(swarm_node_id.stdout) == -1) or ( swarm_status.stdout.find('Swarm: inactive') != -1 ) )"
 
-  - name: add node.label.storagegroup to swarm nodes on SWARMJOIN host
+- hosts: all
+  gather_facts: true
+  remote_user: root
+  roles:
+  - ../roles/common
+
+  tasks:
+
+  - name: add node.label.storagegroup to swarm nodes
     command: "docker node update --label-add storagegroup={{hostvars[item]['DOCKER_STORAGE_GROUP']}} {{hostvars[item].inventory_hostname}}"
     changed_when: false
     ignore_errors: true
     with_items: "{{ groups['swarm'] }}"
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
 
-  - name: drain swarm nodes in drain group via manager node
-    command: "docker node update --availability drain {{inventory_hostname}}"
+  - name: drain swarm nodes in drain group
+    command: "docker node update --availability drain {{hostvars[item].inventory_hostname}}"
     changed_when: false
     ignore_errors: true
-    delegate_to: "{{SWARMJOIN}}"
-    delegate_facts: True
-    when: "'drain' in group_names and 'swarm' in group_names"
-
+    with_items: "{{ groups['drain'] }}"
+    when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
 ...
