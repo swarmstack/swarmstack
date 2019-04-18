@@ -39,7 +39,7 @@
       block: |
         ExecStart=/usr/bin/etcd --name etcd-{{ hostvars[inventory_hostname]['inventory_hostname'] }} \
           --data-dir /var/lib/etcd \
-          --quota-backend-bytes 8589934592 \
+          --quota-backend-bytes 536870912 \
           --auto-compaction-retention 3 \
           --listen-client-urls http://0.0.0.0:2379 \
           --advertise-client-urls http://{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2379 \
