@@ -125,7 +125,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(sum(label_replace(container_tasks_state{state=\"running\",container_label_com_docker_stack_namespace=~\".+\"}, \"node_id\", \"$1\", \"container_label_com_docker_swarm_node_id\", \"(.*)\" ) ) by (node_id) * on (node_id) group_left(state) swarm_node_info{instance=~\"($node_id):9323\"})",
+          "expr": "count(swarm_node_info{instance=~\"($node_id):9323\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "",
