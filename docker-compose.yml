@@ -96,7 +96,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.15.3
+    image: prom/alertmanager:v0.17.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -132,7 +132,7 @@ services:
       - alertmanager:/alertmanager
 
   alertmanagerB:
-    image: prom/alertmanager:v0.15.3
+    image: prom/alertmanager:v0.17.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -311,7 +311,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.33
+    image: lmierzwa/karma:v0.35
     configs:
       - source: karma-conf
         target: /karma.yaml
