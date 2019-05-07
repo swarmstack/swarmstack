@@ -140,7 +140,7 @@
     retries: 10
     delay: 120
     ignore_errors: yes
-    when: "'portworx' in group_names and portworx_restarted is defined"
+    when: "'portworx' in group_names"
 
   - name: make swarm nodes not in drain group active via manager node
     command: "docker node update --availability active {{inventory_hostname}}"
@@ -159,4 +159,5 @@
       enabled: yes
       masked: no
       name: portworx
+
 ...
