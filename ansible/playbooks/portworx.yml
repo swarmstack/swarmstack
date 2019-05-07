@@ -19,6 +19,23 @@
     register: pxctl_installed
     when: "'portworx' in group_names"
 
+  - name: drain swarm node via manager node if Portworx will be installed
+    command: "docker node update --availability drain {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'swarm' in group_names and 'portworx' in group_names and pxctl_installed.stat.exists == False"
+
+  - name: wait until all containers are stopped on this node or 60 seconds elapse if this node is being drained
+    shell: "docker ps | wc"
+    register: dockerlines
+    until: dockerlines.stdout.find("  1  ") != -1
+    retries: 4 
+    delay: 15 
+    ignore_errors: yes
+    when: "'swarm' in group_names and 'portworx' in group_names and pxctl_installed.stat.exists == False"
+
   - name: install Portworx OCI bundle if not installed
     shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_LICENSE }}:{{ PORTWORX_VERSION }}
     args:
@@ -30,24 +47,29 @@
     register: pxctl_configured
     when: "'portworx' in group_names"
 
+  - name: drain swarm node via manager node if Portworx will be configured
+    command: "docker node update --availability drain {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'swarm' in group_names and 'portworx' in group_names and pxctl_configured.stat.exists == False"
+
+  - name: wait until all containers are stopped on this node or 60 seconds elapse if this node is being drained
+    shell: "docker ps | wc"
+    register: dockerlines
+    until: dockerlines.stdout.find("  1  ") != -1
+    retries: 4 
+    delay: 15 
+    ignore_errors: yes
+    when: "'swarm' in group_names and 'portworx' in group_names and pxctl_configured.stat.exists == False"
+
   - name: configure Portworx OCI bundle if not configured
     shell: /opt/pwx/bin/px-runc install -c {{ hostvars[inventory_hostname]['PWX_STORAGE_GROUP'] }} -k {% for host in groups['etcd'] %}etcd://{{ hostvars[host].inventory_hostname }}:2379{{ '' if loop.last else ','}}{% endfor %}{% for device in hostvars[inventory_hostname]['DEVICES'] %} -s {{ device }}{% endfor %} -d {{ hostvars[inventory_hostname]['PWX_DATA'] }} -m {{ hostvars[inventory_hostname]['PWX_MGT'] }}
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_configured.stat.exists == False"
     notify: systemctl-restart-portworx
-
-  - name: update default ExecStart in systemd to include etcd cluster
-    lineinfile:
-      path: /etc/systemd/system/portworx.service
-      regexp: '^ExecStart=/opt/pwx/bin/px-runc'
-      line: "ExecStart=/opt/pwx/bin/px-runc run --name portworx -k {% for host in groups['etcd'] %}etcd://{{ hostvars[host].inventory_hostname }}:2379{{ '' if loop.last else ','}}{% endfor %}"
-      backrefs: yes
-    when: "'portworx' in group_names"
-    notify: systemctl-restart-portworx
-
-  - name: process systemd changes immediately
-    meta: flush_handlers
 
   - name: check installed Portworx version
     shell: /opt/pwx/bin/pxctl --version
@@ -57,7 +79,7 @@
     register: portworx_rev
     when: "'portworx' in group_names and pxctl_installed.stat.exists == True"
 
-  - name: drain swarm node via manager node when Portworx will be upgraded on node
+  - name: drain swarm node via manager node if Portworx will be updated
     command: "docker node update --availability drain {{inventory_hostname}}"
     changed_when: false
     ignore_errors: true
@@ -72,34 +94,61 @@
     retries: 4 
     delay: 15 
     ignore_errors: yes
-    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
+    when: "'swarm' in group_names and 'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
 
-  - name: upgrade Portworx if the PORTWORX_VERSION is different than already installed
+  - name: upgrade Portworx if PORTWORX_VERSION is different than already installed
     shell: docker run --entrypoint /runc-entry-point.sh --rm -i --privileged=true -v /opt/pwx:/opt/pwx -v /etc/pwx:/etc/pwx portworx/{{ PORTWORX_LICENSE }}:{{ PORTWORX_VERSION }} --upgrade
     args:
       warn: no
     when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
     notify: systemctl-restart-portworx
 
+  - name: update Portworx systemd ExecStart to include etcd cluster
+    lineinfile:
+      path: /etc/systemd/system/portworx.service
+      regexp: '^ExecStart=/opt/pwx/bin/px-runc'
+      line: "ExecStart=/opt/pwx/bin/px-runc run --name portworx -k {% for host in groups['etcd'] %}etcd://{{ hostvars[host].inventory_hostname }}:2379{{ '' if loop.last else ','}}{% endfor %}"
+      backrefs: yes
+    when: "'portworx' in group_names"
+    register: portworx_systemd
+    notify: systemctl-restart-portworx
+
+  - name: drain swarm node via manager node if Portworx systemd was changed
+    command: "docker node update --availability drain {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'swarm' in group_names and 'portworx' in group_names and portworx_systemd.changed == True"
+
+  - name: wait until all containers are stopped on this node or 60 seconds elapse if Portworx systemd was changed
+    shell: "docker ps | wc"
+    register: dockerlines
+    until: dockerlines.stdout.find("  1  ") != -1
+    retries: 4 
+    delay: 15 
+    ignore_errors: yes
+    when: "'swarm' in group_names and 'portworx' in group_names and portworx_systemd.changed == True"
+
   - name: process systemd changes immediately
     meta: flush_handlers
 
-  - name: wait until all nodes are contributing space to Portworx cluster or 20 minutes elapses before moving on
+  - name: wait until all nodes are contributing space to Portworx or 20 minutes elapses before moving on to next node
     shell: "/opt/pwx/bin/pxctl status || echo -e '\t\t0 B\t\t'"
     register: pxstatus
     until: pxstatus.stdout.find("\t\t0 B\t\t") == -1
     retries: 10
     delay: 120
     ignore_errors: yes
-    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
+    when: "'portworx' in group_names and portworx_restarted is defined"
 
-  - name: make swarm nodes not in drain group active via manager node if Portworx was upgraded
+  - name: make swarm nodes not in drain group active via manager node
     command: "docker node update --availability active {{inventory_hostname}}"
     changed_when: false
     ignore_errors: true
     delegate_to: "{{SWARMJOIN}}"
     delegate_facts: True
-    when: "'drain' not in group_names and 'swarm' in group_names and 'portworx' in group_names and pxctl_installed.stat.exists == True and portworx_rev.stdout.find(PORTWORX_VERSION) == -1"
+    when: "'drain' not in group_names and 'swarm' in group_names and 'portworx' in group_names"
 
   handlers:
 
