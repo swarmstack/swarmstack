@@ -140,6 +140,7 @@
     retries: 10
     delay: 120
     ignore_errors: yes
+    changed_when: false
     when: "'portworx' in group_names"
 
   - name: make swarm nodes not in drain group active via manager node
