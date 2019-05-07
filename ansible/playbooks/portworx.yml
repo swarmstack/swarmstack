@@ -84,10 +84,10 @@
   - name: process systemd changes immediately
     meta: flush_handlers
 
-  - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
-    shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
+  - name: wait until all nodes are contributing space to Portworx cluster or 20 minutes elapses before moving on
+    shell: "/opt/pwx/bin/pxctl status || echo -e '\t\t0 B\t\t'"
     register: pxstatus
-    until: pxstatus.stdout.find("  0 B  ") == -1
+    until: pxstatus.stdout.find("\t\t0 B\t\t") == -1
     retries: 10
     delay: 120
     ignore_errors: yes
