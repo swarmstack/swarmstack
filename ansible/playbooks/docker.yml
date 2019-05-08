@@ -16,11 +16,11 @@
     register: tunedcustom
 
   - name: copy tuned - tuned.conf
-    copy: src=../roles/common/files/etc/tuned/custom/tuned.conf dest=/src=../roles/common/files/etc/tuned/custom/tuned.conf owner=root group=root mode="u=rw,g=r,o=r"
+    copy: src=../roles/common/files/etc/tuned/custom/tuned.conf dest=/etc/tuned/custom/tuned.conf owner=root group=root mode="u=rw,g=r,o=r"
     when: tunedcustom.changed == True
 
   - name: copy tuned - script.sh
-    copy: src=../roles/common/files/etc/tuned/custom/script.sh dest=/src=../roles/common/files/etc/tuned/custom/script.sh owner=root group=root mode="u=rwx,g=rx,o=rx"
+    copy: src=../roles/common/files/etc/tuned/custom/script.sh dest=/etc/tuned/custom/script.sh owner=root group=root mode="u=rwx,g=rx,o=rx"
     when: tunedcustom.changed == True
 
   - name: set tuned profile to custom
