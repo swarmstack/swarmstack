@@ -3,8 +3,8 @@
   gather_facts: true
   remote_user: root
   vars:
-    NETDATA_VERSION: netdata 1.13.0
-    NETDATA_BRANCH: v1.13.0
+    NETDATA_VERSION: netdata v1.14.0
+    NETDATA_BRANCH: v1.14.0
 
   roles:
   - ../roles/common
@@ -14,6 +14,9 @@
   - name: Install requisite packages on SWARMJOIN host
     yum: name=ansible,git,httpd-tools state=latest
     when: "inventory_hostname == SWARMJOIN"
+
+  - name: Install requisite packages on all hosts (NetData)
+    yum: name=libuuid-devel,zlib-devel state=latest
 
 ### INSTALL/UPDATE NETDATA ON ALL HOSTS
   - name: Determine if NetData is currently installed and version
