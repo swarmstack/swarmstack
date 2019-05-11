@@ -1,46 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "6.0.1"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1552505719717,
+  "id": 7,
+  "iteration": 1557537437023,
   "links": [],
   "panels": [
     {
@@ -818,7 +776,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(label_replace(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*).cpu\") ) by (chart,instance) ) > 0.1",
+          "expr": "label_replace(topk(1, sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (chart,instance)), \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*)\\\\.[[:alnum:]]+\\\\.[[:alnum:]]+\\\\.cpu\")",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1381,7 +1339,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(label_replace(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*).mem\") ) by (chart,instance) )",
+          "expr": "label_replace(topk(1, sum(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}) by (chart,instance)), \"chart\", \"$2\", \"chart\", \"(cgroup_)(.*)\\\\.[[:alnum:]]+\\\\.[[:alnum:]]+\\\\.mem\")",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1564,14 +1522,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, rate(container_network_receive_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 8 > 0 )",
+          "expr": "topk(1,increase(container_network_receive_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 0 )",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "IN: {{instance}} {{task}}",
+          "legendFormat": "IN: {{instance}} {{container_label_com_docker_swarm_service_name}}",
           "refId": "A"
         },
         {
-          "expr": "- topk(1, rate(container_network_transmit_bytes_total{id!~\"/\",instance=~\"($node_id)\"}[1m]) * 8 > 0 )",
+          "expr": "- topk(1,increase(container_network_transmit_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 0 )",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}} {{task}}",
@@ -2604,7 +2562,13 @@
     "list": [
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "tags": [],
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": "Prometheus",
         "definition": "",
         "hide": 0,
@@ -2658,5 +2622,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 4
+  "version": 53
 }
