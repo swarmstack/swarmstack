@@ -97,21 +97,21 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(alertmanager_alerts{state=\"active\"})",
+          "expr": "sum(alertmanager_alerts{state=\"firing\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
-      "title": "Alertmanager Active Alerts",
+      "thresholds": "0.1,0.9",
+      "title": "Alertmanager Firing Alerts",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
         {
           "op": "=",
-          "text": "N/A",
+          "text": "0",
           "value": "null"
         }
       ],
@@ -864,7 +864,6 @@
         "sort": 2,
         "value_type": "individual"
       },
-      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1856,7 +1855,7 @@
   ],
   "refresh": "1m",
   "revision": "1.0",
-  "schemaVersion": 16,
+  "schemaVersion": 18,
   "style": "dark",
   "tags": [
     "prometheus"
@@ -1865,7 +1864,7 @@
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -1897,5 +1896,5 @@
   "timezone": "browser",
   "title": "Prometheus",
   "uid": "mGFfYSRiz",
-  "version": 4
+  "version": 35
 }
