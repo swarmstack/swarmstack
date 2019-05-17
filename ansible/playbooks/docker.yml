@@ -74,6 +74,25 @@
       warn: no
     changed_when: false
 
+  - name: check if /var/log/journal is enabled
+    file:
+      path: /var/log/journal
+      state: directory
+    register: journal_logging
+
+  - name: create journald logging
+    command: systemd-tmpfiles --create --prefix /var/log/journal
+    when: journal_logging.changed == True 
+
+  - name: restart systemd-journald
+    systemd:
+      state: restarted
+      daemon_reload: no
+      enabled: yes
+      masked: no
+      name: systemd-journald
+    when: journal_logging.changed == True 
+
 - hosts: all
   gather_facts: true
   serial: 1
