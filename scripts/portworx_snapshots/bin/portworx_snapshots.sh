@@ -34,7 +34,7 @@ for snapname in ${nonsnaps}; do
     echo "${snaps}" | egrep "^snapshot_weekly_${today}_${snapname}$" > /dev/null 2>&1
     if [ "$?" == "1" ]; then
       echo "Creating weekly snapshot for volume ${snapname}"
-      /usr/local/bin/pxctl volume snapshot create --name snapshot_weekly_${lastweekly}_${snapname} ${snapname}
+      /usr/local/bin/pxctl volume snapshot create --name snapshot_weekly_${today}_${snapname} ${snapname}
     fi
   fi
 
