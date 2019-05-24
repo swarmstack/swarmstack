@@ -1,0 +1,12 @@
+groups:
+
+- name: containers
+
+  rules:
+
+  - alert: no_service_replicas_10m
+    expr: sum(swarm_monitor{service!~'^swarmstack_.*|^docker_.*'}) by (service) == 0
+    for: 10m
+    annotations:
+      description: 'Service {{ $labels.service }} has had no running containers for longer than 10 minutes'
+      summary: 'No containers of service {{ $labels.service }}'

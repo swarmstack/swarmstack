@@ -1,0 +1,15 @@
+groups:
+
+- name: portworx
+
+  rules:
+
+  - alert: Portworx_PXDEV_VolumeCount
+    expr: count(sum(px_monitor) by (clusterid,volume_name)) by (clusterid) > 38
+    for: 2m
+    labels:
+      issue: Portworx volume usage
+      severity: critical
+    annotations:
+      description: Portworx PX-Dev version allows 40 volumes per cluster and {{$value}} are in use
+      summary: Portworx volume count is {{$value}}

@@ -1,0 +1,72 @@
+{
+  "columns": [],
+  "description": "",
+  "fontSize": "100%",
+  "gridPos": {
+    "h": 4,
+    "w": 8,
+    "x": 8,
+    "y": 16
+  },
+  "hideTimeOverride": false,
+  "id": 39,
+  "links": [],
+  "pageSize": 2,
+  "scroll": true,
+  "showHeader": true,
+  "sort": {
+    "col": null,
+    "desc": false
+  },
+  "styles": [
+    {
+      "alias": "",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 2,
+      "mappingType": 1,
+      "pattern": "Time",
+      "thresholds": [],
+      "type": "hidden",
+      "unit": "short"
+    },
+    {
+      "alias": "Replicas",
+      "colorMode": "cell",
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 0,
+      "mappingType": 1,
+      "pattern": "Value",
+      "thresholds": [
+        "0.1"
+      ],
+      "type": "number",
+      "unit": "short"
+    }
+  ],
+  "targets": [
+    {
+      "expr": "min(swarm_monitor) without (exported_instance, exported_job,job,task,node,image,instance,desired) < min(swarm_desired) without (exported_instance, exported_job,job,task,node,image,instance,replicas)",
+      "format": "time_series",
+      "instant": true,
+      "intervalFactor": 1,
+      "legendFormat": "{{service}}",
+      "refId": "A"
+    }
+  ],
+  "timeFrom": null,
+  "timeShift": null,
+  "title": "Services without desired containers",
+  "transform": "timeseries_to_rows",
+  "type": "table"
+}

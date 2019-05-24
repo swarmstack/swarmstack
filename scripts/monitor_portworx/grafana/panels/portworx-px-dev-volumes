@@ -1,0 +1,75 @@
+{
+  "columns": [],
+  "fontSize": "100%",
+  "gridPos": {
+    "h": 5,
+    "w": 4,
+    "x": 12,
+    "y": 7
+  },
+  "id": 52,
+  "links": [],
+  "pageSize": null,
+  "scroll": true,
+  "showHeader": true,
+  "sort": {
+    "col": 2,
+    "desc": false
+  },
+  "styles": [
+    {
+      "alias": "Time",
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "pattern": "Time",
+      "type": "hidden"
+    },
+    {
+      "alias": "Cluster ID",
+      "colorMode": null,
+      "colors": [
+        "rgba(245, 54, 54, 0.9)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(50, 172, 45, 0.97)"
+      ],
+      "decimals": 2,
+      "pattern": "clusterid",
+      "thresholds": [],
+      "type": "string",
+      "unit": "short"
+    },
+    {
+      "alias": "Volumes",
+      "colorMode": "value",
+      "colors": [
+        "rgba(50, 172, 45, 0.97)",
+        "rgba(237, 129, 40, 0.89)",
+        "rgba(245, 54, 54, 0.9)"
+      ],
+      "dateFormat": "YYYY-MM-DD HH:mm:ss",
+      "decimals": 0,
+      "mappingType": 1,
+      "pattern": "Value",
+      "thresholds": [
+        "35",
+        "40"
+      ],
+      "type": "number",
+      "unit": "short"
+    }
+  ],
+  "targets": [
+    {
+      "expr": "count(sum(px_monitor) by (clusterid,volume_name)) by (clusterid)",
+      "format": "table",
+      "instant": true,
+      "intervalFactor": 1,
+      "refId": "A"
+    }
+  ],
+  "timeFrom": null,
+  "timeShift": null,
+  "title": "Portworx Volumes < 40",
+  "transform": "table",
+  "transparent": true,
+  "type": "table"
+}
