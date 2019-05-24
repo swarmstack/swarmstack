@@ -3,8 +3,8 @@
   gather_facts: true
   remote_user: root
   vars:
-    NETDATA_VERSION: netdata v1.14.0
-    NETDATA_BRANCH: v1.14.0
+    NETDATA_VERSION: netdata v1.15.0
+    NETDATA_BRANCH: v1.15.0
 
   roles:
   - ../roles/common
