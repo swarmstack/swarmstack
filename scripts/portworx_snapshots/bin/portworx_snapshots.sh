@@ -20,8 +20,6 @@ for snapname in ${nonsnaps}; do
     fi
   done
 
-  weekdone=0
-
   # WEEKLY SNAPSHOTS
 
   # Remove previous weekly snapshots
@@ -33,7 +31,6 @@ for snapname in ${nonsnaps}; do
 
   # Create weekly snapshot if it doesn't exist
   if [ "${theday}" == "${weekly}" ]; then
-    weekdone=1
     echo "${snaps}" | egrep "^snapshot_weekly_${today}_${snapname}$" > /dev/null 2>&1
     if [ "$?" == "1" ]; then
       echo "Creating weekly snapshot for volume ${snapname}"
@@ -53,7 +50,7 @@ for snapname in ${nonsnaps}; do
   # Create daily snapshot if it doesn't exist
   echo "${snaps}" | egrep "^snapshot_daily_${today}_${snapname}$" > /dev/null 2>&1
   if [ "$?" == "1" ]; then
-    if [ "${weekdone}" -eq 0 ]; then
+    if [ "${theday}" != "${weekly}" ]; then
       echo "Creating daily snapshot for volume ${snapname}"
       /usr/local/bin/pxctl volume snapshot create --name snapshot_daily_${today}_${snapname} ${snapname}
     fi
