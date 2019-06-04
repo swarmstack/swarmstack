@@ -5,7 +5,7 @@ groups:
   rules:
 
   - alert: Portworx_PXDEV_VolumeCount
-    expr: count(sum(px_monitor) by (clusterid,volume_name)) by (clusterid) > 38
+    expr: count(sum(px_monitor{parent=~"(null|)"}) by (clusterid,volume_name)) by (clusterid) > 38
     for: 2m
     labels:
       issue: Portworx volume usage
