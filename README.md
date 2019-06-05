@@ -8,9 +8,10 @@
     - [FEATURES](#features)
     - [REQUIREMENTS](#requirements)
     - [INSTALLATION](#installation)
-    - [MONITORING AND ALERTING](#monitoring-and-alerting)
+    - [MONITORING ALERTING AND LOGGING](#monitoring-alerting-and-logging)
         - [Monitoring](#monitoring)
         - [Alerting](#alerting)
+        - [Logging](#logging)
     - [SCALING](#scaling)
     - [NETWORK URLs](#network-urls)
     - [SCREENSHOTS](#screenshots)
@@ -179,7 +180,7 @@ ansible-playbook -i clusters/swarmstack [playbooks/swarmstack.yml](https://githu
 
 ---
 
-## MONITORING AND ALERTING
+## MONITORING ALERTING AND LOGGING
 
 ### Monitoring
 
@@ -230,6 +231,10 @@ If you need to connect to a service that isn't supported natively by Alertmanage
 One option would be to configure a bot listening for alerts from Alertmanager instances (you could use it also as an alerting target for your code as well). Upon receiving alerts via a web server port, the bot would then relay them to an instant-message destination. swarmstack builds a Docker image of Errbot, one of many bot programs that can provide a conduit between receiving a webhook, processing the received data, and then connecting to something else (in this case, instant-messaging networks) and relaying the message to a recipient or a room's occupants. If this sounds like the option for you, please see the following project:
 
 [https://github.com/swarmstack/errbot-docker](https://github.com/swarmstack/errbot-docker)
+
+### Logging
+
+There is an adjunct [https://github.com/swarmstack/loki](https://github.com/swarmstack/loki) project that can be used to quickly turn up an instance of Grafana Loki, which your swarmstack Grafana instance can configure as a data source. By default, this project will feed the stdout and stderr of all of your Docker swarm containers into Loki (using a promtail container running on each node). Loki can also be fed directly by your own applications, or via Fluentd / Fluent Bit or other logging facilities.
 
 ---
 
