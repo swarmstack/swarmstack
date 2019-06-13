@@ -352,3 +352,5 @@ Thanks to Mark Sullivan at Cisco for his work on the Cisco Webex Teams backend f
 Thanks goes to the team at Portworx for their excellent storage product and support.
 
 Thanks to Shannon Wynter for Caddy re-authentication fixes for LDAP.
+
+Thanks to Nils Laumaillé for [TeamPass](https://teampass.net) - Managing passwords in a collaborative way - [swarmstack/teampass](https://github.com/swarmstack/teampass)
