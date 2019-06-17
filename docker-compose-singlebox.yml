@@ -338,7 +338,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.38
+    image: lmierzwa/karma:v0.39
     configs:
       - source: karma-conf
         target: /karma.yaml
