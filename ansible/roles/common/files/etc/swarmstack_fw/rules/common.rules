@@ -1,7 +1,11 @@
 # THIS FILE IS MANAGED BY ANSIBLE, LOCAL EDITS WILL BE REPLACED
 
+
 # Allow existing (established / related) connections without restriction
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Drop TCP packets where the MSS is less than 500 (CVE-2019-11479)
+-A INPUT -p tcp -m tcpmss --mss 1:500 -j DROP
 
 # Allow loopback traffic
 -A INPUT -i lo -j ACCEPT
