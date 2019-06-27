@@ -16,7 +16,7 @@
     when: "inventory_hostname == SWARMJOIN"
 
   - name: Install requisite packages on all hosts (NetData)
-    yum: name=libuuid-devel,zlib-devel state=latest
+    yum: name=libuuid-devel,zlib-devel,git,Judy-devel,autoconf,autoconf-archive,autogen,automake,gcc,libmnl-devel,libuv-devel,lz4-devel,nmap-ncat,openssl-devel state=latest
 
 ### INSTALL/UPDATE NETDATA ON ALL HOSTS
   - name: Determine if NetData is currently installed and version
