@@ -234,7 +234,7 @@ One option would be to configure a bot listening for alerts from Alertmanager in
 
 ### Logging
 
-There is an adjunct [https://github.com/swarmstack/loki](https://github.com/swarmstack/loki) project that can be used to quickly turn up an instance of Grafana Loki, which your swarmstack Grafana instance can configure as a data source. By default, this project will feed the stdout and stderr of all of your Docker swarm containers into Loki (using a promtail container running on each node). Loki can also be fed directly by your own applications, or via Fluentd / Fluent Bit or other logging facilities.
+There is an adjunct [https://github.com/swarmstack/loki](https://github.com/swarmstack/loki) project that can be used to quickly turn up an instance of Grafana Loki, which your swarmstack or other Grafana instance can configure as a data source. By default, this project will feed the stdout and stderr of all of your Docker swarm containers into Loki (using the loki-docker-driver Docker plugin on each node). Loki can also be fed directly by your own applications, via Fluentd / Fluent Bit, or via other logging facilities.
 
 ---
 
