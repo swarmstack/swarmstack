@@ -150,7 +150,7 @@ services:
     image: prom/alertmanager:v0.17.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
+      - '--storage.path=/home'
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=alertmanagerB:9094'
@@ -183,7 +183,7 @@ services:
     image: prom/alertmanager:v0.17.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
+      - '--storage.path=/home'
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=alertmanager:9094'
@@ -288,7 +288,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   grafana:
-    image: grafana/grafana:6.2.4
+    image: grafana/grafana:6.2.5
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json

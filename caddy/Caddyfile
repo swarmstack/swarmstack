@@ -1,29 +1,43 @@
 :80 {
+
+  log / stdout "{combined}"
+  errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 80
   }
+
   tls off
 
   redir https://{hostonly}{uri}
 }
 
 {$CADDY_URL}:443 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 443
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   root /www
 }
 
 {$CADDY_URL}:3000 {
-  tls {$CADDY_CERT}
+
+  log / stdout "{combined}"
+  errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 3000
   }
-  errors stderr
+
+  tls {$CADDY_CERT}
 
   proxy / grafana:3000 {
     transparent
@@ -32,10 +46,14 @@
 }
 
 {$CADDY_URL}:9000 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9000
   }
+
   tls {$CADDY_CERT}
 
   proxy / portainer:9000 {
@@ -45,31 +63,42 @@
 }
 
 {$CADDY_URL}:9090 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9090
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   proxy / prometheus:9090 {
     transparent
   }
 }
 
 {$CADDY_URL}:9091 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9091
   }
+
   tls {$CADDY_CERT}
 
   basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
+
   proxy /metrics/job/ pushgateway:9091 {
     transparent
   }
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   proxy / pushgateway:9091 {
     except /metrics/job/
     transparent
@@ -77,49 +106,68 @@
 }
 
 {$CADDY_URL}:9093 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9093
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   proxy / alertmanager:9093 {
     transparent
   }
 }
 
 {$CADDY_URL}:9094 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9094
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   proxy / karma:8080 {
     transparent
   }
 }
 
 {$CADDY_URL}:9095 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9095
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
+
   proxy / alertmanagerB:9093 {
     transparent
   }
 }
 
 {$CADDY_URL}:19999 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 19999
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -142,4 +190,5 @@
 #    without /swarmhost3
 #    transparent
 #  }
+
 }
