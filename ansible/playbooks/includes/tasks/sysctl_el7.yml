@@ -1,5 +1,13 @@
 ---
 
+  - name: Disable TCP SACK per CVE-2019-11479
+    sysctl:
+      name: net.ipv4.tcp_sack
+      value: 0
+      sysctl_set: yes
+      state: present
+      reload: no
+
 # Per https://www.emc.com/collateral/technical-documentation/fine-tuning-scaleio-performance.pdf
 
   - name: set sysctl net.ipv4.tcp_slow_start_after_idle
