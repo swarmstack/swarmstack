@@ -240,6 +240,8 @@ There is an adjunct [https://github.com/swarmstack/loki](https://github.com/swar
 
 ## SCALING
 
+### Prometheus
+
 The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. Prometheus itself is not designed for long-term storage and retrival of data, but can work with several storage back-ends as remote-read and remote-write targets. If you find that you need to perform queries on metrics data older than a few days, you should explore deploying other options for long-term storage and retrieval of Prometheus data. Prometheus can optionally replicate metrics stored within it's own internal time-series database (tsdb) out to one or more external tsdb such as InfluxDB and supports efficient remote-read and write from these longer-term storage sources.
 
 InfluxDB and Postgres (even streaming read-replication) can be used to persist metrics data in a way that Prometheus can consume it, other [storage back-ends for Prometheus](https://prometheus.io/docs/operating/integrations/) are also available. The project [swarmstack/influxdb](https://github.com/swarmstack/influxdb) can help swarmstack users quickly bring up an optional InfluxDB remote read-write back-end for hosting longer-term Prometheus metrics.
@@ -248,7 +250,14 @@ You might instead choose to scale your Prometheus using a federated architecture
 
 If you want to centralize your Prometheus data-sources rather than federating them, scalable designs such as [Cortex](https://github.com/cortexproject/cortex) are available for self-hosting. Commerical offerings such as [GrafanaCloud - Hosted Metrics](https://grafana.com/cloud/metrics), [InfluxDB with HA](https://docs.openstack.org/developer/performance-docs/methodologies/monitoring/influxha.html), and [Weave Cloud](https://www.weave.works/product/cloud/) are also available.
 
+### Trickster
+
+By default, Grafana will query the Prometheus data source directly. As you add dashboards that might requiring (re)querying hundreds of metrics per refresh period, per viewer, this can lead to higher load on your Prometheus database. There is an adjunct [https://github.com/swarmstack/trickster](https://github.com/swarmstack/trickster) project that can act as cache for Prometheus metrics for low-resolution dashboards or other software where caching and coalescing of metrics data may be acceptable.
+
+---
+
 As your needs for this stack grow, you may find yourself replacing some of the services within this stack with your own tools. Hope this got you or your team heading in a great direction running applications at scale. Kubernetes is also your friend, and should be used where needed to scale parts that need to scale beyond [several](https://mobile.twitter.com/scaleway/status/758982324553867267) dozen swarm nodes. You might just choose to deploy some applications (such as Cortex) on Kubernetes, and also run some of your services or development on Docker swarm. Both can be used together to solve your needs.
+
 
 ## NETWORK URLs
 
