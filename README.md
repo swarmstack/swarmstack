@@ -252,7 +252,7 @@ If you want to centralize your Prometheus data-sources rather than federating th
 
 ### Trickster
 
-By default, Grafana will query the Prometheus data source directly. As you add dashboards that might requiring (re)querying hundreds of metrics per refresh period, per viewer, this can lead to higher load on your Prometheus database. There is an adjunct [https://github.com/swarmstack/trickster](https://github.com/swarmstack/trickster) project that can act as cache for Prometheus metrics for low-resolution dashboards or other software where caching and coalescing of metrics data may be acceptable.
+By default, Grafana will query the Prometheus data source directly. As you add dashboards that might require (re)querying hundreds of metrics per refresh period, per viewer, this can lead to higher load on your Prometheus database. There is an adjunct [https://github.com/swarmstack/trickster](https://github.com/swarmstack/trickster) project that can act as cache for Prometheus metrics for low-resolution dashboards or other software where caching and coalescing of metrics data may be acceptable.
 
 ---
 
