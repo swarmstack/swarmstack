@@ -121,13 +121,26 @@
     register: KernelUpdateAvailable
     changed_when: false
 
-  - name: ensure docker service is disabled and stopped if rebooting due to kernel upgrade
-    systemd: name=docker state=stopped enabled=no masked=no
-    when: "'swarm' in group_names and KernelUpdateAvailable.stdout.find('upgrade') != -1"
+  - name: drain swarm node via manager node if rebooting due to kernel or Docker update
+    command: "docker node update --availability drain {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'swarm' in group_names and ( KernelUpdateAvailable.stdout.find('upgrade') != -1 or DockerUpdateAvailable.stdout.find('upgrade') != -1)"
 
-  - name: ensure docker service is disabled and stopped if upgrading
-    systemd: name=docker state=stopped enabled=no masked=no
-    when: "'swarm' in group_names and DockerUpdateAvailable.stdout.find('upgrade') != -1"
+  - name: ensure docker service is disabled and stopped if rebooting due to kernel or Docker upgrade
+    systemd: name=docker enabled=no masked=no
+    when: "'swarm' in group_names and ( KernelUpdateAvailable.stdout.find('upgrade') != -1 or DockerUpdateAvailable.stdout.find('upgrade') != -1)"
+
+  - name: wait until all containers are stopped on this node or 60 seconds elapse if this node is being drained
+    shell: "docker ps | wc"
+    register: dockerlines
+    until: dockerlines.stdout.find("  1  ") != -1
+    retries: 4
+    delay: 15
+    ignore_errors: yes
+    when: "'swarm' in group_names and ( KernelUpdateAvailable.stdout.find('upgrade') != -1 or DockerUpdateAvailable.stdout.find('upgrade') != -1)"
 
   - name: upgrade docker if update available
     yum: name=docker-ce state=latest
@@ -212,18 +225,25 @@
     when: "'portworx' in group_names"
 
   - name: wait until this node's space is available again to Portworx or 20 minutes elapses before moving on
-    shell: "/opt/pwx/bin/pxctl status || echo '  0 B  '"
+    shell: "/opt/pwx/bin/pxctl status || echo -e '\t\t0 B\t\t'"
     register: pxstatus
-    until: pxstatus.stdout.find("  0 B  ") == -1
-    retries: 10
-    delay: 120
+    until: pxstatus.stdout.find("\t\t0 B\t\t") == -1
+    retries: 20
+    delay: 60 
     ignore_errors: yes
     when: "'portworx' in group_names and pxctl_installed.stat.exists == True and reboot_hint.stdout.find('reboot') != -1"
 
   - name: ensure docker service is enabled and started
     systemd: name=docker state=started masked=no enabled=yes
-    register: DockerStarted
     when: "'swarm' in group_names"
+
+  - name: make swarm nodes not in drain group active via manager node
+    command: "docker node update --availability active {{inventory_hostname}}"
+    changed_when: false
+    ignore_errors: true
+    delegate_to: "{{SWARMJOIN}}"
+    delegate_facts: True
+    when: "'drain' not in group_names and 'swarm' in group_names"
 
   handlers:
 
@@ -336,4 +356,5 @@
     ignore_errors: true
     with_items: "{{ groups['drain'] }}"
     when: "'swarm' in group_names and inventory_hostname == SWARMJOIN"
+
 ...

@@ -96,7 +96,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.17.0
+    image: prom/alertmanager:v0.18.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/home'
@@ -132,7 +132,7 @@ services:
       - alertmanager:/alertmanager
 
   alertmanagerB:
-    image: prom/alertmanager:v0.17.0
+    image: prom/alertmanager:v0.18.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/home'
@@ -357,7 +357,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.10.0
+    image: prom/prometheus:v2.11.1
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'

@@ -344,7 +344,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-2GB' in group_names"
+    when: "'memory2GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -355,7 +355,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-2GB' in group_names"
+    when: "'memory2GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 539602 * 4096 = 2210209792
@@ -366,7 +366,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-4GB' in group_names"
+    when: "'memory4GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -377,7 +377,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-4GB' in group_names"
+    when: "'memory4GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 1079204 * 4096 = 4420419584
@@ -388,7 +388,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-8GB' in group_names"
+    when: "'memory8GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -399,7 +399,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-8GB' in group_names"
+    when: "'memory8GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 2158408 * 4096 = 8840839168
@@ -410,7 +410,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-16GB' in group_names"
+    when: "'memory16GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -421,7 +421,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-16GB' in group_names"
+    when: "'memory16GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 4316816 * 4096 = 17681678336
@@ -432,7 +432,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-32GB' in group_names"
+    when: "'memory32GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -443,7 +443,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-32GB' in group_names"
+    when: "'memory32GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 8633632 * 4096 = 35363356672
@@ -454,7 +454,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-64GB' in group_names"
+    when: "'memory64GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -465,7 +465,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-64GB' in group_names"
+    when: "'memory64GB' in group_names"
 
 # Controls the maximum number of shared memory segments, in pages (4096 bytes)
 # 12950448 * 4096 = 53045035008
@@ -476,7 +476,7 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-96GB' in group_names"
+    when: "'memory96GB' in group_names"
 
 # Controls the maximum shared segment size, in bytes
 # For x86_64 servers you generally want to set this to 1/2 physical ram
@@ -487,6 +487,6 @@
       sysctl_set: yes
       state: present
       reload: no
-    when: "'memory-96GB' in group_names"
+    when: "'memory96GB' in group_names"
 
 ...
