@@ -423,7 +423,7 @@ services:
       - net
 
   swarm-discovery-server:
-    image: jmendiara/prometheus-swarm-discovery:0.2.0
+    image: bborysenko/prometheus-swarm-discovery:0.3.0
     command:
       - server
       - -l=warn
@@ -437,7 +437,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   swarm-discovery-client:
-    image: jmendiara/prometheus-swarm-discovery:0.2.0
+    image: bborysenko/prometheus-swarm-discovery:0.3.0
     command:
       - client
       - -i=5
