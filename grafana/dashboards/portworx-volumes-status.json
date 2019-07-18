@@ -26,7 +26,6 @@
           "value": "current"
         }
       ],
-      "datasource": "Prometheus",
       "filterNull": false,
       "fontSize": "80%",
       "gridPos": {
@@ -196,7 +195,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 0,
       "fill": 0,
       "gridPos": {
@@ -283,7 +281,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "decimals": 0,
       "fill": 1,
       "gridPos": {
@@ -370,7 +367,6 @@
     },
     {
       "columns": [],
-      "datasource": null,
       "fontSize": "80%",
       "gridPos": {
         "h": 5,
@@ -557,7 +553,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -646,7 +641,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "decimals": 2,
       "fill": 1,
       "gridPos": {
@@ -740,7 +734,6 @@
           "value": "current"
         }
       ],
-      "datasource": "Prometheus",
       "description": "",
       "filterNull": false,
       "fontSize": "80%",
@@ -933,7 +926,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "decimals": 1,
       "fill": 1,
       "gridPos": {
@@ -1024,7 +1016,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -1119,7 +1110,6 @@
     },
     {
       "columns": [],
-      "datasource": "Prometheus",
       "filterNull": false,
       "fontSize": "80%",
       "gridPos": {
@@ -1306,7 +1296,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "gridPos": {
@@ -1394,7 +1383,6 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
       "decimals": 0,
       "fill": 1,
       "gridPos": {
@@ -1499,7 +1487,6 @@
             "$__all"
           ]
         },
-        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": true,
         "label": "Volume Name",
