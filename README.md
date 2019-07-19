@@ -291,7 +291,8 @@ DevOps Tool | Browser URL<br>(proxied by Caddy) | Purpose
 Security | Notes | Source / Image
 -------- | ----- | --------------
 [Caddy](https://caddyserver.com/) | Reverse proxy - see above for URLs | Source:[https://github.com/swarmstack/caddy](https://github.com/swarmstack/caddy)<br>Image:[https://hub.docker.com/r/swarmstack/caddy](https://hub.docker.com/r/swarmstack/caddy) no-stats-1.0.1
-[fail2ban](https://www.fail2ban.org) | Brute-force prevention | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
+[Docker Garbage Collection](https://docs.docker.com/config/pruning/) | Removes unused and expired Docker images, containers, and volumes | Source: [https://github.com/clockworksoul/docker-gc-cron](https://github.com/clockworksoul/docker-gc-cron)<br>Image:[https://hub.docker.com/r/clockworksoul/docker-gc-cron](https://hub.docker.com/r/clockworksoul/docker-gc-cron) latest
+[Fail2ban](https://www.fail2ban.org) | Brute-force prevention | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
 [iptables](https://en.wikipedia.org/wiki/Iptables) | Firewall management | [ansible/playbooks/firewall.yml](https://github.com/swarmstack/swarmstack/blob/master/ansible/playbooks/firewall.yml)
 
 ---

@@ -1,9 +1,16 @@
 #!/bin/bash
 
+# The Docker cleanup below is handled by the docker-gc-cron container
 #/bin/docker container prune -f > /dev/null 2>&1
 #/bin/docker volume prune -f > /dev/null 2>&1
 #/bin/docker image prune -a -f > /dev/null 2>&1
-/bin/docker system prune -a -f > /dev/null 2>&1
+#/bin/docker system prune -a -f > /dev/null 2>&1
+
 rm -rf /var/lib/osd/log/* >/dev/null 2>&1
 rm -rf /var/spool/abrt/vmcore* > /dev/null 2>&1
 rm -rf /var/crash/127* > /dev/null 2>&1
+/bin/journalctl --vacuum-size=100M 2>&1
+/bin/package-cleanup -y --quiet --leaves --exclude-bin 2>/dev/null | xargs yum remove -y 2>&1
+/bin/find /var/log | egrep '\.(log-)?[0-9]+$' | xargs rm -f 2>&1
+/bin/sleep 5
+/bin/yum clean all 2>&1; rm -rf /var/cache/yum/* 2>&1
