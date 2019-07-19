@@ -1,4 +1,4 @@
-<img align="right" src="https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png"> A starting point for the installation, maintenance, and monitoring of highly-available Docker swarm-based containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage, firewall management, HTTPS by default, LDAP and web-proxied network support, dynamic swarm service discovery, optional Errbot, and other HA and enterprise-grade features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
+<img align="right" src="https://raw.githubusercontent.com/swarmstack/swarmstack/master/documentation/logos/swarmstack150x150.png"> A starting point for the installation, maintenance, and monitoring of highly-available Docker swarm-based containerized applications. Features a modern DevOps toolset (Prometheus / Alertmanager / Grafana) for monitoring and alerting, persistent storage for your container workloads, firewall management, HTTPS by default, LDAP and web-proxied network support, dynamic swarm service discovery, and other HA and enterprise-grade features that your applications can take advantage of. Installation requires only cut and paste of a few commands and editing some documented files.
 
  
 <!-- TOC -->
@@ -37,7 +37,7 @@
 
 Easily deploy and update Docker swarm nodes as you scale up from at least (3) baremetal servers, AWS/GCE/etc instances, virtual machine(s) or just a single macOS laptop if you really need to, which will host your monitored containerized applications.
 
-Manage one or more Docker swarm host clusters via ansible playbooks that can _(optionally)_ help you install and maintain Docker swarm clusters and their nodes, automatically install [Portworx](https://portworx.com) Developer or Enterprise persistent storage for your application's HA container volumes replicated across your swarm nodes, and also automatically update firewall configurations on all of your nodes.
+Manage one or more Docker swarm clusters via ansible playbooks that can _(optionally)_ help you install and maintain Docker swarm clusters and their nodes, automatically install [Portworx](https://portworx.com) Developer or Enterprise persistent storage for your application's HA container volumes replicated across your swarm nodes, and also automatically update firewall configurations on all of your nodes.
 
 swarmstack includes a modern DevOps workflow for monitoring and alerting about your containerized applications running within Docker swarms, including monitoring and alerting of the cluster health itself as well as the health of your own applications. swarmstack installs and updates [Prometheus](https://github.com/prometheus/prometheus/blob/master/README.md) + [Grafana](https://grafana.com) + [Alertmanager](https://github.com/prometheus/alertmanager/blob/master/README.md). swarmstack also provides an optional installation of [Portworx](https://portworx.com) for persistent storage for containers such as databases that need storage that can move to another Docker swarm node instantly, or bring your own persistent storage layer for Docker (e.g. [RexRay](https://github.com/rexray/rexray), or use local host volumes and add placement constraints to _[docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)_) 
 
@@ -54,11 +54,18 @@ For an overview of the flow of metrics into Prometheus, exploring metrics using 
 A set of ansible playbooks and a docker-compose stack that:
 
 - Tunes EL7 [sysctls](https://raw.githubusercontent.com/swarmstack/swarmstack/master/ansible/playbooks/includes/tasks/sysctl_el7.yml) for optimal network performance
-- _(optional: docker)_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
-- _(optional: docker)_ Automatically prunes unused Docker containers / volumes / images from nodes
-- _(optional: storage)_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
-- _(optional: storage)_ Installs and configures HA Portworx storage cluster: default is PX Developer, change to PX Enterprise in portworx.yml (used to replicate persistent container volumes across Docker nodes)
-- _(swarmstack: devops)_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, karma, and Portainer containers, and also installs NetData under systemd on each host. All tools are secured using HTTPS by a Caddy reverse proxy. Optional [Errbot](https://github.com/swarmstack/errbot-docker) to connect alerts to social rooms to not natively supported by Alertmanager
+- _(optional: Docker)_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
+- _(optional: etcd)_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
+- _(optional: Portworx)_ Installs and configures 3+ node Portworx high availability storage cluster. Default: px-dev (px-developer free license) ([licensing](https://docs.portworx.com/reference/knowledge-base/px-licensing/)), exceptionally stable
+- _(DevOps: swarmstack)_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, karma, and Portainer containers, and also installs NetData under systemd on each host. All tools are secured using HTTPS by a Caddy reverse-proxy.
+
+Optional
+
+- [Errbot](https://github.com/swarmstack/errbot-docker) - Connect alerts to social rooms to not already natively supported by Alertmanager
+- [InfluxDB](https://github.com/swarmstack/influxdb) - Useful for longer-term Prometheus storage/retrieval in certain workloads
+- [Loki](https://github.com/swarmstack/loki) - Like Prometheus but for logs
+- [TeamPass](https://github.com/swarmstack/teampass) - Secure collaborative team management for shared credentials
+- [Trickster](https://github.com/swarmstack/trickster) - In-memory Prometheus data cache for frequently re-requested tsdb blocks (accelerator for Grafana if you have popular dashboards)
 
 ---
 
@@ -99,7 +106,7 @@ There is a [docker-compose-singlebox.yml](https://github.com/swarmstack/swarmsta
 Using the free [Portworx PX-Developer](https://github.com/portworx/px-dev) version by default, swarmstack will install a storage cluster for each set of (3) hosts added to the cluster, which must provide a minimum 40GB (needed by swarmstack) up to the Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. Adding 1TB drives/partitions from each node would be optimal to fill out the 1TB of replicated space. You can contribute unused block device(s) or partition(s), adding more smaller SSDs on bare-metal or cloud-provider high-IOPS block devices would provide Portworx faster storage, but Portworx functions even across 3 VMs on the same machine each contributing storage from a single shared USB2 NAS, so scale your storage depending on your expected persistent-storage workloads. Block devices or partitions larger than 1TB can be contributed, but only 1TB of persistent storage will be available without licensing the PX-Enterprise version.
 
  
-When deploying the default Portworx PX-Developer version, or later adding more than 3 nodes in the Docker swarm, you'll add nodes in multiples of 3 and use _constraints_ such as _- node.label.storagegroup == RED_ to pin your individual services requiring persistent storage to one particular group of 3 hosts within the larger swarm cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. When choosing [Portworx PX-Enterprise](https://portworx.com/) during installation, or when bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes across the swarm cluster without regards to pinning them to certain nodes as when using the Portworx PX-Developer version. Only a subset of your application services will require persistent storage and will require manual pinning, including swarmstack, if you deploy more than 3 nodes. The Portworx storage space is available for your applications to use. Containers not requiring persistent storage can be scheduled across the entire swarm cluster.
+When deploying the default Portworx PX-Developer version, you'll add nodes in multiples of 3 and use _constraints_ such as _- node.label.storagegroup == RED_ to pin your individual services requiring persistent storage to one particular group of 3 hosts within the larger swarm cluster _(e.g. nodes 1 2 3, nodes 4 5 6,  etc)_. When choosing [Portworx PX-Enterprise](https://portworx.com/) during installation, or when bringing another storage solution, these limitations may no longer apply and a single larger storage cluster could be made available simultaneously to more nodes being added later to the cluster without regard to pinning storage to groups of 3 nodes as px-dev supports. Only a subset of your application services will generally require persistent storage and will require  a decision on which cluster to pin a service to. The remainder of the Portworx storage space is available for your applications to use. Containers not requiring persistent storage can be scheduled across the entire swarm cluster.
 
 ---
  
@@ -147,9 +154,9 @@ Edit these (4) files: | |
 
 All of the playbooks below are idempotent, will only take actions on hosts  where necessary, and can be safely re-run as needed, such as when changing cluster parameters or adding storage or additional nodes.
 
-After execution of the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD set in [ansible/clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack). You can update the ADMIN_PASSWORD later by executing _docker stack rm swarmstack_ (persistent data volumes will be preserved) and then re-running the swarmstack.yml playbook. 
+After execution of the swarmstack.yml playbook, you'll log into most of the tools as 'admin' and the ADMIN_PASSWORD set in [ansible/clusters/swarmstack](https://github.com/swarmstack/swarmstack/blob/master/ansible/clusters/swarmstack). You can update the ADMIN_PASSWORD later by executing _docker stack rm swarmstack_ (persistent data volumes will be preserved) and then re-deploy the swarmstack [docker-compose.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose.yml)
 
-Instances such as Grafana and Portainer will save credential configuration in their respective persistent data volumes. These volumes can be manually removed and would be automatically re-initialized if you ever encounter issues with a particular tool container. You would lose any historical information such as metrics if you choose to initialize an application by executing _docker volume rm swarmstack_volumename_ before re-running the swarmstack.yml playbook.
+Instances such as Grafana and Portainer will save credential configuration in their respective persistent data volumes. These volumes can be manually removed if required and would be automatically re-initialized the next time the swarmstack compose file is deployed. You would lose any historical information such as metrics if you choose to initialize an application by executing _docker volume rm swarmstack_volumename_ before re-running the swarmstack.yml playbook.
 
 ---
 
