@@ -56,7 +56,7 @@ A set of ansible playbooks and a docker-compose stack that:
 - Tunes EL7 [sysctls](https://raw.githubusercontent.com/swarmstack/swarmstack/master/ansible/playbooks/includes/tasks/sysctl_el7.yml) for optimal network performance
 - _(optional: Docker)_ Installs and configures a 3+ node Docker swarm cluster from minimal EL7 hosts (or use existing swarm)
 - _(optional: etcd)_ Installs and configures a 3-node etcd cluster, used by Portworx for cluster metadata
-- _(optional: Portworx)_ Installs and configures 3+ node Portworx high availability storage cluster. Default: px-dev (px-developer free license) ([licensing](https://docs.portworx.com/reference/knowledge-base/px-licensing/)), exceptionally stable
+- _(optional: Portworx)_ Installs and configures 3+ node Portworx high availability storage cluster. Default: px-dev (px-developer free license) ([licensing](https://docs.portworx.com/reference/knowledge-base/px-licensing/)), 5M+ pulls and exceptionally stable
 - _(DevOps: swarmstack)_ Configures and deploys the swarmstack tool chain, including Prometheus and Pushgateway, redundant Alertmanager instances, Grafana, karma, and Portainer containers, and also installs NetData under systemd on each host. All tools are secured using HTTPS by a Caddy reverse-proxy.
 
 Optional
