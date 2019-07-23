@@ -16,7 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1562212727966,
+  "id": 5,
+  "iteration": 1563897900782,
   "links": [],
   "panels": [
     {
@@ -682,10 +683,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(5, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}) by (container_label_com_docker_swarm_service_name))",
+          "expr": "topk(5, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}) by (instance, container_label_com_docker_swarm_service_name))",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
+          "legendFormat": "{{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "A",
           "step": 2
         }
@@ -776,7 +777,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(10, sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (chart,instance)) > 5",
+          "expr": "topk(5, sum(netdata_cgroup_cpu_percentage_average{instance=~\"($node_id)\"}) by (chart,instance)) > 10",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -873,7 +874,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(netdata_disk_io_KiB_persec_average{family=~\"/var.*\",dimension=\"reads\",instance=~\"($node_id)\"} ) by (instance) > 0",
+          "expr": "sum(netdata_disk_io_KiB_persec_average{family=~\"/pxd.*|/var.*\",dimension=\"reads\",instance=~\"($node_id)\"} ) by (instance) > 0",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -964,10 +965,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3, rate(container_fs_reads_bytes_total{instance=~\"($node_id)\"}[1m])) > 0",
+          "expr": "topk(1, sum(increase(container_fs_reads_bytes_total{instance=~\"($node_id)\",container_label_com_docker_swarm_service_name=~\".+\"}[1m])) by (instance,container_label_com_docker_swarm_service_name)) > 0",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{id}}",
+          "legendFormat": "{{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "B"
         }
       ],
@@ -1150,11 +1151,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3, rate(container_fs_writes_bytes_total{instance=~\"($node_id)\"}[1m]) ) > 0",
+          "expr": "topk(1, sum(increase(container_fs_writes_bytes_total{instance=~\"($node_id)\",container_label_com_docker_swarm_service_name=~\".+\"}[1m])) by (instance,container_label_com_docker_swarm_service_name)) > 0",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": "{{instance}} {{id}}",
+          "legendFormat": "{{instance}} {{container_label_com_docker_swarm_service_name}}",
           "refId": "A"
         }
       ],
@@ -1526,17 +1527,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1,increase(container_network_receive_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 0 )",
+          "expr": "topk(1,increase(container_network_receive_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 10000000 )",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "IN: {{instance}} {{container_label_com_docker_swarm_service_name}}",
+          "legendFormat": "IN: {{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "A"
         },
         {
-          "expr": "- topk(1,increase(container_network_transmit_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 0 )",
+          "expr": "- topk(1,increase(container_network_transmit_bytes_total{name=~\".+\",instance=~\"($node_id)\"}[1m]) > 10000000 )",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "OUT: {{instance}} {{task}}",
+          "legendFormat": "OUT: {{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "B"
         }
       ],
@@ -1820,22 +1821,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 8 > 20000 ) by (container_label_com_docker_swarm_service_name,instance)) ",
+          "expr": "topk(1, sum(increase(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"($node_id)\"}[1m]) > 10000000 ) by (instance, container_label_com_docker_swarm_service_name)) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "IN: {{instance}} {{container_label_com_docker_swarm_service_name}}",
+          "legendFormat": "IN: {{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "A",
           "step": 2
         },
         {
-          "expr": "- topk(1, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name!~\"\",instance=~\"($node_id)\"}[1m]) * 8 > 20000 ) by (container_label_com_docker_swarm_service_name,instance))",
+          "expr": "- topk(1, sum(increase(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"($node_id)\"}[1m])> 10000000 ) by (instance, container_label_com_docker_swarm_service_name))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "OUT: {{instance}} {{container_label_com_docker_swarm_service_name}}",
+          "legendFormat": "OUT: {{instance}} - {{container_label_com_docker_swarm_service_name}}",
           "refId": "B"
         }
       ],
@@ -2593,7 +2594,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -2624,5 +2625,5 @@
   "timezone": "",
   "title": "Containers",
   "uid": "zr_baSRmk",
-  "version": 11
+  "version": 6
 }
