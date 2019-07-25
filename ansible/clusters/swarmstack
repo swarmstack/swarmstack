@@ -45,7 +45,7 @@ LDAP_ENABLED=false
 
 # Set PORTWORX_LICENSE to px-enterprise to start a 30 day evaluation of Portworx's enterprise version, later downgrade to px-dev is not possible
 PORTWORX_LICENSE=px-dev
-PORTWORX_VERSION=2.1.1
+PORTWORX_VERSION=2.1.2
 
 PROXY_ENABLED=false
 #PROXY_HTTP=http://proxy.example.com:80
