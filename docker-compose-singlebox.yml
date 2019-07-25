@@ -465,7 +465,7 @@ services:
       - prometheus:/prometheus
 
   pushgateway:
-    image: prom/pushgateway:v0.8.0
+    image: prom/pushgateway:v0.9.0
     deploy:
       mode: replicated
       replicas: 1
