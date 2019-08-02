@@ -12,9 +12,6 @@
     yum: name=ansible,git,httpd-tools state=latest
     when: "inventory_hostname == SWARMJOIN"
 
-  - name: Install requisite packages on all hosts (NetData)
-    yum: name=libuuid-devel,zlib-devel,git,Judy-devel,autoconf,autoconf-archive,autogen,automake,gcc,libmnl-devel,libuv-devel,lz4-devel,nmap-ncat,openssl-devel state=latest
-
 ### INSTALL/UPDATE NETDATA ON ALL HOSTS
   - name: install packagecloud.io yum repo
     get_url:
