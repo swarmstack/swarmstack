@@ -13,13 +13,13 @@
     when: "inventory_hostname == SWARMJOIN"
 
 ### INSTALL/UPDATE NETDATA ON ALL HOSTS
-  - name: install packagecloud.io yum repo
+  - name: Download packagecloud.io yum repo installer
     get_url:
       url: "https://packagecloud.io/install/repositories/netdata/netdata/script.rpm.sh"
       dest: "/tmp/netdata-script.rpm.sh"
     changed_when: false
 
-  - name: execute /tmp/netdata-script.rpm.sh
+  - name: Execute packagecloud.io yum repo installer
     shell: cat /tmp/netdata-script.rpm.sh | /bin/bash
     register: netdata_installed
     changed_when: False
@@ -36,12 +36,19 @@
     register: NetdataCommented
     when: NetdataInstalled.changed == True
 
-  - name: systemctl restart netdata
+  - name: ensure that netdata user is in adm group so it can read logs such as /var/log/fail2ban.log
+    user:
+      name: netdata
+      groups: adm
+      append: yes
+    register: NetdataGroup
+
+  - name: systemctl restart netdata if needed
     systemd:
       state: restarted
       daemon_reload: no
       name: netdata
-    when: NetdataInstalled.changed == True and NetdataCommented.changed == True
+    when: NetdataInstalled.changed == True and (NetdataCommented.changed == True or NetdataGroup.changed == True)
 
 ### DOWNLOAD SWARMSTACK FILES TO SWARMJOIN HOST, COPY SOME LOCAL FILES TO SWARMJOIN HOST
   - name: Use git to download latest swarmstack
