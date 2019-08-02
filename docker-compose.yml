@@ -345,7 +345,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.41
+    image: lmierzwa/karma:v0.42
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -440,7 +440,7 @@ services:
       - swarm-endpoints:/etc/swarm-endpoints/:ro
 
   pushgateway:
-    image: prom/pushgateway:v0.9.0
+    image: prom/pushgateway:v0.9.1
     deploy:
       labels:
         prometheus.enable: "true"

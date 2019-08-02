@@ -2,9 +2,6 @@
 - hosts: all
   gather_facts: true
   remote_user: root
-  vars:
-    NETDATA_VERSION: netdata v1.15.0
-    NETDATA_BRANCH: v1.15.0
 
   roles:
   - ../roles/common
@@ -19,24 +16,35 @@
     yum: name=libuuid-devel,zlib-devel,git,Judy-devel,autoconf,autoconf-archive,autogen,automake,gcc,libmnl-devel,libuv-devel,lz4-devel,nmap-ncat,openssl-devel state=latest
 
 ### INSTALL/UPDATE NETDATA ON ALL HOSTS
-  - name: Determine if NetData is currently installed and version
-    shell: if [ -f /sbin/netdata ]; then /sbin/netdata -v; else echo "not-installed"; fi
-    args:
-      executable: /bin/bash
+  - name: install packagecloud.io yum repo
+    get_url:
+      url: "https://packagecloud.io/install/repositories/netdata/netdata/script.rpm.sh"
+      dest: "/tmp/netdata-script.rpm.sh"
+    changed_when: false
+
+  - name: execute /tmp/netdata-script.rpm.sh
+    shell: cat /tmp/netdata-script.rpm.sh | /bin/bash
     register: netdata_installed
     changed_when: False
 
-  - name: Install or update NetData
-    shell: rm -rf /tmp/netdata-install; mkdir -p /tmp/netdata-install; (cd /tmp/netdata-install; git clone --single-branch --branch {{NETDATA_BRANCH}} https://github.com/netdata/netdata.git --depth=1 && cd netdata; ./netdata-installer.sh --dont-wait) && rm -rf /tmp/netdata-install
-    args:
-      warn: no
-      executable: /bin/bash
-    ignore_errors: true
-    changed_when: False
-    when: "netdata_installed.stdout != NETDATA_VERSION"
+  - name: Install Netdata
+    yum: name=netdata state=latest
+    register: NetdataInstalled
 
-  - name: Ensure NetData is enabled and started
-    systemd: name=netdata state=started enabled=yes masked=no
+  - name: Comment out bind port in /etc/netdata/netdata.conf
+    replace:
+      path: /etc/netdata/netdata.conf
+      regexp: '^([\s]*)bind to ='
+      replace: '\g<1>#bind to = localhost'
+    register: NetdataCommented
+    when: NetdataInstalled.changed == True
+
+  - name: systemctl restart netdata
+    systemd:
+      state: restarted
+      daemon_reload: no
+      name: netdata
+    when: NetdataInstalled.changed == True and NetdataCommented.changed == True
 
 ### DOWNLOAD SWARMSTACK FILES TO SWARMJOIN HOST, COPY SOME LOCAL FILES TO SWARMJOIN HOST
   - name: Use git to download latest swarmstack
