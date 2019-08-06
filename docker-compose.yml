@@ -286,7 +286,7 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
-    image: grafana/grafana:6.2.5
+    image: grafana/grafana:6.3.0
     configs:
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
