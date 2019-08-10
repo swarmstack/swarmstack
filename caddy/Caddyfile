@@ -50,11 +50,14 @@
   log / stdout "{combined}"
   errors stderr
 
-  prometheus 0.0.0.0:9180 {
-    hostname 9000
-  }
+  # Disable prometheus module due to https://github.com/miekg/caddy-prometheus/issues/43
+  #prometheus 0.0.0.0:9180 {
+  #  hostname 9000
+  #}
 
-  tls {$CADDY_CERT}
+  tls {$CADDY_CERT} {
+    alpn http/1.1
+  }
 
   proxy / portainer:9000 {
     transparent

@@ -1,13 +1,22 @@
 :80 {
+
+  log / stdout "{combined}"
+  errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 80
   }
+
   tls off
+
   redir https://{hostonly}{uri}
 }
 
 {$CADDY_URL}:443 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 443
   }
@@ -18,10 +27,14 @@
 }
 
 {$CADDY_URL}:3000 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 3000
   }
+
   tls {$CADDY_CERT}
 
   proxy / grafana:3000 {
@@ -31,11 +44,18 @@
 }
 
 {$CADDY_URL}:9000 {
+
+  log / stdout "{combined}"
   errors stderr
-  prometheus 0.0.0.0:9180 {
-    hostname 9000
+
+  # Disable prometheus module due to https://github.com/miekg/caddy-prometheus/issues/43
+  #prometheus 0.0.0.0:9180 {
+  #  hostname 9000
+  #}
+
+  tls {$CADDY_CERT} {
+    alpn http/1.1
   }
-  tls {$CADDY_CERT}
 
   proxy / portainer:9000 {
     transparent
@@ -44,10 +64,14 @@
 }
 
 {$CADDY_URL}:9090 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9090
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -57,10 +81,14 @@
 }
 
 {$CADDY_URL}:9091 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9091
   }
+
   tls {$CADDY_CERT}
 
   basicauth /metrics/job/ {$PUSH_USER} {$PUSH_PASSWORD}
@@ -76,10 +104,14 @@
 }
 
 {$CADDY_URL}:9093 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9093
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -89,10 +121,14 @@
 }
 
 {$CADDY_URL}:9094 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9094
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -102,10 +138,14 @@
 }
 
 {$CADDY_URL}:9095 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 9095
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
@@ -115,14 +155,17 @@
 }
 
 {$CADDY_URL}:19999 {
+
+  log / stdout "{combined}"
   errors stderr
+
   prometheus 0.0.0.0:9180 {
     hostname 19999
   }
+
   tls {$CADDY_CERT}
 
   basicauth / {$ADMIN_USER} {$ADMIN_PASSWORD}
-
   proxy /swarmhost1 http://10.0.13.2:19999/ {
     without /swarmhost1
     transparent

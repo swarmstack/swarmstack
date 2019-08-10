@@ -328,7 +328,7 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
-    image: grafana/grafana:6.3.0
+    image: grafana/grafana:6.3.2
     configs:
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
@@ -378,7 +378,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.42
+    image: lmierzwa/karma:v0.43
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -398,7 +398,7 @@ services:
       - net
 
   portainer:
-    image: portainer/portainer:1.21.0
+    image: portainer/portainer:1.22.0
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     deploy:
       mode: replicated
@@ -412,7 +412,7 @@ services:
       - portainer_certs:/certs
 
   portainer-agent:
-    image: portainer/agent:1.3.0
+    image: portainer/agent:1.4.0
     deploy:
       mode: global
       placement:
