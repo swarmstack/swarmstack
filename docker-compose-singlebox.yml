@@ -153,7 +153,7 @@ services:
     image: prom/alertmanager:v0.18.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/home'
+      - '--storage.path=/alertmanager'
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=alertmanagerB:9094'
@@ -186,7 +186,7 @@ services:
     image: prom/alertmanager:v0.18.0
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/home'
+      - '--storage.path=/alertmanager'
       - '--cluster.listen-address=0.0.0.0:9094'
       - '--cluster.advertise-address=:9094'
       - '--cluster.peer=alertmanager:9094'
