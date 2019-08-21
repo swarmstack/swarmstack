@@ -171,7 +171,7 @@ services:
       - alertmanagerB:/alertmanager
 
   caddy:
-    image: swarmstack/caddy:no-stats-1.0.1
+    image: swarmstack/caddy:no-stats-1.0.3
     configs:
       - source: caddy_config
         target: /etc/Caddyfile
@@ -286,7 +286,7 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
-    image: grafana/grafana:6.3.2
+    image: grafana/grafana:6.3.3
     configs:
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
@@ -396,7 +396,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.11.1
+    image: prom/prometheus:v2.12.0
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
