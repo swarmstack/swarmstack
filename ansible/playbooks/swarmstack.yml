@@ -46,6 +46,7 @@
   - name: systemctl restart netdata if needed
     systemd:
       state: restarted
+      enabled = true
       daemon_reload: no
       name: netdata
     when: NetdataInstalled.changed == True and (NetdataCommented.changed == True or NetdataGroup.changed == True)
