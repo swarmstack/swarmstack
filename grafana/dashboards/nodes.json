@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1563477643010,
+  "iteration": 1566951399084,
   "links": [],
   "panels": [
     {
@@ -180,7 +180,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Total Nodes",
+      "title": "Nodes",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -268,7 +268,7 @@
       "thresholds": "",
       "timeFrom": "1m",
       "timeShift": null,
-      "title": "Total CPUs",
+      "title": "CPUs",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -356,7 +356,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Total Memory",
+      "title": "Memory",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -515,7 +515,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{job=~\"dockerd-($node_id)\"}[5m]) ) )",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total[5m]) ) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -541,11 +541,12 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 10,
       "gridPos": {
         "h": 5,
         "w": 8,
@@ -568,7 +569,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -645,6 +648,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -656,7 +660,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
@@ -667,7 +671,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -710,7 +716,7 @@
           "decimals": 0,
           "format": "decgbytes",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -736,6 +742,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -759,7 +766,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -802,7 +811,7 @@
           "decimals": 0,
           "format": "decgbytes",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -828,6 +837,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 10,
       "gridPos": {
         "h": 3,
         "w": 4,
@@ -848,11 +858,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null as zero",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -864,7 +876,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "ceil(sum(netdata_disk_ops_operations_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\"}))",
+          "expr": "ceil(sum(netdata_disk_ops_operations_persec_average{family!=\"/etc/resolv.conf\",dimension=\"reads\"})) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Reads",
@@ -895,7 +907,7 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": "0",
           "show": true
@@ -921,6 +933,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 10,
       "gridPos": {
         "h": 3,
         "w": 4,
@@ -938,11 +951,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -984,7 +999,7 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": null,
           "show": true
@@ -1010,6 +1025,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 10,
       "gridPos": {
         "h": 3,
         "w": 4,
@@ -1030,11 +1046,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null as zero",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -1077,7 +1095,7 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": "0",
           "show": true
@@ -1103,6 +1121,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 10,
       "gridPos": {
         "h": 3,
         "w": 4,
@@ -1114,17 +1133,20 @@
         "avg": false,
         "current": true,
         "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -1136,7 +1158,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_fs_writes_bytes_total{instance=~\"($node_id)\"}[1m]) ) by (instance)",
+          "expr": "sum(rate(container_fs_writes_bytes_total{instance=~\"($node_id)\"}[1m]) ) by (instance) > 0",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1167,7 +1189,7 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": "0",
           "show": true
@@ -1188,11 +1210,12 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 2,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 16,
@@ -1210,7 +1233,7 @@
         "min": false,
         "rightSide": true,
         "show": true,
-        "sort": "current",
+        "sort": "max",
         "sortDesc": true,
         "total": false,
         "values": true
@@ -1218,12 +1241,14 @@
       "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
-      "pointradius": 5,
-      "points": false,
+      "pointradius": 0.5,
+      "points": true,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -1231,7 +1256,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "{dimension=\"load1\",instance=~\"($node_id)\"}",
+          "expr": "{dimension=\"load1\",instance=~\"($node_id)\"} > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1288,6 +1313,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 4,
         "w": 8,
@@ -1308,7 +1334,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -1442,7 +1470,7 @@
           "step": 2
         }
       ],
-      "thresholds": "10,25,100",
+      "thresholds": "10,25",
       "timeFrom": "1m",
       "timeShift": null,
       "title": "Lowest CPU Free",
@@ -1519,7 +1547,7 @@
       "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, sum(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\".*\"}) by (instance))",
+          "expr": "bottomk(1, sum(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"($node_id)\"}) by (instance))",
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
@@ -1615,7 +1643,7 @@
           "step": 20
         }
       ],
-      "thresholds": "10,25,100",
+      "thresholds": "10,25",
       "title": "Lowest Memory",
       "transparent": true,
       "type": "singlestat",
@@ -1782,7 +1810,7 @@
           "step": 20
         }
       ],
-      "thresholds": "10,25,100",
+      "thresholds": "5,15",
       "title": "Lowest Free /",
       "transparent": true,
       "type": "singlestat",
@@ -1886,6 +1914,7 @@
       "dashes": false,
       "decimals": 2,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 16,
@@ -1903,7 +1932,7 @@
         "min": false,
         "rightSide": true,
         "show": true,
-        "sort": "current",
+        "sort": "max",
         "sortDesc": true,
         "total": false,
         "values": true
@@ -1912,7 +1941,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -1980,7 +2011,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2001,11 +2033,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2049,7 +2083,7 @@
           "decimals": 0,
           "format": "short",
           "label": "",
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -2074,7 +2108,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 2,
-      "fill": 1,
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2097,7 +2132,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2140,7 +2177,7 @@
           "decimals": 0,
           "format": "decmbytes",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -2165,7 +2202,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2186,11 +2224,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2202,7 +2242,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "- ceil(sum(netdata_disk_ops_operations_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) ) > 0",
+          "expr": "-ceil(sum(netdata_disk_ops_operations_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) ) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2259,7 +2299,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 2,
-      "fill": 1,
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2284,7 +2325,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2298,7 +2341,7 @@
         {
           "expr": "netdata_system_ram_MiB_average{dimension=\"used\",instance=~\"($node_id)\"}",
           "format": "time_series",
-          "intervalFactor": 4,
+          "intervalFactor": 10,
           "legendFormat": "Memory: {{instance}}",
           "refId": "A",
           "step": 2
@@ -2327,7 +2370,7 @@
         {
           "format": "decmbytes",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -2353,6 +2396,7 @@
       "dashLength": 10,
       "dashes": false,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 3,
         "w": 11,
@@ -2375,7 +2419,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2417,7 +2463,7 @@
           "decimals": 0,
           "format": "percent",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -2442,7 +2488,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 9,
@@ -2463,11 +2510,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2511,7 +2560,7 @@
           "decimals": 0,
           "format": "percent",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -2536,7 +2585,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 1,
+      "fill": 0,
+      "fillGradient": 1,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2557,8 +2607,10 @@
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null as zero",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2567,7 +2619,7 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": true,
+      "steppedLine": false,
       "targets": [
         {
           "expr": "sum(netdata_cgroup_mem_MiB_average{instance=~\"($node_id)\"}) by (instance)",
@@ -2626,6 +2678,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 11,
@@ -2645,10 +2698,12 @@
         "values": true
       },
       "lines": false,
-      "linewidth": 2,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2656,8 +2711,8 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "stack": true,
+      "steppedLine": true,
       "targets": [
         {
           "expr": "netdata_net_net_kilobits_persec_average{family=~\"eth.*|en.*\",dimension=\"received\",instance=~\"($node_id)\"} > 0",
@@ -2724,6 +2779,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 9,
@@ -2744,11 +2800,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2792,7 +2850,7 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -2818,6 +2876,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -2840,7 +2899,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2910,6 +2971,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 9,
@@ -2930,11 +2992,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -2946,7 +3010,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "- sum(netdata_disk_io_KiB_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) > 0",
+          "expr": "-sum(netdata_disk_io_KiB_persec_average{family!=\"/etc/resolv.conf\",dimension=\"writes\",instance=~\"($node_id)\"}) by (instance) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2977,7 +3041,7 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": "0",
           "show": true
@@ -3003,6 +3067,7 @@
       "dashes": false,
       "decimals": 1,
       "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 6,
         "w": 11,
@@ -3019,11 +3084,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3032,7 +3099,7 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
           "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"received\"}) by (instance) > 0",
@@ -3042,7 +3109,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"sent\"}) by (instance) < 0",
+          "expr": "-sum(netdata_net_net_kilobits_persec_average{chart=~\"cgroup_.*\", dimension=\"sent\"}) by (instance) < 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
@@ -3096,7 +3163,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 9,
@@ -3117,11 +3185,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3164,7 +3234,7 @@
           "decimals": 0,
           "format": "ms",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -3190,6 +3260,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -3212,7 +3283,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3280,7 +3353,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 9,
@@ -3299,11 +3373,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3346,7 +3422,7 @@
           "decimals": 0,
           "format": "ms",
           "label": null,
-          "logBase": 1,
+          "logBase": 2,
           "max": null,
           "min": "0",
           "show": true
@@ -3372,6 +3448,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 11,
         "w": 10,
@@ -3396,7 +3473,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3463,7 +3542,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -3486,11 +3566,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3506,7 +3588,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": " {{instance}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -3533,7 +3615,7 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 1,
+          "logBase": 32,
           "max": null,
           "min": "0",
           "show": true
@@ -3558,7 +3640,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -3577,11 +3660,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3624,7 +3709,7 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 1,
+          "logBase": 1024,
           "max": null,
           "min": "0",
           "show": true
@@ -3650,6 +3735,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 4,
@@ -3672,7 +3758,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3740,7 +3828,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -3763,11 +3852,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3810,7 +3901,7 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 1,
+          "logBase": 1024,
           "max": null,
           "min": "0",
           "show": true
@@ -3835,7 +3926,8 @@
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -3854,11 +3946,13 @@
         "total": false,
         "values": true
       },
-      "lines": false,
-      "linewidth": 2,
+      "lines": true,
+      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {},
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -3870,7 +3964,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "- ceil(sum(netdata_disk_ops_operations_persec_average{family=~\"/var.*\",dimension=\"writes\",instance=~\"($node_id)\"} ) by (instance) ) > 0",
+          "expr": "-ceil(sum(netdata_disk_ops_operations_persec_average{family=~\"/var.*\",dimension=\"writes\",instance=~\"($node_id)\"} ) by (instance) ) > 0",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -3901,7 +3995,7 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 1,
+          "logBase": 1024,
           "max": null,
           "min": "0",
           "show": true
@@ -3927,6 +4021,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 7,
@@ -3953,7 +4048,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -4022,6 +4119,7 @@
       "dashes": false,
       "decimals": 0,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 5,
         "w": 7,
@@ -4048,7 +4146,9 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 5,
@@ -4308,14 +4408,14 @@
         }
       ],
       "timeFrom": "1s",
-      "title": "Nodes",
+      "title": "Container Nodes",
       "transform": "table",
       "transparent": true,
       "type": "table"
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 18,
+  "schemaVersion": 19,
   "style": "dark",
   "tags": [
     "docker"
@@ -4323,12 +4423,16 @@
   "templating": {
     "list": [
       {
-        "allValue": ".+",
+        "allValue": "",
         "current": {
+          "tags": [],
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
-        "definition": "",
+        "datasource": null,
+        "definition": "netdata_info",
         "hide": 0,
         "includeAll": true,
         "label": "Node",
@@ -4337,7 +4441,7 @@
         "options": [],
         "query": "netdata_info",
         "refresh": 1,
-        "regex": "/job=\"netdata-([^\"]+)\"/",
+        "regex": "/instance=\"([^\":]+).*\"/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
@@ -4380,5 +4484,5 @@
   "timezone": "",
   "title": "Nodes",
   "uid": "BPlb-Sgik",
-  "version": 2
+  "version": 5
 }
