@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 16,
-  "iteration": 1567360456013,
+  "id": 15,
+  "iteration": 1567360618217,
   "links": [],
   "panels": [
     {
@@ -83,11 +83,11 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, netdata_system_uptime_seconds_average{instance=~\"$node\"} )",
+          "expr": "time() - topk(1, node_boot_time_seconds{instance=~\"$node\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "",
           "refId": "A",
           "step": 2
         }
@@ -170,17 +170,17 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_info{instance=~\"$node\"})",
+          "expr": "count(node_load1{instance=~\"$node\"})",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 4,
-          "legendFormat": "{{instance}}",
+          "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A",
           "step": 20
         }
       ],
       "thresholds": "",
-      "title": "Nodes",
+      "title": "Total Nodes",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -256,10 +256,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"})",
+          "expr": "count(node_cpu_seconds_total{mode=\"idle\",instance=~\"$node\"})",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 10,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
           "step": 2
@@ -268,7 +268,7 @@
       "thresholds": "",
       "timeFrom": "1m",
       "timeShift": null,
-      "title": "CPUs",
+      "title": "Total CPUs",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -291,7 +291,7 @@
         "rgba(50, 172, 45, 0.97)"
       ],
       "decimals": 0,
-      "format": "decmbytes",
+      "format": "bytes",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -344,10 +344,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(netdata_system_ram_MiB_average{instance=~\"$node\"})",
+          "expr": "sum(node_memory_MemTotal_bytes{instance=~\"$node\"})",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 10,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
           "step": 20
@@ -423,14 +423,14 @@
       ],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
+        "full": false,
         "lineColor": "rgb(31, 120, 193)",
         "show": true
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(container_last_seen{instance=~\"$node\"})",
+          "expr": "count(container_last_seen{instance=~\"$node_no_port\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -508,14 +508,14 @@
       ],
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
+        "full": false,
         "lineColor": "rgb(31, 120, 193)",
         "show": true
       },
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{instance=~\"$node_9323\"}[5m]) ) )",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{instance=~\"$node_9323\"}[5m])))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -559,7 +559,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -578,7 +578,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pointradius": 0.5,
+      "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -587,7 +587,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2,{dimension=\"load1\",instance=~\"$node\"} > 0)",
+          "expr": "topk(2,node_load1{instance=~\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -616,7 +616,6 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -645,19 +644,19 @@
       "dashes": false,
       "decimals": 0,
       "fill": 0,
-      "fillGradient": 10,
+      "fillGradient": 1,
       "gridPos": {
         "h": 5,
         "w": 6,
         "x": 6,
         "y": 2
       },
-      "id": 22,
+      "id": 88,
       "legend": {
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": true,
         "show": false,
@@ -667,7 +666,7 @@
       "lines": true,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null as zero",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -682,7 +681,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"})",
+          "expr": "sum(increase(node_network_receive_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Received",
@@ -690,7 +689,7 @@
           "step": 4
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"})",
+          "expr": "-sum(increase(node_network_transmit_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Sent",
@@ -720,7 +719,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "Kbits",
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -755,110 +754,13 @@
         "x": 12,
         "y": 2
       },
-      "id": 18,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 0.5,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(3, sum(netdata_disk_ops_operations_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance)) < 2000000000",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Storage Reads",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": "",
-          "logBase": 2,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "iops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": 10
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 15,
-        "y": 2
-      },
-      "id": 16,
+      "id": 24,
       "legend": {
         "alignAsTable": false,
         "avg": true,
-        "current": false,
+        "current": true,
         "hideEmpty": true,
-        "hideZero": true,
+        "hideZero": false,
         "max": true,
         "min": false,
         "rightSide": false,
@@ -884,12 +786,109 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_disk_io_KiB_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(3, sum(rate(node_disk_reads_merged_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
-          "step": 2
+          "step": 4
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Storage Reads",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 2
+      },
+      "id": 89,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 0.5,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(3, sum(rate(node_disk_read_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 4
         }
       ],
       "thresholds": [],
@@ -908,13 +907,13 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": false,
+        "show": true,
         "values": []
       },
       "yaxes": [
         {
           "decimals": 0,
-          "format": "KBs",
+          "format": "Bps",
           "label": null,
           "logBase": 2,
           "max": null,
@@ -949,16 +948,14 @@
         "x": 18,
         "y": 2
       },
-      "id": 24,
+      "id": 44,
       "legend": {
-        "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": true,
         "min": false,
-        "rightSide": false,
         "show": false,
         "total": false,
         "values": true
@@ -981,12 +978,12 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_reads_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(3, sum(rate(container_fs_reads_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 4
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -996,7 +993,7 @@
       "title": "Top Container Storage Reads",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1004,7 +1001,7 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
@@ -1014,7 +1011,7 @@
           "label": null,
           "logBase": 2,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -1028,7 +1025,7 @@
       ],
       "yaxis": {
         "align": false,
-        "alignLevel": null
+        "alignLevel": 10
       }
     },
     {
@@ -1075,7 +1072,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_reads_bytes_total{instance=~\"$node\"}[2m])) by (instance)) ",
+          "expr": "topk(3, sum(rate(container_fs_reads_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance)) ",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1172,7 +1169,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, 100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance)))",
+          "expr": "topk(2, 100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1236,7 +1233,7 @@
         "x": 6,
         "y": 7
       },
-      "id": 89,
+      "id": 36,
       "legend": {
         "avg": false,
         "current": true,
@@ -1266,14 +1263,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"}[1m])) by (instance))",
+          "expr": "topk(1, sum(rate(node_network_receive_bytes_total{device=~\"e.*\",instance=~\"$node\"}[2m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Received: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(1, sum(rate(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"}[1m])) by (instance))",
+          "expr": "-topk(1, sum(rate(node_network_transmit_bytes_total{device=~\"e.*\",instance=~\"$node\"}[2m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Sent: {{instance}}",
@@ -1337,108 +1334,11 @@
         "x": 12,
         "y": 7
       },
-      "id": 79,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 0.5,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(3, -sum(netdata_disk_ops_operations_persec_average{dimension=\"writes\",instance=~\"$node\"}) by (instance)) < 2000000000",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Node Disk Write Operations",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": "",
-          "logBase": 2,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "iops",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": 10
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 15,
-        "y": 7
-      },
-      "id": 76,
+      "id": 77,
       "legend": {
         "alignAsTable": false,
         "avg": true,
-        "current": false,
+        "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": true,
@@ -1466,11 +1366,12 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "-topk(3, sum(netdata_disk_io_KiB_persec_average{instance=~\"$node\"}) by (instance)) < 2000000000",
+          "expr": "topk(3 ,sum(rate(node_disk_writes_completed_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "step": 4
         }
       ],
       "thresholds": [],
@@ -1480,7 +1381,7 @@
       "title": "Top Node Storage Writes",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -1495,7 +1396,104 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "KBs",
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 7
+      },
+      "id": 90,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 0.5,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(3, sum(rate(node_disk_written_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 4
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Storage Write Rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "Bps",
           "label": null,
           "logBase": 2,
           "max": null,
@@ -1530,7 +1528,7 @@
         "x": 18,
         "y": 7
       },
-      "id": 77,
+      "id": 78,
       "legend": {
         "avg": true,
         "current": true,
@@ -1560,7 +1558,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_writes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(3, sum(rate(container_fs_writes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1653,7 +1651,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_writes_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(3, sum(rate(container_fs_writes_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1712,10 +1710,10 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "decimals": null,
-      "format": "percent",
+      "decimals": 0,
+      "format": "percentunit",
       "gauge": {
-        "maxValue": 100,
+        "maxValue": 1,
         "minValue": 0,
         "show": true,
         "thresholdLabels": false,
@@ -1766,10 +1764,10 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance))",
+          "expr": "bottomk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m]))) )",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 4,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
           "step": 2
@@ -1852,7 +1850,7 @@
       "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, sum(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance))",
+          "expr": "bottomk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m]))) )",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1938,12 +1936,12 @@
       "tableColumn": "job",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(netdata_system_ram_MiB_average{instance=~\"$node\"}) by (instance) * sum(netdata_system_ram_MiB_average{dimension=~\"free|cached\",instance=~\"$node\"}) by (instance))",
+          "expr": "bottomk(1, ((100 / node_memory_MemTotal_bytes{instance=~\"$node\"}) * node_memory_MemFree_bytes{instance=~\"$node\"}) * 100)",
           "format": "time_series",
           "hide": false,
           "instant": true,
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "",
           "refId": "A",
           "step": 20
         }
@@ -1985,7 +1983,7 @@
         "x": 11,
         "y": 12
       },
-      "id": 66,
+      "id": 86,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -2023,7 +2021,7 @@
       "tableColumn": "instance",
       "targets": [
         {
-          "expr": "floor( bottomk(1, 100 / sum(netdata_system_ram_MiB_average{instance=~\"$node\"}) by (instance) * sum(netdata_system_ram_MiB_average{dimension=~\"free|cached\",instance=~\"$node\"}) by (instance) ) )",
+          "expr": "bottomk(1, ((100 / node_memory_MemTotal_bytes{instance=~\"$node\"}) * node_memory_MemFree_bytes{instance=~\"$node\"}) * 100)",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -2106,11 +2104,11 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(netdata_disk_space_GiB_average{family=\"/\", instance=~\"$node\"}) by (instance) * sum(netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"$node\"} ) by (instance) ) ",
+          "expr": "bottomk(1, ((100 / node_filesystem_size_bytes{instance=~\"$node\"}) * node_filesystem_avail_bytes{instance=~\"$node\"}))",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 4,
-          "legendFormat": "{{instance}}",
+          "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A",
           "step": 20
         }
@@ -2152,7 +2150,7 @@
         "x": 19,
         "y": 12
       },
-      "id": 68,
+      "id": 87,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -2190,7 +2188,7 @@
       "tableColumn": "instance",
       "targets": [
         {
-          "expr": "bottomk(1, 100 / sum(netdata_disk_space_GiB_average{family=\"/\", instance=~\"$node\"}) by (instance) * sum(netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"$node\"} ) by (instance) )",
+          "expr": "bottomk(1, 100 / node_filesystem_size_bytes{instance=~\"$node\"} * node_filesystem_avail_bytes{instance=~\"$node\"})",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -2255,7 +2253,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg by (instance,name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\"}[60s]) * 1024 * 60) / on (instance,name) (container_spec_cpu_shares) / 60 * 100)",
+          "expr": "topk(3, avg by (instance,name) (rate(container_cpu_usage_seconds_total{instance=~\"$node_no_port\"}[60s]) * 1024 * 60) / on (instance,name) (container_spec_cpu_shares) / 60 * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": " {{instance}}",
@@ -2348,14 +2346,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, rate(container_network_receive_bytes_total{instance=~\"$node\"}[1m]) > 0)",
+          "expr": "topk(1, rate(container_network_receive_bytes_total{instance=~\"$node_no_port\"}[1m]) > 0)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(1, rate(container_network_transmit_bytes_total{instance=~\"$node\"}[1m]) > 0)",
+          "expr": "-topk(1, rate(container_network_transmit_bytes_total{instance=~\"$node_no_port\"}[1m]) > 0)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
@@ -2417,7 +2415,7 @@
         "x": 12,
         "y": 15
       },
-      "id": 96,
+      "id": 34,
       "legend": {
         "alignAsTable": true,
         "avg": false,
@@ -2513,13 +2511,13 @@
         "x": 18,
         "y": 15
       },
-      "id": 97,
+      "id": 48,
       "legend": {
-        "avg": true,
-        "current": true,
+        "avg": false,
+        "current": false,
         "hideEmpty": true,
         "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
         "show": false,
         "total": false,
@@ -2543,10 +2541,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
+          "expr": "topk(2, sum(node_filesystem_files{instance=~\"$node\"} - node_filesystem_files_free{instance=~\"$node\"}) by (instance,device))",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "intervalFactor": 10,
+          "legendFormat": "{{instance}} {{device}}",
           "refId": "A"
         }
       ],
@@ -2557,7 +2555,7 @@
       "title": "Top Node Open File Descriptors",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "transparent": true,
@@ -2572,7 +2570,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "none",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -2580,6 +2578,7 @@
           "show": true
         },
         {
+          "decimals": 2,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -2636,7 +2635,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3,sum(container_memory_usage_bytes{instance=~\"$node\",id=\"/\"}) by (instance))",
+          "expr": "topk(3,sum(container_memory_usage_bytes{instance=~\"$node_no_port\",id=\"/\"}) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2716,7 +2715,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -2731,7 +2730,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"iowait\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2826,7 +2825,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(3, netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail\",instance=~\"$node\"})",
+          "expr": "bottomk(3, node_filesystem_avail_bytes{mountpoint=\"/\",instance=~\"$node\"})",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{instance}}",
@@ -2840,7 +2839,7 @@
       "title": "Lowest Node /",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -2855,7 +2854,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "decgbytes",
+          "format": "decbytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -2890,14 +2889,16 @@
         "x": 9,
         "y": 20
       },
-      "id": 54,
+      "id": 15,
       "legend": {
-        "avg": true,
+        "alignAsTable": false,
+        "avg": false,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": false,
         "total": false,
         "values": true
@@ -2920,11 +2921,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, netdata_system_ram_MiB_average{dimension=\"used\",instance=~\"$node\"})",
+          "expr": "topk(2,sum(node_memory_MemTotal_bytes{instance=~\"$node\"} - (node_memory_MemFree_bytes{instance=~\"$node\"} + node_memory_Cached_bytes{instance=~\"$node\"} + node_memory_Buffers_bytes{instance=~\"$node\"})) by (instance))",
           "format": "time_series",
-          "intervalFactor": 1,
+          "intervalFactor": 4,
           "legendFormat": "{{instance}}",
-          "refId": "A"
+          "refId": "A",
+          "step": 2
         }
       ],
       "thresholds": [],
@@ -2934,7 +2936,7 @@
       "title": "Top Node Memory Used",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -2943,13 +2945,13 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": 0,
-          "format": "decmbytes",
+          "decimals": 1,
+          "format": "bytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -2957,6 +2959,7 @@
           "show": true
         },
         {
+          "decimals": 2,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -3017,7 +3020,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "count(container_last_seen{instance=~\"$node\"}) by (instance)",
+          "expr": "count(container_last_seen{instance=~\"$node_no_port\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3091,7 +3094,7 @@
         "min": false,
         "rightSide": true,
         "show": true,
-        "sort": "current",
+        "sort": "max",
         "sortDesc": true,
         "total": false,
         "values": true
@@ -3114,10 +3117,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]))) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"$node_9323\"}[1m]))) by (action)",
           "format": "time_series",
           "instant": false,
-          "intervalFactor": 10,
+          "intervalFactor": 1,
           "legendFormat": "{{action}}",
           "refId": "A",
           "step": 10
@@ -3148,7 +3151,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -3179,7 +3182,7 @@
         "x": 0,
         "y": 23
       },
-      "id": 90,
+      "id": 91,
       "legend": {
         "alignAsTable": false,
         "avg": true,
@@ -3196,7 +3199,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -3211,7 +3214,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg(netdata_cpu_cpu_percentage_average{dimension=\"system\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"system\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3245,7 +3248,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -3307,7 +3310,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(3, netdata_disk_space_GiB_average{family=\"/var/lib/docker\",dimension=~\"avail\",instance=~\"$node\"})",
+          "expr": "bottomk(3,node_filesystem_free_bytes{mountpoint=\"/var/lib/docker\",instance=~\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3336,7 +3339,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "decgbytes",
+          "format": "decbytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -3371,16 +3374,14 @@
         "x": 9,
         "y": 23
       },
-      "id": 15,
+      "id": 54,
       "legend": {
-        "alignAsTable": false,
-        "avg": false,
+        "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": false,
         "total": false,
         "values": true
@@ -3403,12 +3404,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(2, sum(netdata_system_ram_MiB_average{dimension=~\"free|cached|buffers\",instance=~\"$node\"}) by (instance))",
+          "expr": "bottomk(2,sum(node_memory_MemFree_bytes{instance=~\"$node\"} + node_memory_Cached_bytes{instance=~\"$node\"} + node_memory_Buffers_bytes{instance=~\"$node\"}) by (instance))",
           "format": "time_series",
-          "intervalFactor": 1,
+          "intervalFactor": 4,
           "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -3427,12 +3427,13 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": false,
+        "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "format": "decmbytes",
+          "decimals": 1,
+          "format": "bytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -3440,7 +3441,6 @@
           "show": true
         },
         {
-          "decimals": 2,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -3479,7 +3479,7 @@
         "min": false,
         "rightSide": true,
         "show": true,
-        "sort": "current",
+        "sort": "max",
         "sortDesc": true,
         "total": false,
         "values": true
@@ -3502,7 +3502,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]))) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"$node_9323\"}[1m]))) by (action)",
           "format": "time_series",
           "intervalFactor": 10,
           "legendFormat": "{{action}}",
@@ -3535,7 +3535,7 @@
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -3566,7 +3566,7 @@
         "x": 0,
         "y": 26
       },
-      "id": 91,
+      "id": 92,
       "legend": {
         "alignAsTable": false,
         "avg": true,
@@ -3583,7 +3583,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -3598,7 +3598,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg(netdata_cpu_cpu_percentage_average{dimension=\"user\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"user\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3632,7 +3632,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -3664,7 +3664,7 @@
         "x": 6,
         "y": 26
       },
-      "id": 92,
+      "id": 94,
       "legend": {
         "alignAsTable": false,
         "avg": true,
@@ -3681,7 +3681,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -3696,7 +3696,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg(netdata_cpu_cpu_percentage_average{dimension=\"steal\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"steal\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3761,7 +3761,7 @@
         "x": 0,
         "y": 29
       },
-      "id": 94,
+      "id": 95,
       "legend": {
         "alignAsTable": false,
         "avg": true,
@@ -3778,7 +3778,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -3793,7 +3793,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg(netdata_cpu_cpu_percentage_average{dimension=~\"irq|softirq\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=~\"irq|softirq\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3875,7 +3875,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "options": {
         "dataLinks": []
       },
@@ -3890,7 +3890,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg(netdata_cpu_cpu_percentage_average{dimension=\"nice\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"nice\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3942,388 +3942,13 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 32
-      },
-      "id": 87,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": true,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "ceil(netdata_jail_in_jail_IPs_average)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Node Banned IPs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 3,
-        "y": 32
-      },
-      "id": 48,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance,dimension) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance,dimension))",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{instance}} {{dimension}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Files",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": 2,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 6,
-        "y": 32
-      },
-      "id": 52,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(3, sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Pipes",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 9,
-        "y": 32
-      },
-      "id": 50,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Sockets",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "columns": [],
       "fontSize": "80%",
       "gridPos": {
-        "h": 17,
+        "h": 20,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 32
       },
       "hideTimeOverride": true,
       "id": 20,
@@ -4342,22 +3967,6 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
         },
         {
           "alias": "CPU %",
@@ -4450,7 +4059,7 @@
           "mappingType": 1,
           "pattern": "version",
           "thresholds": [],
-          "type": "number",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -4466,7 +4075,7 @@
           "mappingType": 1,
           "pattern": "kernel",
           "thresholds": [],
-          "type": "number",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -4482,7 +4091,87 @@
           "mappingType": 1,
           "pattern": "os",
           "thresholds": [],
-          "type": "number",
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "Node",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "release",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "sysname",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #A",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Value #D",
+          "thresholds": [],
+          "type": "hidden",
           "unit": "short"
         },
         {
@@ -4496,7 +4185,7 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 0,
           "mappingType": 1,
-          "pattern": "Value #D",
+          "pattern": "Value #E",
           "thresholds": [],
           "type": "number",
           "unit": "short"
@@ -4504,15 +4193,7 @@
       ],
       "targets": [
         {
-          "expr": "100 - avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\"}) by (instance)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "intervalFactor": 1,
-          "refId": "B"
-        },
-        {
-          "expr": "sum(label_replace(engine_daemon_engine_info,\"instance\",\"$1\",\"instance\",\"(.*):9323\")  ) by (instance, kernel, os, version)",
+          "expr": "sum(label_replace(engine_daemon_engine_info{instance=~\"$node_9323\"},\"instance\",\"$1:9100\",\"instance\",\"(.*):[0-9]+\")) by (instance, kernel, version)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4522,7 +4203,15 @@
           "step": 2
         },
         {
-          "expr": "label_replace(swarm_node_manager, \"instance\", \"$1\", \"instance\", \"(.*):9323\")",
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m]))) * 100",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "intervalFactor": 1,
+          "refId": "B"
+        },
+        {
+          "expr": "label_replace(swarm_node_manager{instance=~\"$node_9323\"}, \"instance\", \"$1:9100\", \"instance\", \"(.*):[0-9]+\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4530,12 +4219,18 @@
           "refId": "C"
         },
         {
-          "expr": "count(container_last_seen) by (instance)",
+          "expr": "label_replace(label_replace(sum(label_replace(node_uname_info{instance=~\"$node\"},\"instance\",\"$1:9100\",\"instance\",\"(.*):[0-9]+\")) by (instance, release, sysname), \"os\", \"$1\", \"sysname\", \"(.*)\"), \"kernel\", \"$1\", \"release\", \"(.*)\")",
           "format": "table",
           "hide": false,
           "instant": true,
-          "legendFormat": "",
+          "intervalFactor": 1,
           "refId": "D"
+        },
+        {
+          "expr": "count(label_replace(container_last_seen{instance=~\"$node_no_port\"}, \"instance\", \"$1:9100\", \"instance\", \"(.*)\")) by (instance)",
+          "format": "table",
+          "instant": true,
+          "refId": "E"
         }
       ],
       "timeFrom": "1s",
@@ -4549,9 +4244,9 @@
   "schemaVersion": 19,
   "style": "dark",
   "tags": [
+    "cadvisor",
     "docker",
-    "netdata",
-    "cadvisor"
+    "node_exporter"
   ],
   "templating": {
     "list": [
@@ -4564,16 +4259,16 @@
           ]
         },
         "datasource": "Prometheus",
-        "definition": "netdata_info",
+        "definition": "node_load1",
         "hide": 0,
         "includeAll": true,
         "label": "Node",
         "multi": true,
         "name": "node",
         "options": [],
-        "query": "netdata_info",
+        "query": "node_load1",
         "refresh": 1,
-        "regex": "/instance=\"([^\":]+).*\"/",
+        "regex": "/instance=\"([^\"]+:[0-9]+).*\"/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
@@ -4583,7 +4278,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": "",
         "current": {
           "text": "All",
           "value": [
@@ -4591,7 +4286,40 @@
           ]
         },
         "datasource": "Prometheus",
-        "definition": "query_result(label_replace(netdata_info{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*)\"))",
+        "definition": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1\", \"instance\", \"(.*):[0-9]+\"))",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Node",
+        "multi": true,
+        "name": "node_no_port",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          }
+        ],
+        "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1\", \"instance\", \"(.*):[0-9]+\"))",
+        "refresh": 0,
+        "regex": "/instance=\"([^\"]+)\"/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
+        "tags": [],
+        "tagsQuery": "label_values(node_meta, node_name)",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": "",
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "Prometheus",
+        "definition": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*):[0-9]+\"))",
         "hide": 2,
         "includeAll": true,
         "label": "Node:9323",
@@ -4602,16 +4330,51 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "caa-bi-hado6.cisco.com:9323",
+            "value": "caa-bi-hado6.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "caa-bi-hado7.cisco.com:9323",
+            "value": "caa-bi-hado7.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "dna-dev-swarm01.cisco.com:9323",
+            "value": "dna-dev-swarm01.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "dna-dev-swarm02.cisco.com:9323",
+            "value": "dna-dev-swarm02.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "dna-dev-swarm03.cisco.com:9323",
+            "value": "dna-dev-swarm03.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "opus.cisco.com:9323",
+            "value": "opus.cisco.com:9323"
+          },
+          {
+            "selected": false,
+            "text": "opus2.cisco.com:9323",
+            "value": "opus2.cisco.com:9323"
           }
         ],
-        "query": "query_result(label_replace(netdata_info{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*)\"))",
+        "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*):[0-9]+\"))",
         "refresh": 0,
         "regex": "/instance=\"([^\"]+)\"/",
         "skipUrlSync": false,
         "sort": 0,
-        "tagValuesQuery": "",
+        "tagValuesQuery": "label_values({node_id=\"$tag\"},node_name)",
         "tags": [],
-        "tagsQuery": "",
+        "tagsQuery": "label_values(node_meta, node_name)",
         "type": "query",
         "useTags": false
       }
@@ -4647,7 +4410,7 @@
     ]
   },
   "timezone": "",
-  "title": "Nodes (netdata+dockerd+cadvisor)",
-  "uid": "pSZIebEWz",
-  "version": 48
+  "title": "Nodes (node_exporter+dockerd+cadvisor)",
+  "uid": "jeUlsfKWz",
+  "version": 35
 }
