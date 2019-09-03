@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 16,
-  "iteration": 1567360456013,
+  "iteration": 1567529923000,
   "links": [],
   "panels": [
     {
@@ -2501,11 +2501,11 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
@@ -2513,22 +2513,20 @@
         "x": 18,
         "y": 15
       },
-      "id": 97,
+      "id": 87,
       "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
+        "avg": false,
+        "current": false,
+        "max": true,
         "min": false,
         "show": false,
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "connected",
       "options": {
         "dataLinks": []
       },
@@ -2539,11 +2537,11 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
+          "expr": "ceil(netdata_jail_in_jail_IPs_average)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2554,10 +2552,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Open File Descriptors",
+      "title": "Node Banned IPs",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "transparent": true,
@@ -2566,17 +2564,17 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": false,
+        "show": true,
         "values": []
       },
       "yaxes": [
         {
           "decimals": 0,
-          "format": "none",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -2687,6 +2685,383 @@
     },
     {
       "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 20
+      },
+      "id": 97,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open File Descriptors",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 20
+      },
+      "id": 48,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance,dimension) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance,dimension))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} - {{dimension}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open Files",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": 2,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 20
+      },
+      "id": 52,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(2, sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open Pipes",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 20
+      },
+      "id": 50,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(2, sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open Sockets",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
       "bars": true,
       "dashLength": 10,
       "dashes": false,
@@ -2697,7 +3072,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 20
+        "y": 24
       },
       "id": 19,
       "legend": {
@@ -2794,7 +3169,7 @@
         "h": 3,
         "w": 3,
         "x": 6,
-        "y": 20
+        "y": 24
       },
       "id": 46,
       "legend": {
@@ -2888,7 +3263,7 @@
         "h": 3,
         "w": 3,
         "x": 9,
-        "y": 20
+        "y": 24
       },
       "id": 54,
       "legend": {
@@ -2982,7 +3357,7 @@
         "h": 12,
         "w": 7,
         "x": 12,
-        "y": 20
+        "y": 24
       },
       "id": 70,
       "legend": {
@@ -3078,7 +3453,7 @@
         "h": 5,
         "w": 5,
         "x": 19,
-        "y": 20
+        "y": 24
       },
       "id": 26,
       "legend": {
@@ -3177,7 +3552,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 23
+        "y": 27
       },
       "id": 90,
       "legend": {
@@ -3274,7 +3649,7 @@
         "h": 3,
         "w": 3,
         "x": 6,
-        "y": 23
+        "y": 27
       },
       "id": 72,
       "legend": {
@@ -3369,7 +3744,7 @@
         "h": 3,
         "w": 3,
         "x": 9,
-        "y": 23
+        "y": 27
       },
       "id": 15,
       "legend": {
@@ -3466,7 +3841,7 @@
         "h": 7,
         "w": 5,
         "x": 19,
-        "y": 25
+        "y": 29
       },
       "id": 28,
       "legend": {
@@ -3564,7 +3939,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 26
+        "y": 30
       },
       "id": 91,
       "legend": {
@@ -3662,7 +4037,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 26
+        "y": 30
       },
       "id": 92,
       "legend": {
@@ -3759,7 +4134,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 29
+        "y": 33
       },
       "id": 94,
       "legend": {
@@ -3856,7 +4231,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 29
+        "y": 33
       },
       "id": 93,
       "legend": {
@@ -3942,388 +4317,13 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 32
-      },
-      "id": 87,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": true,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "connected",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "ceil(netdata_jail_in_jail_IPs_average)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Node Banned IPs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 3,
-        "y": 32
-      },
-      "id": 48,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance,dimension) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance,dimension))",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{instance}} {{dimension}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Files",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": 2,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 6,
-        "y": 32
-      },
-      "id": 52,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(3, sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Pipes",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 9,
-        "y": 32
-      },
-      "id": 50,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Sockets",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
       "columns": [],
       "fontSize": "80%",
       "gridPos": {
         "h": 17,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 36
       },
       "hideTimeOverride": true,
       "id": 20,
@@ -4597,15 +4597,9 @@
         "label": "Node:9323",
         "multi": true,
         "name": "node_9323",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          }
-        ],
+        "options": [],
         "query": "query_result(label_replace(netdata_info{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*)\"))",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "/instance=\"([^\"]+)\"/",
         "skipUrlSync": false,
         "sort": 0,
@@ -4647,7 +4641,7 @@
     ]
   },
   "timezone": "",
-  "title": "Nodes (netdata+dockerd+cadvisor)",
-  "uid": "pSZIebEWz",
-  "version": 48
+  "title": "Nodes",
+  "uid": "pSrIgeFWz",
+  "version": 51
 }

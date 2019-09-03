@@ -150,7 +150,7 @@ configs:
 services:
 
   alertmanager:
-    image: prom/alertmanager:v0.18.0
+    image: prom/alertmanager:latest
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
@@ -183,7 +183,7 @@ services:
       - alertmanager:/alertmanager
 
   alertmanagerB:
-    image: prom/alertmanager:v0.18.0
+    image: prom/alertmanager:latest
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--storage.path=/alertmanager'
