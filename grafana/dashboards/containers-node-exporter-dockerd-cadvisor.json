@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 17,
-  "iteration": 1567526378773,
+  "id": 18,
+  "iteration": 1567540167128,
   "links": [],
   "panels": [
     {
@@ -170,7 +170,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(sum(container_tasks_state{instance=~\"$node\",state=\"running\",container_label_com_docker_stack_namespace=~\".+\"}) by (container_label_com_docker_stack_namespace) )",
+          "expr": "count(sum(container_tasks_state{instance=~\"$node_no_port\",state=\"running\",container_label_com_docker_stack_namespace=~\".+\"}) by (container_label_com_docker_stack_namespace) )",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -257,7 +257,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(sum(container_tasks_state{instance=~\"$node\",state=\"running\",container_label_com_docker_swarm_service_name=~\".+\"}) by (container_label_com_docker_swarm_service_id))",
+          "expr": "count(sum(container_tasks_state{instance=~\"$node_no_port\",state=\"running\",container_label_com_docker_swarm_service_name=~\".+\"}) by (container_label_com_docker_swarm_service_id))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -343,7 +343,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(container_last_seen{instance=~\"$node\"})",
+          "expr": "count(container_last_seen{instance=~\"$node_no_port\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A",
@@ -496,7 +496,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg by (container_label_com_docker_swarm_task_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_task_name!=\"\"}[60s])) * 1024)",
+          "expr": "topk(2, avg by (container_label_com_docker_swarm_task_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node_no_port\",container_label_com_docker_swarm_task_name!=\"\"}[60s])) * 1024)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -592,14 +592,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1,rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node\"}[1m]) > 100000)",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node_no_port\"}[1m])) by (name,instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}} - {{name}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(1,rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node\"}[1m]) > 100000)",
+          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node_no_port\"}[1m])) by (name,instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}} - {{name}}",
@@ -610,7 +610,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Network Usage",
+      "title": "Top Container Network Traffic",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -695,7 +695,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, ceil(rate(container_fs_reads_total{instance=~\"$node\", name=~\".+\"}[1m])) > 0)",
+          "expr": "topk(1, ceil(sum(rate(container_fs_reads_total{instance=~\"$node_no_port\", name=~\".+\"}[1m])) by (instance,name)) > 0)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} - {{name}}",
@@ -765,8 +765,8 @@
         "alignAsTable": true,
         "avg": true,
         "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
+        "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "rightSide": true,
@@ -794,11 +794,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_cgroup_mem_MiB_average{instance=~\"$node\"}) by (chart,instance))",
+          "expr": "topk(2, sum(container_memory_usage_bytes{instance=~\"$node_no_port\",name=~\".+\"}) by (name))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
-          "legendFormat": " {{instance}} {{chart}}",
+          "legendFormat": "{{name}}",
           "refId": "A",
           "step": 2
         }
@@ -825,7 +825,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "decmbytes",
+          "format": "decbytes",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -894,7 +894,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg by (container_label_com_docker_swarm_service_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_service_name!=\"\"}[60s]) * 1024))",
+          "expr": "topk(2, avg by (container_label_com_docker_swarm_service_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node_no_port\",container_label_com_docker_swarm_service_name!=\"\"}[60s]) * 1024))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -994,7 +994,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name)) ",
+          "expr": "topk(2, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node_no_port\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name)) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1005,7 +1005,7 @@
           "step": 2
         },
         {
-          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name))",
+          "expr": "-topk(2, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node_no_port\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1017,7 +1017,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Service Network Usage",
+      "title": "Top Service Network Traffic",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1100,7 +1100,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(container_fs_reads_bytes_total{instance=~\"$node\",name=~\".+\"}[1m])) by (name, instance))",
+          "expr": "topk(1, sum(rate(container_fs_reads_bytes_total{instance=~\"$node_no_port\",name=~\".+\"}[1m])) by (name, instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} - {{name}}",
@@ -1198,7 +1198,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!=\"\",instance=~\"$node\"}) by (container_label_com_docker_swarm_service_name))",
+          "expr": "topk(2, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!=\"\",instance=~\"$node_no_port\"}) by (container_label_com_docker_swarm_service_name))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
@@ -1297,7 +1297,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, 100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance)))",
+          "expr": "topk(2, 100 - (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1391,14 +1391,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(netdata_net_net_kilobits_persec_average{chart=~\".*veth.*\", dimension=\"received\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node_no_port\"}[1m]) > 100000) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "topk(3, sum(netdata_net_net_kilobits_persec_average{chart=~\".*veth.*\", dimension=\"sent\",instance=~\"$node\"}) by (instance))",
+          "expr": "-topk(1,sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node_no_port\"}[1m]) > 100000) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
@@ -1490,7 +1490,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, ceil(rate(container_fs_writes_total{instance=~\"$node\",name=~\".+\"}[1m])) > 0 )",
+          "expr": "topk(1, ceil(sum(rate(container_fs_writes_total{instance=~\"$node_no_port\",name=~\".+\"}[1m])) by (name,instance) > 0 ))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1688,7 +1688,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "count(container_last_seen{instance=~\"$node\"}) by (instance)",
+          "expr": "count(container_last_seen{instance=~\"$node_no_port\"}) by (instance)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1699,13 +1699,12 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Running Containers",
+      "title": "Node Running Containers",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1757,7 +1756,7 @@
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": true,
         "show": false,
@@ -1782,7 +1781,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"})",
+          "expr": "sum(rate(node_network_receive_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Received",
@@ -1790,7 +1789,7 @@
           "step": 4
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"})",
+          "expr": "-sum(rate(node_network_transmit_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Sent",
@@ -1819,7 +1818,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "Kbits",
+          "format": "Bps",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1883,7 +1882,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(container_fs_writes_bytes_total{instance=~\"$node\",name=~\".+\"}[1m])) by (name, instance) > 0)",
+          "expr": "topk(1, sum(rate(container_fs_writes_bytes_total{instance=~\"$node_no_port\",name=~\".+\"}[1m])) by (name, instance) > 0)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2049,7 +2048,7 @@
       "scroll": false,
       "showHeader": true,
       "sort": {
-        "col": 5,
+        "col": 6,
         "desc": false
       },
       "styles": [
@@ -2350,7 +2349,7 @@
       ],
       "targets": [
         {
-          "expr": "container_tasks_state{id!~\"/|/docker|/system.slice.*|/user.slice.*\", instance=~\"$node\" ,state=\"running\"}",
+          "expr": "container_tasks_state{id!~\"/|/docker|/system.slice.*|/user.slice.*\", instance=~\"$node_no_port\" ,state=\"running\"}",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -2368,32 +2367,31 @@
   "schemaVersion": 19,
   "style": "dark",
   "tags": [
-    "docker",
     "cadvisor",
-    "netdata"
+    "dockerd",
+    "node_exporter"
   ],
   "templating": {
     "list": [
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
           ]
         },
         "datasource": "Prometheus",
-        "definition": "netdata_info",
+        "definition": "node_load1",
         "hide": 0,
         "includeAll": true,
         "label": "Node",
         "multi": true,
         "name": "node",
         "options": [],
-        "query": "netdata_info",
+        "query": "node_load1",
         "refresh": 1,
-        "regex": "/instance=\"([^\":]+).*\"/",
+        "regex": "/instance=\"([^\"]+:[0-9]+).*\"/",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "label_values({instance=\\\"$tag\\\"},node_id)",
@@ -2409,14 +2407,39 @@
           "value": "$__all"
         },
         "datasource": "Prometheus",
-        "definition": "query_result(label_replace(netdata_info{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*)\"))",
+        "definition": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*):[0-9]+\"))",
         "hide": 2,
         "includeAll": true,
         "label": "Node:9323",
         "multi": true,
         "name": "node_9323",
         "options": [],
-        "query": "query_result(label_replace(netdata_info{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*)\"))",
+        "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*):[0-9]+\"))",
+        "refresh": 1,
+        "regex": "/instance=\"([^\"]+)\"/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
+        "definition": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1\", \"instance\", \"(.*):[0-9]+\"))",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Node_no_port",
+        "multi": true,
+        "name": "node_no_port",
+        "options": [],
+        "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1\", \"instance\", \"(.*):[0-9]+\"))",
         "refresh": 1,
         "regex": "/instance=\"([^\"]+)\"/",
         "skipUrlSync": false,
@@ -2459,7 +2482,7 @@
     ]
   },
   "timezone": "",
-  "title": "Containers",
-  "uid": "P10PzfFtk",
-  "version": 21
+  "title": "Containers (node_exporter+dockerd+cadvisor)",
+  "uid": "1x77X3FWz",
+  "version": 20
 }

@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 15,
-  "iteration": 1567531116562,
+  "iteration": 1567540105426,
   "links": [],
   "panels": [
     {
@@ -4364,6 +4364,6 @@
   },
   "timezone": "",
   "title": "Nodes (node_exporter+dockerd+cadvisor)",
-  "uid": "jmzlso1Wz",
+  "uid": "kmU9soKWz",
   "version": 36
 }

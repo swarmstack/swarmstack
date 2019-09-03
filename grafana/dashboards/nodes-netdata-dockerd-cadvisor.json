@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 16,
-  "iteration": 1567529923000,
+  "iteration": 1567539740310,
   "links": [],
   "panels": [
     {
@@ -2449,7 +2449,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_disk_io_time_seconds_total{instance=~\".*\"}[1m]))) * 100)",
+          "expr": "topk(1, (avg by (instance) (rate(netdata_disk_util___of_time_working_average{instance=~\".*\"}[1m]))) < 100)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -4641,7 +4641,7 @@
     ]
   },
   "timezone": "",
-  "title": "Nodes",
-  "uid": "pSrIgeFWz",
-  "version": 51
+  "title": "Nodes (netdata+dockerd+cadvisor)",
+  "uid": "pEZI9bFWz",
+  "version": 52
 }

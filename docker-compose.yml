@@ -67,9 +67,11 @@ configs:
     file: ./docker-gc-exclude
 
   grafana_dashboards_nodes:
-    file: ./grafana/dashboards/nodes.json
+    file: ./grafana/dashboards/nodes-netdata-dockerd-cadvisor.json
+    #file: ./grafana/dashboards/nodes-node-exporter-dockerd-cadvisor.json
   grafana_dashboards_containers:
-    file: ./grafana/dashboards/containers.json
+    file: ./grafana/dashboards/containers-netdata-dockerd-cadvisor.json
+    #file: ./grafana/dashboards/containers-node-exporter-dockerd-cadvisor.json
   grafana_dashboards_etcd-cluster:
     file: ./grafana/dashboards/etcd-cluster.json
   grafana_dashboards_portworx-cluster-status:
