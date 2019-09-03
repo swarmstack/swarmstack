@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 15,
-  "iteration": 1567360618217,
+  "iteration": 1567531116562,
   "links": [],
   "panels": [
     {
@@ -4292,15 +4292,9 @@
         "label": "Node",
         "multi": true,
         "name": "node_no_port",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          }
-        ],
+        "options": [],
         "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1\", \"instance\", \"(.*):[0-9]+\"))",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "/instance=\"([^\"]+)\"/",
         "skipUrlSync": false,
         "sort": 0,
@@ -4325,50 +4319,9 @@
         "label": "Node:9323",
         "multi": true,
         "name": "node_9323",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "caa-bi-hado6.cisco.com:9323",
-            "value": "caa-bi-hado6.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "caa-bi-hado7.cisco.com:9323",
-            "value": "caa-bi-hado7.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "dna-dev-swarm01.cisco.com:9323",
-            "value": "dna-dev-swarm01.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "dna-dev-swarm02.cisco.com:9323",
-            "value": "dna-dev-swarm02.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "dna-dev-swarm03.cisco.com:9323",
-            "value": "dna-dev-swarm03.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "opus.cisco.com:9323",
-            "value": "opus.cisco.com:9323"
-          },
-          {
-            "selected": false,
-            "text": "opus2.cisco.com:9323",
-            "value": "opus2.cisco.com:9323"
-          }
-        ],
+        "options": [],
         "query": "query_result(label_replace(node_load1{instance=~\"$node\"}, \"instance\", \"$1:9323\", \"instance\", \"(.*):[0-9]+\"))",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "/instance=\"([^\"]+)\"/",
         "skipUrlSync": false,
         "sort": 0,
@@ -4411,6 +4364,6 @@
   },
   "timezone": "",
   "title": "Nodes (node_exporter+dockerd+cadvisor)",
-  "uid": "jeUlsfKWz",
-  "version": 35
+  "uid": "jmzlso1Wz",
+  "version": 36
 }
