@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 15,
-  "iteration": 1567540105426,
+  "iteration": 1567621372147,
   "links": [],
   "panels": [
     {
@@ -60,7 +60,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -147,7 +147,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -233,7 +233,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -321,7 +321,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -407,7 +407,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -492,7 +492,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -541,7 +541,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 2,
@@ -786,7 +786,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(node_disk_reads_merged_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
+          "expr": "topk(2, sum(rate(node_disk_reads_merged_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -883,7 +883,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(node_disk_read_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(rate(node_disk_read_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -936,7 +936,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
@@ -978,7 +978,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_reads_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(rate(container_fs_reads_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1030,7 +1030,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
@@ -1072,7 +1072,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_reads_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance)) ",
+          "expr": "topk(2, sum(rate(container_fs_reads_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance)) ",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1123,7 +1123,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 2,
@@ -1221,7 +1221,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -1263,14 +1263,14 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, sum(rate(node_network_receive_bytes_total{device=~\"e.*\",instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(increase(node_network_receive_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Received: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(1, sum(rate(node_network_transmit_bytes_total{device=~\"e.*\",instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "-topk(2, sum(increase(node_network_transmit_bytes_total{device=~\"e.*\",instance=~\"$node\"}[1m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Sent: {{instance}}",
@@ -1366,7 +1366,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3 ,sum(rate(node_disk_writes_completed_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
+          "expr": "topk(2 ,sum(rate(node_disk_writes_completed_total{instance=~\"$node\"}[2m])) by (instance)) < 2000000000",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1463,7 +1463,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(node_disk_written_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(rate(node_disk_written_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1516,7 +1516,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
@@ -1558,7 +1558,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_writes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(rate(container_fs_writes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1610,7 +1610,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 0,
@@ -1651,7 +1651,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, sum(rate(container_fs_writes_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
+          "expr": "topk(2, sum(rate(container_fs_writes_bytes_total{instance=~\"$node_no_port\"}[2m])) by (instance))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1741,7 +1741,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -1827,7 +1827,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -1911,7 +1911,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -1998,7 +1998,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -2081,7 +2081,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -2165,7 +2165,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
+      "nullPointMode": "null",
       "nullText": null,
       "options": {},
       "postfix": "",
@@ -2212,7 +2212,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "fill": 1,
@@ -2253,7 +2253,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg by (instance,name) (rate(container_cpu_usage_seconds_total{instance=~\"$node_no_port\"}[60s]) * 1024 * 60) / on (instance,name) (container_spec_cpu_shares) / 60 * 100)",
+          "expr": "topk(2, avg by (instance,name) (rate(container_cpu_usage_seconds_total{instance=~\"$node_no_port\"}[60s]) * 1024 * 60) / on (instance,name) (container_spec_cpu_shares) / 60 * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": " {{instance}}",
@@ -2403,7 +2403,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -2447,7 +2447,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_disk_io_time_seconds_total{instance=~\".*\"}[1m]))) * 100)",
+          "expr": "topk(2, (avg by (instance) (rate(node_disk_io_time_seconds_total{instance=~\".*\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -2635,7 +2635,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(3,sum(container_memory_usage_bytes{instance=~\"$node_no_port\",id=\"/\"}) by (instance))",
+          "expr": "topk(2, sum(container_memory_usage_bytes{instance=~\"$node_no_port\",id=\"/\"}) by (instance))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2686,7 +2686,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -2730,7 +2730,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"iowait\"}[1m]))) * 100) > 0",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"iowait\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -2825,10 +2825,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(3, node_filesystem_avail_bytes{mountpoint=\"/\",instance=~\"$node\"})",
+          "expr": "bottomk(2, sum(node_filesystem_avail_bytes{instance=~\"$node\",mountpoint=\"/\",device!~\"rootfs\"}) by (instance,device))",
           "format": "time_series",
           "intervalFactor": 10,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{instance}} - {{device}}",
           "refId": "A"
         }
       ],
@@ -3170,7 +3170,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -3214,7 +3214,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"system\"}[1m]))) * 100) > 0",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"system\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3310,7 +3310,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(3,node_filesystem_free_bytes{mountpoint=\"/var/lib/docker\",instance=~\"$node\"})",
+          "expr": "bottomk(2, node_filesystem_free_bytes{mountpoint=\"/var/lib/docker\",instance=~\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3554,7 +3554,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -3598,7 +3598,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"user\"}[1m]))) * 100) > 0",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"user\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3651,7 +3651,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -3696,7 +3696,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"steal\"}[1m]))) * 100)",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"steal\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3749,7 +3749,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -3793,7 +3793,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=~\"irq|softirq\"}[1m]))) * 100) > 0",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=~\"irq|softirq\"}[1m]))) * 100) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -3846,7 +3846,7 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "decimals": 1,
@@ -3890,7 +3890,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"nice\"}[1m]))) * 100)",
+          "expr": "topk(2, (avg by (instance) (rate(node_cpu_seconds_total{instance=~\"$node\",mode=\"nice\"}[1m]))) * 100)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -4364,6 +4364,6 @@
   },
   "timezone": "",
   "title": "Nodes (node_exporter+dockerd+cadvisor)",
-  "uid": "kmU9soKWz",
-  "version": 36
+  "uid": "kmUlsoKWz",
+  "version": 38
 }
