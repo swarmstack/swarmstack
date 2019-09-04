@@ -1381,7 +1381,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Node Disk Write Operations",
+      "title": "Top Node Storage Writes",
       "tooltip": {
         "shared": true,
         "sort": 2,
