@@ -231,7 +231,7 @@
     retries: 20
     delay: 60 
     ignore_errors: yes
-    when: "'portworx' in group_names and pxctl_installed.stat.exists == True and reboot_hint.stdout.find('reboot') != -1"
+    when: "'portworx' in group_names and pxctl_installed.stat.exists == True"
 
   - name: ensure docker service is enabled and started
     systemd: name=docker state=started masked=no enabled=yes
