@@ -59,7 +59,7 @@ PUSH_PASSWORD=changeme!43
 # Used for Prometheus Pushgateway
 
 REBOOT_DELAY=30
-REBOOT_TIMEOUT=120
+REBOOT_TIMEOUT=180
 # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600. Physical hosts may take much longer to boot.
 
 SWARMSTACK_REPO=https://github.com/swarmstack/swarmstack
