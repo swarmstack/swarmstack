@@ -404,7 +404,7 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.path=/prometheus'
-      - '--storage.tsdb.retention=48h'
+      - '--storage.tsdb.retention.time=48h'
       - '--web.enable-admin-api'
     configs:
       - source: prometheus-conf
