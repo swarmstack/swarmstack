@@ -56,6 +56,7 @@
     git:
       repo: "{{ SWARMSTACK_REPO }}"
       dest: "{{ SWARMSTACK_SRC_DIR }}"
+      version: "{{ SWARMSTACK_REPO_VERSION }}"
     ignore_errors: true
     when: "inventory_hostname == SWARMJOIN"
 
