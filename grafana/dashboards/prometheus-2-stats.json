@@ -272,7 +272,8 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "max",
+      "options": {}
     },
     {
       "cacheTimeout": null,
