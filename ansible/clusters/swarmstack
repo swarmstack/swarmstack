@@ -63,6 +63,7 @@ REBOOT_TIMEOUT=180
 # For physical machines, try REBOOT_DELAY=300, and REBOOT_TIMEOUT=600. Physical hosts may take much longer to boot.
 
 SWARMSTACK_REPO=https://github.com/swarmstack/swarmstack
+SWARMSTACK_REPO_VERSION=master
 SWARMSTACK_SRC_DIR=/usr/local/src/swarmstack
 SWARMSTACK_LOCAL_DIR=/usr/local/src/localswarmstack
 
