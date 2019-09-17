@@ -51,6 +51,72 @@
       name: netdata
     when: NetdataInstalled.changed == True and (NetdataCommented.changed == True or NetdataGroup.changed == True)
 
+### INSTALL/UPDATE node_exporter ON ALL HOSTS
+  - name: download current node_exporter version
+    get_url:
+      url: "https://api.github.com/repos/prometheus/node_exporter/releases/latest"
+      dest: "/tmp/node_exporter_version.tmp"
+    changed_when: false
+
+  #curl --silent "https://api.github.com/repos/prometheus/node_exporter/releases/latest" | egrep -i '"name": "[0-9.]+ / [0-9]+' | cut -f 4 -d '"' | cut -f 1 -d ' '
+  - name: determine current node_exporter version
+    shell: cat /tmp/node_exporter_version.tmp | cut -d '"' -f 26 | sed 's/v//'
+    register: NODE_EXPORTER_VER
+
+  - name: download current node_exporter release
+    get_url:
+      url: "https://github.com/prometheus/node_exporter/releases/download/v{{item}}/node_exporter-{{item}}.linux-amd64.tar.gz"
+      dest: "/tmp/node_exporter-{{item}}.linux-amd64.tar.gz"
+    with_items: "{{NODE_EXPORTER_VER.stdout}}"
+    changed_when: false
+
+  - name: extract node_exporter
+    unarchive:
+      src: "/tmp/node_exporter-{{item}}.linux-amd64.tar.gz"
+      dest: "/tmp"
+    with_items: "{{NODE_EXPORTER_VER.stdout}}"
+    changed_when: false
+
+  - name: check if node_exporter already installed
+    stat: path=/usr/local/bin/node_exporter
+    register: NODE_EXPORTER_EXISTS
+
+  - name: stop current node_exporter
+    systemd:
+      state: stopped
+      daemon_reload: no
+      name: node_exporter
+    ignore_errors: true
+    when: NODE_EXPORTER_EXISTS.stat.exists
+
+  - name: move extracted node_exporter to /usr/local/bin
+    command: "mv /tmp/node_exporter-{{item}}.linux-amd64/node_exporter /usr/local/bin"
+    with_items: "{{NODE_EXPORTER_VER.stdout}}"
+
+  - name: install node_exporter systemd service file
+    copy:
+      dest: "/etc/systemd/system/node_exporter.service"
+      content: |
+        [Unit]
+        Description=Node Exporter
+        After=network.target
+
+        [Service]
+        User=node_exporter
+        Group=node_exporter
+        Type=simple
+        ExecStart=/usr/local/bin/node_exporter
+
+        [Install]
+        WantedBy=multi-user.target
+
+  - name: (re)start node_exporter service
+    systemd:
+      state: started
+      enabled: true
+      daemon_reload: yes
+      name: node_exporter
+
 ### DOWNLOAD SWARMSTACK FILES TO SWARMJOIN HOST, COPY SOME LOCAL FILES TO SWARMJOIN HOST
   - name: Use git to download latest swarmstack
     git:
