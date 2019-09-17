@@ -329,63 +329,71 @@
 ### ADD PROMETHEUS SCRAPE CONFIGS FOR HOSTS
   - name: Add NetData to local Prometheus scrapes
     blockinfile:
-      marker_begin: "SWARMSTACK_BEGIN NetData {{item}}"
-      marker_end: "SWARMSTACK_END NetData {{item}}"
+      marker_begin: "SWARMSTACK_BEGIN NetData"
+      marker_end: "SWARMSTACK_END NetData"
       path: "{{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml"
       block: |2
-          - job_name: 'netdata-{{item}}'
+          - job_name: 'netdata'
             metrics_path: '/api/v1/allmetrics'
             params:
               format: [prometheus_all_hosts]
             honor_labels: true
             static_configs:
-              - targets: ['{{item}}:19999']
-    with_items: "{{groups['all']}}"
+              - targets: [{% for host in groups['all'] %}'{{ hostvars[host].inventory_hostname }}:19999'{{ '' if loop.last else ','}}{% endfor %}]
+    when: "inventory_hostname == SWARMJOIN"
+    ignore_errors: true
+
+  - name: Add node_exporter to local Prometheus scrapes
+    blockinfile:
+      marker_begin: "SWARMSTACK_BEGIN node_exporter"
+      marker_end: "SWARMSTACK_END node_exporter"
+      path: "{{SWARMSTACK_LOCAL_DIR}}/prometheus/conf//prometheus.yml"
+      block: |2
+          - job_name: 'node_exporter'
+            static_configs:
+              - targets: [{% for host in groups['all'] %}'{{ hostvars[host].inventory_hostname }}:9100'{{ '' if loop.last else ','}}{% endfor %}]
     when: "inventory_hostname == SWARMJOIN"
     ignore_errors: true
 
   - name: Add docker to local Prometheus scrapes
     blockinfile:
-      marker_begin: "SWARMSTACK_BEGIN docker {{item}}"
-      marker_end: "SWARMSTACK_END docker {{item}}"
+      marker_begin: "SWARMSTACK_BEGIN dockerd"
+      marker_end: "SWARMSTACK_END dockerd"
       path: "{{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml"
       block: |2
-          - job_name: 'dockerd-{{item}}'
+          - job_name: 'dockerd'
             metrics_path: '/metrics'
             honor_labels: true
             static_configs:
-              - targets: ['{{item}}:9323']
-    with_items: "{{groups['swarm']}}"
+              - targets: [{% for host in groups['swarm'] %}'{{ hostvars[host].inventory_hostname }}:9323'{{ '' if loop.last else ','}}{% endfor %}]
     when: "inventory_hostname == SWARMJOIN"
     ignore_errors: true
 
   - name: Add etcd to local Prometheus scrapes
     blockinfile:
-      marker_begin: "SWARMSTACK_BEGIN etcd {{item}}"
-      marker_end: "SWARMSTACK_END etcd {{item}}"
+      marker_begin: "SWARMSTACK_BEGIN etcd"
+      marker_end: "SWARMSTACK_END etcd"
       path: "{{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml"
       block: |2
-          - job_name: 'etcd-{{item}}'
+          - job_name: 'etcd'
             metrics_path: '/metrics'
             honor_labels: true
             static_configs:
-              - targets: ['{{item}}:2379']
-    with_items: "{{groups['etcd']}}"
+              - targets: [{% for host in groups['etcd'] %}'{{ hostvars[host].inventory_hostname }}:2379'{{ '' if loop.last else ','}}{% endfor %}]
     when: "inventory_hostname == SWARMJOIN"
     ignore_errors: true
 
   - name: Add Portworx to local Prometheus scrapes
     blockinfile:
-      marker_begin: "SWARMSTACK_BEGIN Portworx {{item}}"
-      marker_end: "SWARMSTACK_END Portworx {{item}}"
+      marker_begin: "SWARMSTACK_BEGIN Portworx"
+      marker_end: "SWARMSTACK_END Portworx"
       path: "{{SWARMSTACK_LOCAL_DIR}}/prometheus/conf/prometheus.yml"
       block: |2
-          - job_name: 'portworx-{{item}}'
+          - job_name: 'portworx'
             metrics_path: '/metrics'
             honor_labels: true
             static_configs:
-              - targets: ['{{item}}:9001']
-    with_items: "{{groups['portworx']}}"
+              - targets: [{% for host in groups['portworx'] %}'{{ hostvars[host].inventory_hostname }}:9001'{{ '' if loop.last else ','}}{% endfor %}]
     when: "inventory_hostname == SWARMJOIN"
     ignore_errors: true
 
