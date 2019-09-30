@@ -5,8 +5,19 @@ groups:
   rules:
 
   - alert: no_service_replicas_10m
-    expr: sum(swarm_monitor{service!~'^swarmstack_.*|^docker_.*'}) by (service) == 0
+    expr: sum(swarm_monitor) by (service,node) == 0
     for: 10m
+    labels:
+      severity: critical
     annotations:
       description: 'Service {{ $labels.service }} has had no running containers for longer than 10 minutes'
       summary: 'No containers of service {{ $labels.service }}'
+
+  - alert: desired_service_replicas_30m
+    expr: (sum by(service, node) (swarm_desired) or vector(0)) - (sum by(service, node) (swarm_monitor) or vector(0)) > 0
+    for: 30m
+    labels:
+      severity: warning
+    annotations:
+      description: 'Service {{ $labels.service }} has not been running the desired number of containers for longer than 30 minutes per {{ $labels.node }}'
+      summary: 'Not enough container replicas for service {{ $labels.service }}'
