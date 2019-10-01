@@ -337,7 +337,7 @@ services:
       #- https_proxy=https://proxy.example.com:443
       #- no_proxy=10.0.0.0/8,.example.com
     healthcheck:
-      test: "/usr/bin/curl -s -I -X GET http://localhost:3000/login"
+      test: "wget -q -Y off -O /dev/null http://localhost:3000/login > /dev/null 2>&1"
       interval: 25s
       timeout: 3s
       start_period: 120s
