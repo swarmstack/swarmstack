@@ -347,7 +347,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.45
+    image: lmierzwa/karma:v0.47
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -367,7 +367,7 @@ services:
       - net
 
   portainer:
-    image: portainer/portainer:1.22.0
+    image: portainer/portainer:latest
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     deploy:
       mode: replicated
@@ -383,7 +383,7 @@ services:
       - portainer_data:/data
 
   portainer-agent:
-    image: portainer/agent:1.4.0
+    image: portainer/agent:latest
     deploy:
       mode: global
       placement:
@@ -398,7 +398,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   prometheus:
-    image: prom/prometheus:v2.12.0
+    image: prom/prometheus:latest
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
@@ -442,7 +442,7 @@ services:
       - swarm-endpoints:/etc/swarm-endpoints/:ro
 
   pushgateway:
-    image: prom/pushgateway:v0.9.1
+    image: prom/pushgateway:latest
     deploy:
       labels:
         prometheus.enable: "true"
