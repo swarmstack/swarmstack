@@ -347,7 +347,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.49
+    image: lmierzwa/karma:v0.50
     configs:
       - source: karma-conf
         target: /karma.yaml
@@ -358,11 +358,29 @@ services:
         prometheus.path: "/metrics"
       mode: replicated
       replicas: 1
-    #healthcheck:
-    #  test: "/busybox/wget -q -Y off http://localhost:8080 -O /dev/null > /dev/null 2>&1"
-    #  interval: 25s
-    #  timeout: 3s
-    #  start_period: 30s
+    networks:
+      - net
+
+  kthxbye:
+    image: lmierzwa/kthxbye:v0.4
+    command:
+     - '-alertmanager.addr'
+     - 'alertmanager:9093'
+     - '-extend-if-expiring-in'
+     - '5m'
+     - '-extend-by'
+     - '12h'
+     - '-extend-with-prefix'
+     - 'ACK'
+     - '-interval'
+     - '60s'
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        prometheus.enable: "true"
+        prometheus.port: "8080"
+        prometheus.path: "/metrics"
     networks:
       - net
 
