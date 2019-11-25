@@ -362,7 +362,7 @@ services:
       - net
 
   kthxbye:
-    image: lmierzwa/kthxbye:v0.4
+    image: lmierzwa/kthxbye:v0.5
     command:
      - '-alertmanager.addr'
      - 'alertmanager:9093'
