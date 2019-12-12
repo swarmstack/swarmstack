@@ -227,7 +227,7 @@ services:
       - caddycerts:/etc/caddycerts
 
   cadvisor:
-    image: google/cadvisor:v0.33.0
+    image: gcr.io/google-containers/cadvisor:v0.34.0 
     command: -logtostderr -docker_only
     deploy:
       labels:
@@ -347,7 +347,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.51
+    image: lmierzwa/karma:v0.52
     configs:
       - source: karma-conf
         target: /karma.yaml
