@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1567621976178,
+  "id": 17,
+  "iteration": 1580163340293,
   "links": [],
   "panels": [
     {
@@ -29,6 +29,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -116,6 +117,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -203,6 +205,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -289,6 +292,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -374,6 +378,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -453,6 +458,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -462,6 +468,7 @@
         "x": 0,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 33,
       "legend": {
         "alignAsTable": true,
@@ -481,7 +488,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -496,20 +503,28 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, avg by (container_label_com_docker_swarm_task_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_task_name!=\"\"}[60s])) * 1024)",
+          "expr": "topk(1, sum by (instance, container_label_com_docker_swarm_task_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_task_name!=\"\"}[60s]) * 100))",
           "format": "time_series",
+          "hide": true,
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{container_label_com_docker_swarm_task_name}}",
+          "legendFormat": "cAdvisor: {{instance}} - {{container_label_com_docker_swarm_task_name}}",
           "refId": "A",
           "step": 2
+        },
+        {
+          "expr": "topk(1, sum(label_replace(netdata_cgroup_cpu_percentage_average{instance=~\"$node\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)?(.*)(.cpu)\") ) by (instance,chart))",
+          "interval": "1m",
+          "legendFormat": "{{instance}} - {{chart}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container CPU Usage",
+      "title": "Top Container CPU Cores",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -531,7 +546,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -553,6 +568,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -562,6 +578,7 @@
         "x": 6,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 47,
       "legend": {
         "avg": false,
@@ -577,7 +594,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -592,15 +609,17 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node\"}[1m])) by (name,instance))",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node\"}[$__interval]) > 0) by (name,instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}} - {{name}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(2, sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node\"}[1m])) by (name,instance))",
+          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node\"}[$__interval]) > 0) by (name,instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}} - {{name}}",
           "refId": "B"
@@ -654,6 +673,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 1,
@@ -663,6 +683,7 @@
         "x": 12,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 38,
       "legend": {
         "alignAsTable": false,
@@ -680,7 +701,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -695,8 +716,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, ceil(sum(rate(container_fs_reads_total{instance=~\"$node\", name=~\".+\"}[1m])) by (name,instance)))",
+          "expr": "topk(1, ceil(sum(rate(container_fs_reads_total{instance=~\"$node\", name=~\".+\"}[$__interval])) by (name,instance)))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} - {{name}}",
           "refId": "A",
@@ -727,9 +749,9 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -751,6 +773,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 0,
       "fillGradient": 1,
@@ -760,12 +783,13 @@
         "x": 18,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 34,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": false,
-        "hideEmpty": false,
+        "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
@@ -794,9 +818,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(netdata_cgroup_mem_MiB_average{instance=~\"$node\"}) by (chart,instance))",
+          "expr": "topk(1, sum(netdata_cgroup_mem_MiB_average{instance=~\"$node\"}) by (chart,instance))",
           "format": "time_series",
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": " {{instance}} {{chart}}",
           "refId": "A",
@@ -851,6 +876,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -860,13 +886,14 @@
         "x": 0,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 22,
       "legend": {
         "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "rightSide": false,
@@ -879,7 +906,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -894,20 +921,28 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, avg by (container_label_com_docker_swarm_service_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_service_name!=\"\"}[60s]) * 1024))",
+          "expr": "topk(1, sum by (container_label_com_docker_swarm_service_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_service_name!=\"\"}[$__interval]) * 100))",
           "format": "time_series",
+          "hide": true,
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
+          "legendFormat": "cAdvisor: {{container_label_com_docker_swarm_service_name}}",
           "refId": "A",
           "step": 2
+        },
+        {
+          "expr": "topk(1, sum(label_replace(netdata_cgroup_cpu_percentage_average{instance=~\"$node\"}, \"chart\", \"$2\", \"chart\", \"(cgroup_)?(.*)(.cpu)\") ) by (chart))",
+          "interval": "1m",
+          "legendFormat": "{{chart}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Service CPU Usage",
+      "title": "Top Service CPU Cores",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -929,7 +964,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -951,6 +986,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -960,6 +996,7 @@
         "x": 6,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 17,
       "legend": {
         "alignAsTable": false,
@@ -979,7 +1016,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -994,20 +1031,21 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name)) ",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[$__interval]) > 0 ) by (container_label_com_docker_swarm_service_name)) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
-          "interval": "",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "IN: {{container_label_com_docker_swarm_service_name}}",
           "refId": "A",
           "step": 2
         },
         {
-          "expr": "-topk(2, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[1m]) > 100000 ) by (container_label_com_docker_swarm_service_name))",
+          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{container_label_com_docker_swarm_service_name=~\".+\",instance=~\"$node\"}[$__interval]) > 0 ) by (container_label_com_docker_swarm_service_name))",
           "format": "time_series",
           "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{container_label_com_docker_swarm_service_name}}",
           "refId": "B"
@@ -1061,6 +1099,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 1,
@@ -1070,6 +1109,7 @@
         "x": 12,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 55,
       "legend": {
         "avg": false,
@@ -1085,7 +1125,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1100,8 +1140,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_reads_bytes_total{instance=~\"$node\",name=~\".+\"}[1m])) by (name, instance))",
+          "expr": "topk(1, sum(rate(container_fs_reads_bytes_total{instance=~\"$node\",name=~\".+\"}[$__interval])) by (name, instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} - {{name}}",
           "refId": "B"
@@ -1131,9 +1172,9 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1155,6 +1196,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 0,
       "fillGradient": 0,
@@ -1164,6 +1206,7 @@
         "x": 18,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 24,
       "legend": {
         "alignAsTable": false,
@@ -1198,8 +1241,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!=\"\",instance=~\"$node\"}) by (container_label_com_docker_swarm_service_name))",
+          "expr": "topk(1, sum(container_memory_usage_bytes{container_label_com_docker_swarm_service_name!=\"\",instance=~\"$node\"}) by (container_label_com_docker_swarm_service_name))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{container_label_com_docker_swarm_service_name}}",
           "refId": "A",
@@ -1254,6 +1298,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -1263,13 +1308,14 @@
         "x": 0,
         "y": 12
       },
+      "hiddenSeries": false,
       "id": 45,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -1282,7 +1328,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1297,8 +1343,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, 100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance)))",
+          "expr": "topk(1, 100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance))) > 0",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -1330,7 +1377,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -1352,6 +1399,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
@@ -1361,6 +1409,7 @@
         "x": 6,
         "y": 12
       },
+      "hiddenSeries": false,
       "id": 53,
       "legend": {
         "avg": false,
@@ -1376,7 +1425,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1391,15 +1440,17 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node\"}[1m]) > 100000) by (instance))",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$node\"}[$__interval]) > 1) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(2, sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node\"}[1m]) > 100000) by (instance))",
+          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$node\"}[$__interval]) > 1) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
           "refId": "B"
@@ -1451,6 +1502,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 1,
@@ -1460,6 +1512,7 @@
         "x": 12,
         "y": 12
       },
+      "hiddenSeries": false,
       "id": 41,
       "legend": {
         "avg": true,
@@ -1475,7 +1528,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1490,9 +1543,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, ceil(sum(rate(container_fs_writes_total{instance=~\"$node\",name=~\".+\"}[1m])) by (name,instance) > 0 ))",
+          "expr": "topk(1, ceil(sum(rate(container_fs_writes_total{instance=~\"$node\",name=~\".+\"}[$__interval])) by (name,instance)))",
           "format": "time_series",
           "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": " {{instance}} - {{name}}",
           "refId": "A"
@@ -1522,9 +1576,9 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1546,6 +1600,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 10,
@@ -1555,6 +1610,7 @@
         "x": 18,
         "y": 12
       },
+      "hiddenSeries": false,
       "id": 49,
       "legend": {
         "alignAsTable": true,
@@ -1574,7 +1630,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1589,10 +1645,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]))) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count{instance=~\"$node_9323\"}[$__interval]))) by (action)",
           "format": "time_series",
           "instant": false,
-          "intervalFactor": 10,
+          "interval": "1m",
+          "intervalFactor": 1,
           "legendFormat": "{{action}}",
           "refId": "A",
           "step": 10
@@ -1624,7 +1681,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -1646,21 +1703,24 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
-      "fillGradient": 10,
+      "fillGradient": 1,
       "gridPos": {
         "h": 5,
         "w": 6,
         "x": 0,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 61,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
         "hideEmpty": true,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -1690,6 +1750,7 @@
         {
           "expr": "count(container_last_seen{instance=~\"$node\"}) by (instance)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1720,7 +1781,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -1742,6 +1803,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 0,
       "fillGradient": 10,
@@ -1751,6 +1813,7 @@
         "x": 6,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 59,
       "legend": {
         "avg": true,
@@ -1781,16 +1844,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"})",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"received\"})",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Received",
           "refId": "A",
           "step": 4
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"})",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"sent\"})",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Sent",
           "refId": "B",
@@ -1844,6 +1909,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 1,
@@ -1853,11 +1919,13 @@
         "x": 12,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 57,
       "legend": {
         "avg": false,
         "current": true,
         "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
@@ -1867,7 +1935,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1882,9 +1950,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_writes_bytes_total{instance=~\"$node\",name=~\".+\"}[1m])) by (name, instance) > 0)",
+          "expr": "topk(1, sum(rate(container_fs_writes_bytes_total{instance=~\"$node\",name=~\".+\"}[$__interval])) by (name, instance))",
           "format": "time_series",
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} - {{name}}",
           "refId": "A"
@@ -1914,9 +1983,9 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1938,6 +2007,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 10,
@@ -1947,6 +2017,7 @@
         "x": 18,
         "y": 17
       },
+      "hiddenSeries": false,
       "id": 51,
       "legend": {
         "alignAsTable": true,
@@ -1981,9 +2052,10 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]))) by (action)",
+          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count{instance=~\"$node_9323\"}[$__interval]))) by (action)",
           "format": "time_series",
-          "intervalFactor": 10,
+          "interval": "1m",
+          "intervalFactor": 1,
           "legendFormat": "{{action}}",
           "refId": "A",
           "step": 10
@@ -2015,7 +2087,7 @@
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -2034,6 +2106,7 @@
     },
     {
       "columns": [],
+      "datasource": null,
       "fontSize": "100%",
       "gridPos": {
         "h": 50,
@@ -2048,96 +2121,10 @@
       "scroll": false,
       "showHeader": true,
       "sort": {
-        "col": 5,
+        "col": 6,
         "desc": false
       },
       "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_com_docker_stack_namespace",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "__name__",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_com_docker_swarm_node_id",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_com_docker_swarm_service_id",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_com_docker_swarm_task_id",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
         {
           "alias": "Docker Swarm Service Name",
           "colorMode": null,
@@ -2152,150 +2139,6 @@
           "pattern": "container_label_com_docker_swarm_service_name",
           "thresholds": [],
           "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_com_docker_swarm_task_name",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "/container_label_org_.*/",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "name",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "state",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "container_label_maintainer",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "task",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "image",
-          "thresholds": [],
-          "type": "hidden",
           "unit": "short"
         },
         {
@@ -2341,7 +2184,7 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "mappingType": 1,
-          "pattern": "container_label_MAINTAINER",
+          "pattern": "/.*/",
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
@@ -2363,8 +2206,8 @@
       "type": "table"
     }
   ],
-  "refresh": "30s",
-  "schemaVersion": 19,
+  "refresh": "",
+  "schemaVersion": 21,
   "style": "dark",
   "tags": [
     "docker",
@@ -2403,6 +2246,7 @@
       {
         "allValue": null,
         "current": {
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2428,7 +2272,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -2459,5 +2303,5 @@
   "timezone": "",
   "title": "Containers (netdata+dockerd+cadvisor)",
   "uid": "R20PzfFWk",
-  "version": 900
+  "version": 901
 }

@@ -15,7 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1567629121221,
+  "id": 5,
+  "iteration": 1580163567991,
   "links": [],
   "panels": [
     {
@@ -23,6 +24,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -31,6 +33,7 @@
         "x": 0,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 16,
       "legend": {
         "alignAsTable": false,
@@ -47,7 +50,7 @@
       "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -61,11 +64,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": " topk(2, px_volume_readthroughput{volumename=~\"($volumename)\"} )",
+          "expr": " topk(1, px_volume_readthroughput{cluster=~\"$cluster\",volumename=~\"$volumename\"} ) by (cluster)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 20
         }
@@ -117,6 +120,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
@@ -125,13 +129,14 @@
         "x": 5,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 15,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "show": false,
@@ -143,7 +148,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -157,19 +162,21 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, px_volume_vol_read_latency_seconds{volumename=~\"$volumename\"})",
+          "expr": "topk(1, px_volume_vol_read_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Read: {{volumename}}",
+          "legendFormat": "Read: ({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 10
         },
         {
-          "expr": "- topk(2, px_volume_vol_write_latency_seconds{volumename=~\"$volumename\"})",
+          "expr": "- topk(1, px_volume_vol_write_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
           "format": "time_series",
           "hide": false,
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "Write: {{volumename}}",
+          "legendFormat": "Write: ({{cluster}}) {{volumename}}",
           "refId": "B"
         }
       ],
@@ -220,6 +227,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 2,
       "fill": 0,
       "fillGradient": 0,
@@ -229,6 +237,7 @@
         "x": 10,
         "y": 0
       },
+      "hiddenSeries": false,
       "id": 19,
       "legend": {
         "alignAsTable": false,
@@ -261,10 +270,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, (px_volume_usage_bytes{volumename=~\"($volumename)\"}/px_volume_capacity_bytes{volumename=~\"($volumename)\"})*100)",
+          "expr": "topk(1, (px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}/px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"})*100) by (cluster)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 10
         }
@@ -318,6 +327,7 @@
           "value": "current"
         }
       ],
+      "datasource": null,
       "description": "",
       "filterNull": false,
       "fontSize": "80%",
@@ -357,7 +367,7 @@
           "unit": "percent"
         },
         {
-          "alias": "",
+          "alias": "Cluster",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -369,7 +379,7 @@
           "mappingType": 1,
           "pattern": "cluster",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -492,16 +502,16 @@
       ],
       "targets": [
         {
-          "expr": "sort_desc((px_volume_usage_bytes/px_volume_capacity_bytes)*100)",
+          "expr": "sort_desc((px_volume_usage_bytes{cluster=~\"$cluster\"}/px_volume_capacity_bytes{cluster=~\"$cluster\"})*100)",
           "format": "table",
           "instant": true,
-          "intervalFactor": 4,
-          "legendFormat": "{{volumename}}",
+          "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A",
           "step": 2
         }
       ],
-      "timeFrom": "1m",
+      "timeFrom": null,
       "title": "Volume Fill",
       "transform": "table",
       "type": "table"
@@ -511,6 +521,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 0,
@@ -520,13 +531,14 @@
         "x": 0,
         "y": 5
       },
+      "hiddenSeries": false,
       "id": 31,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
@@ -536,7 +548,7 @@
       "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -550,11 +562,11 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, px_volume_writethroughput{volumename=~\"($volumename)\"} ) > 0",
+          "expr": "topk(1, px_volume_writethroughput{cluster=~\"$cluster\",volumename=~\"($volumename)\"}  > 0 ) by (cluster)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "Write: {{volumename}}",
+          "legendFormat": "Write: ({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 20
         }
@@ -580,12 +592,12 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
+          "decimals": 1,
           "format": "Bps",
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -607,6 +619,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
@@ -616,6 +629,7 @@
         "x": 5,
         "y": 5
       },
+      "hiddenSeries": false,
       "hideTimeOverride": true,
       "id": 13,
       "legend": {
@@ -623,7 +637,7 @@
         "avg": false,
         "current": false,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "show": false,
@@ -635,7 +649,7 @@
       "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -649,10 +663,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, px_volume_depth_io{volumename=~\"($volumename)\"}) > 0",
+          "expr": "topk(2, px_volume_depth_io{cluster=~\"$cluster\",volumename=~\"($volumename)\"} > 0) by (cluster)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 10
         }
@@ -705,6 +719,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 0,
       "fillGradient": 0,
@@ -714,6 +729,7 @@
         "x": 10,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 28,
       "legend": {
         "avg": false,
@@ -743,10 +759,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(2, px_volume_capacity_bytes{volumename=~\"($volumename)\"} - px_volume_usage_bytes{volumename=~\"($volumename)\"})",
+          "expr": "bottomk(1, px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"($volumename)\"} - px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"($volumename)\"}) by (cluster)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A"
         }
       ],
@@ -798,6 +814,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 1,
@@ -807,6 +824,7 @@
         "x": 0,
         "y": 10
       },
+      "hiddenSeries": false,
       "id": 24,
       "legend": {
         "alignAsTable": false,
@@ -837,11 +855,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, px_volume_iops{volumename=~\"($volumename)\"}) > 0",
+          "expr": "topk(1, px_volume_iops{cluster=~\"$cluster\",volumename=~\"($volumename)\"} > 0) by (cluster)",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 20
         }
@@ -896,6 +914,7 @@
           "value": "current"
         }
       ],
+      "datasource": null,
       "filterNull": false,
       "fontSize": "80%",
       "gridPos": {
@@ -949,7 +968,7 @@
           "unit": "short"
         },
         {
-          "alias": "",
+          "alias": "Cluster",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -961,7 +980,7 @@
           "mappingType": 1,
           "pattern": "cluster",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -997,7 +1016,7 @@
           "unit": "short"
         },
         {
-          "alias": "",
+          "alias": "Node",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1009,7 +1028,7 @@
           "mappingType": 1,
           "pattern": "node",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -1043,15 +1062,31 @@
           "thresholds": [],
           "type": "hidden",
           "unit": "short"
+        },
+        {
+          "alias": "Volume Name",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "volumename",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
         }
       ],
       "targets": [
         {
-          "expr": "sort(px_volume_halevel)",
+          "expr": "sort(px_volume_halevel{cluster=~\"$cluster\"})",
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "",
           "refId": "A",
           "step": 2
         }
@@ -1067,6 +1102,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 0,
       "fillGradient": 0,
@@ -1076,6 +1112,7 @@
         "x": 10,
         "y": 15
       },
+      "hiddenSeries": false,
       "id": 26,
       "legend": {
         "avg": false,
@@ -1105,10 +1142,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, px_volume_usage_bytes{volumename=~\"($volumename)\"})",
+          "expr": "topk(1, px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{volumename}}",
+          "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A"
         }
       ],
@@ -1119,7 +1156,7 @@
       "title": "Top Volume Usage",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -1157,6 +1194,7 @@
     },
     {
       "columns": [],
+      "datasource": null,
       "fontSize": "80%",
       "gridPos": {
         "h": 10,
@@ -1230,7 +1268,7 @@
           "unit": "short"
         },
         {
-          "alias": "",
+          "alias": "Cluster",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1242,7 +1280,7 @@
           "mappingType": 1,
           "pattern": "cluster",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -1294,7 +1332,7 @@
           "unit": "short"
         },
         {
-          "alias": "",
+          "alias": "Node",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1306,7 +1344,7 @@
           "mappingType": 1,
           "pattern": "node",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -1328,10 +1366,10 @@
       ],
       "targets": [
         {
-          "expr": "sort(px_volume_usage_bytes)",
+          "expr": "sort(px_volume_usage_bytes{cluster=~\"$cluster\"})",
           "format": "table",
           "instant": true,
-          "intervalFactor": 4,
+          "intervalFactor": 1,
           "refId": "A"
         }
       ],
@@ -1342,6 +1380,7 @@
     },
     {
       "columns": [],
+      "datasource": null,
       "filterNull": false,
       "fontSize": "80%",
       "gridPos": {
@@ -1395,7 +1434,7 @@
           "unit": "short"
         },
         {
-          "alias": "",
+          "alias": "Cluster",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1407,7 +1446,7 @@
           "mappingType": 1,
           "pattern": "cluster",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
@@ -1505,15 +1544,31 @@
           "thresholds": [],
           "type": "number",
           "unit": "short"
+        },
+        {
+          "alias": "Node",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "node",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
         }
       ],
       "targets": [
         {
-          "expr": "px_volume_capacity_bytes",
+          "expr": "px_volume_capacity_bytes{cluster=~\"$cluster\"}",
           "format": "table",
           "instant": true,
           "intervalFactor": 4,
-          "legendFormat": "{{volumename}} ( {{volumeid}} ) via {{instance}}",
+          "legendFormat": "",
           "refId": "A",
           "step": 2
         }
@@ -1525,8 +1580,8 @@
       "type": "table"
     }
   ],
-  "refresh": "1m",
-  "schemaVersion": 19,
+  "refresh": "",
+  "schemaVersion": 21,
   "style": "dark",
   "tags": [
     "portworx"
@@ -1541,11 +1596,38 @@
             "$__all"
           ]
         },
-        "datasource": null,
-        "definition": "",
+        "datasource": "Prometheus",
+        "definition": "px_cluster_status_cluster_size",
         "hide": 0,
         "includeAll": true,
-        "label": "Volume Name",
+        "label": "Cluster",
+        "multi": true,
+        "name": "cluster",
+        "options": [],
+        "query": "px_cluster_status_cluster_size",
+        "refresh": 1,
+        "regex": "/cluster=\"([^\"]+).*\"/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "Prometheus",
+        "definition": "label_values(px_volume_usage_bytes,volumename)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Volume",
         "multi": true,
         "name": "volumename",
         "options": [],
@@ -1553,7 +1635,7 @@
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [],
         "tagsQuery": "",
@@ -1563,7 +1645,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -1594,5 +1676,5 @@
   "timezone": "browser",
   "title": "Portworx Volumes Status",
   "uid": "29tJy65iz",
-  "version": 3
+  "version": 4
 }

@@ -380,7 +380,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.51
+    image: lmierzwa/karma:v0.54
     configs:
       - source: karma-conf
         target: /karma.yaml

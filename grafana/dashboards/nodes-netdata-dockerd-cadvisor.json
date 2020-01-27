@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1567621873303,
+  "id": 16,
+  "iteration": 1580162723427,
   "links": [],
   "panels": [
     {
@@ -29,6 +29,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 1,
       "format": "s",
       "gauge": {
@@ -117,6 +118,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "none",
       "gauge": {
@@ -202,6 +204,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "short",
       "gauge": {
@@ -290,6 +293,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": 0,
       "format": "decmbytes",
       "gauge": {
@@ -378,6 +382,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -463,6 +468,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -515,10 +521,11 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{instance=~\"$node_9323\"}[5m]) ) )",
+          "expr": "sum(ceil(increase(engine_daemon_health_checks_failed_total{instance=~\"$node_9323\"}[$__interval]) ) )",
           "format": "time_series",
           "hide": false,
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -544,22 +551,24 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 2,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 0,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 13,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -572,7 +581,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -587,8 +596,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2,{dimension=\"load1\",instance=~\"$node\"} > 0)",
+          "expr": "topk(1,{dimension=\"load1\",instance=~\"$node\"} > 0)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -621,7 +631,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -643,21 +653,23 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 0,
       "fillGradient": 10,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 6,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 22,
       "legend": {
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": true,
         "show": false,
@@ -682,16 +694,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"})",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"received\"})",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Received",
           "refId": "A",
           "step": 4
         },
         {
-          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"})",
+          "expr": "sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"sent\"})",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Sent",
           "refId": "B",
@@ -743,18 +757,20 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 12,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 18,
       "legend": {
         "alignAsTable": false,
@@ -772,23 +788,24 @@
       "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 0.5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(netdata_disk_ops_operations_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance)) < 2000000000",
+          "expr": "topk(1, sum(netdata_disk_ops_operations_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance)) < 2000000000",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -799,7 +816,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Storage Reads",
+      "title": "Top Node Reads",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -811,7 +828,7 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
@@ -819,9 +836,9 @@
           "decimals": 0,
           "format": "short",
           "label": "",
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -840,18 +857,20 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 15,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 16,
       "legend": {
         "alignAsTable": false,
@@ -869,14 +888,14 @@
       "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 0.5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -884,8 +903,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(netdata_disk_io_KiB_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, sum(netdata_disk_io_KiB_persec_average{dimension=\"reads\",instance=~\"$node\"}) by (instance) > 0)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -896,7 +916,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Storage Read Rate",
+      "title": "Top Node Read Rate",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -916,9 +936,9 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -937,25 +957,27 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 18,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 24,
       "legend": {
         "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": false,
@@ -963,10 +985,10 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -981,10 +1003,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_reads_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(1, sum(rate(container_fs_reads_total{name!=\"\",instance=~\"$node\"}[$__interval])) by (instance, name))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{instance}} {{name}}",
           "refId": "A",
           "step": 4
         }
@@ -993,10 +1016,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Storage Reads",
+      "title": "Top Container Reads",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1004,7 +1027,7 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
@@ -1012,9 +1035,9 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -1033,18 +1056,20 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 21,
         "y": 2
       },
+      "hiddenSeries": false,
       "id": 85,
       "legend": {
         "avg": false,
@@ -1057,10 +1082,10 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1075,10 +1100,11 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_reads_bytes_total{instance=~\"$node\"}[2m])) by (instance)) ",
+          "expr": "topk(1, sum(rate(container_fs_reads_bytes_total{name!=\"\",instance=~\"$node\"}[$__interval])) by (instance,name)) ",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{instance}} {{name}}",
           "refId": "B"
         }
       ],
@@ -1086,7 +1112,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Storage Read Rate",
+      "title": "Top Container Read Rate",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1105,9 +1131,9 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1129,22 +1155,24 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 2,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 0,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 14,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": true,
@@ -1157,7 +1185,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1172,8 +1200,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, 100 - (avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance)))",
+          "expr": "topk(1, 100 - avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance) > 0)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -1205,7 +1234,7 @@
           "label": null,
           "logBase": 1,
           "max": "100",
-          "min": "0",
+          "min": "0.1",
           "show": true
         },
         {
@@ -1227,15 +1256,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 6,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 89,
       "legend": {
         "avg": false,
@@ -1251,7 +1282,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1266,15 +1297,17 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(increase(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"received\"}[1m])) by (instance))",
+          "expr": "topk(1, sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"received\"} > 0) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Received: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(2, sum(increase(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"eth.*|en.*\",dimension=\"sent\"}[1m])) by (instance))",
+          "expr": "bottomk(1, sum(netdata_net_net_kilobits_persec_average{instance=~\"$node\",family=~\"e.*\",dimension=\"sent\"} < 0) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "Sent: {{instance}}",
           "refId": "B"
@@ -1325,25 +1358,27 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 12,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 79,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "rightSide": false,
@@ -1354,14 +1389,14 @@
       "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 0.5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -1369,8 +1404,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, -sum(netdata_disk_ops_operations_persec_average{dimension=\"writes\",instance=~\"$node\"}) by (instance)) < 2000000000",
+          "expr": "topk(1, -sum(netdata_disk_ops_operations_persec_average{dimension=\"writes\",instance=~\"$node\"}) by (instance)) < 2000000000",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -1381,7 +1417,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Storage Writes",
+      "title": "Top Node Writes",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1401,9 +1437,9 @@
           "decimals": 0,
           "format": "short",
           "label": "",
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1422,25 +1458,27 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 15,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 76,
       "legend": {
         "alignAsTable": false,
         "avg": true,
         "current": false,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": true,
         "min": false,
         "rightSide": false,
@@ -1451,14 +1489,14 @@
       "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
       "paceLength": 10,
       "percentage": false,
       "pointradius": 0.5,
-      "points": true,
+      "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -1466,8 +1504,9 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "-topk(2, sum(netdata_disk_io_KiB_persec_average{instance=~\"$node\"}) by (instance)) < 2000000000",
+          "expr": "topk(1, -sum(netdata_disk_io_KiB_persec_average{instance=~\"$node\"}) by (instance) < 20000000)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1477,10 +1516,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Storage Writes",
+      "title": "Top Node Write Rate",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -1497,9 +1536,9 @@
           "decimals": 0,
           "format": "KBs",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1518,18 +1557,20 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 18,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 77,
       "legend": {
         "avg": true,
@@ -1542,10 +1583,10 @@
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1560,11 +1601,12 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_writes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(1, sum(rate(container_fs_writes_total{name!=\"\",instance=~\"$node\"}[$__interval])) by (instance, name))",
           "format": "time_series",
           "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": " {{instance}}",
+          "legendFormat": " {{instance}} {{name}}",
           "refId": "A"
         }
       ],
@@ -1572,10 +1614,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Storage Writes",
+      "title": "Top Container Writes",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1591,9 +1633,9 @@
           "decimals": 0,
           "format": "short",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1612,33 +1654,36 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 0,
+      "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
         "x": 21,
-        "y": 7
+        "y": 6
       },
+      "hiddenSeries": false,
       "id": 83,
       "legend": {
         "avg": false,
         "current": true,
         "hideEmpty": true,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -1653,11 +1698,12 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, sum(rate(container_fs_writes_bytes_total{instance=~\"$node\"}[2m])) by (instance))",
+          "expr": "topk(1, sum(rate(container_fs_writes_bytes_total{name!=\"\",instance=~\"$node\"}[$__interval])) by (instance, name))",
           "format": "time_series",
           "instant": false,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{instance}} {{name}}",
           "refId": "A"
         }
       ],
@@ -1665,7 +1711,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Storage Write Rate",
+      "title": "Top Container Write Rate",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1684,9 +1730,9 @@
           "decimals": 0,
           "format": "Bps",
           "label": null,
-          "logBase": 2,
+          "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -1712,6 +1758,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "decimals": null,
       "format": "percent",
       "gauge": {
@@ -1725,7 +1772,7 @@
         "h": 3,
         "w": 3,
         "x": 0,
-        "y": 12
+        "y": 10
       },
       "hideTimeOverride": true,
       "id": 11,
@@ -1769,7 +1816,7 @@
           "expr": "bottomk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"idle\",instance=~\"$node\"}) by (instance))",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 4,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
           "step": 2
@@ -1778,7 +1825,7 @@
       "thresholds": "10,25",
       "timeFrom": "1m",
       "timeShift": null,
-      "title": "Lowest CPU Free",
+      "title": "Lowest CPU Idle",
       "transparent": true,
       "type": "singlestat",
       "valueFontSize": "80%",
@@ -1800,6 +1847,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -1812,7 +1860,7 @@
         "h": 3,
         "w": 5,
         "x": 3,
-        "y": 12
+        "y": 10
       },
       "id": 64,
       "interval": null,
@@ -1872,7 +1920,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "first"
     },
     {
       "cacheTimeout": null,
@@ -1883,6 +1931,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "description": "",
       "format": "percent",
       "gauge": {
@@ -1896,7 +1945,7 @@
         "h": 3,
         "w": 3,
         "x": 8,
-        "y": 12
+        "y": 10
       },
       "id": 8,
       "interval": null,
@@ -1935,7 +1984,7 @@
         "lineColor": "rgb(31, 120, 193)",
         "show": false
       },
-      "tableColumn": "job",
+      "tableColumn": "",
       "targets": [
         {
           "expr": "bottomk(1, 100 / sum(netdata_system_ram_MiB_average{instance=~\"$node\"}) by (instance) * sum(netdata_system_ram_MiB_average{dimension=~\"free|cached\",instance=~\"$node\"}) by (instance))",
@@ -1971,6 +2020,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -1983,7 +2033,7 @@
         "h": 3,
         "w": 5,
         "x": 11,
-        "y": 12
+        "y": 10
       },
       "id": 66,
       "interval": null,
@@ -2043,7 +2093,7 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "first"
     },
     {
       "cacheTimeout": null,
@@ -2054,6 +2104,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
+      "datasource": null,
       "format": "percent",
       "gauge": {
         "maxValue": 100,
@@ -2066,7 +2117,7 @@
         "h": 3,
         "w": 3,
         "x": 16,
-        "y": 12
+        "y": 10
       },
       "id": 10,
       "interval": null,
@@ -2109,7 +2160,7 @@
           "expr": "bottomk(1, 100 / sum(netdata_disk_space_GiB_average{family=\"/\", instance=~\"$node\"}) by (instance) * sum(netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail|cached\",instance=~\"$node\"} ) by (instance) ) ",
           "format": "time_series",
           "instant": true,
-          "intervalFactor": 4,
+          "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
           "step": 20
@@ -2138,6 +2189,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": null,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -2150,7 +2202,7 @@
         "h": 3,
         "w": 5,
         "x": 19,
-        "y": 12
+        "y": 10
       },
       "id": 68,
       "interval": null,
@@ -2210,27 +2262,29 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
+      "valueName": "first"
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 0,
-        "y": 15
+        "y": 13
       },
+      "hiddenSeries": false,
       "id": 38,
       "legend": {
         "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": false,
@@ -2240,7 +2294,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -2255,18 +2309,27 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(3, avg by (instance,name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\"}[60s]) * 1024 * 60) / on (instance,name) (container_spec_cpu_shares) / 60 * 100)",
+          "expr": "topk(1, sum by (instance,chart) (netdata_cgroup_cpu_percentage_average{instance=~\"$node\"}))",
           "format": "time_series",
+          "hide": true,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": " {{instance}}",
+          "legendFormat": "{{instance}} - {{chart}}",
           "refId": "A"
+        },
+        {
+          "expr": "topk(1, sum by (instance,container_label_com_docker_swarm_task_name) (rate(container_cpu_usage_seconds_total{instance=~\"$node\",container_label_com_docker_swarm_task_name!=\"\"}[$__interval]))) * 100",
+          "hide": false,
+          "interval": "1m",
+          "legendFormat": "{{instance}} - {{container_label_com_docker_swarm_task_name}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container CPU Usage",
+      "title": "Top Node Container CPU Cores",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2287,7 +2350,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -2309,15 +2372,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 6,
         "x": 6,
-        "y": 15
+        "y": 13
       },
+      "hiddenSeries": false,
       "id": 75,
       "legend": {
         "avg": false,
@@ -2333,7 +2398,7 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -2348,15 +2413,17 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, rate(container_network_receive_bytes_total{instance=~\"$node\"}[1m]) > 0)",
+          "expr": "topk(1, sum(rate(container_network_receive_bytes_total{instance=~\"$node\"}[$__interval])) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "IN: {{instance}}",
           "refId": "A"
         },
         {
-          "expr": "-topk(1, rate(container_network_transmit_bytes_total{instance=~\"$node\"}[1m]) > 0)",
+          "expr": "-topk(1, sum(rate(container_network_transmit_bytes_total{instance=~\"$node\"}[$__interval])) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "OUT: {{instance}}",
           "refId": "B"
@@ -2366,7 +2433,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Network Traffic",
+      "title": "Top Node Container Network Traffic",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2408,203 +2475,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 12,
-        "y": 15
-      },
-      "id": 96,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(2, (avg by (instance) (rate(netdata_disk_util___of_time_working_average{instance=~\".*\"}[1m]))) < 100)",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Disk IO Time",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 18,
-        "y": 15
-      },
-      "id": 87,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": true,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "ceil(netdata_jail_in_jail_IPs_average)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Node Banned IPs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
+      "datasource": null,
       "decimals": 1,
       "fill": 0,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 3,
-        "x": 21,
-        "y": 15
+        "x": 12,
+        "y": 13
       },
+      "hiddenSeries": false,
       "id": 40,
       "legend": {
         "avg": false,
@@ -2634,8 +2515,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2,sum(container_memory_usage_bytes{instance=~\"$node\",id=\"/\"}) by (instance))",
+          "expr": "topk(1, sum(container_memory_usage_bytes{instance=~\"$node\",id=\"/\"}) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2645,7 +2527,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Container Memory Used",
+      "title": "Top Node Container Memory",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2685,128 +2567,34 @@
     },
     {
       "aliasColors": {},
-      "bars": false,
+      "bars": true,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
-      "fill": 0,
+      "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 20
+        "w": 3,
+        "x": 15,
+        "y": 13
       },
-      "id": 97,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open File Descriptors",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 6,
-        "y": 20
-      },
-      "id": 48,
+      "hiddenSeries": false,
+      "id": 87,
       "legend": {
         "avg": false,
         "current": false,
-        "hideEmpty": true,
-        "hideZero": false,
         "max": true,
         "min": false,
         "show": false,
         "total": false,
         "values": true
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 2,
       "links": [],
-      "nullPointMode": "null",
+      "nullPointMode": "null as zero",
       "options": {
         "dataLinks": []
       },
@@ -2817,14 +2605,15 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance,dimension) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance,dimension))",
+          "expr": "topk(1, ceil(netdata_jail_in_jail_IPs_average))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}} - {{dimension}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2832,296 +2621,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node Open Files",
+      "title": "Top Node Banned IPs",
       "tooltip": {
         "shared": true,
         "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": 2,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 12,
-        "y": 20
-      },
-      "id": 52,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Pipes",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 20
-      },
-      "id": 50,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node Open Sockets",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 24
-      },
-      "id": 19,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(2, sum(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node CPU IO Wait",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -3136,11 +2639,11 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "percent",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -3162,109 +2665,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 1,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 6,
-        "y": 24
-      },
-      "id": 46,
-      "legend": {
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "bottomk(2, netdata_disk_space_GiB_average{family=\"/\",dimension=~\"avail\",instance=~\"$node\"})",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Lowest Node /",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "decgbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
+      "datasource": null,
       "decimals": 2,
       "fill": 0,
       "fillGradient": 0,
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 3,
-        "x": 9,
-        "y": 24
+        "x": 18,
+        "y": 13
       },
+      "hiddenSeries": false,
       "id": 54,
       "legend": {
         "avg": true,
@@ -3295,8 +2706,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, netdata_system_ram_MiB_average{dimension=\"used\",instance=~\"$node\"})",
+          "expr": "topk(1, netdata_system_ram_MiB_average{dimension=\"used\",instance=~\"$node\"} > 0)",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -3350,15 +2762,1114 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
+      "decimals": 2,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 15,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "bottomk(1, sum(netdata_system_ram_MiB_average{dimension=~\"free|cached|buffers\",instance=~\"$node\"}) by (instance) > 0)",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Lowest Node Memory Available",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decmbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": 2,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 19,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"iowait\",instance=~\"$node\"}) by (instance) > 0)",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node CPU IO Wait",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 93,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"nice\",instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node CPU Nice",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "description": "Amount of CPU time stolen by the hypervisor for other VMs",
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 92,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"steal\",instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node CPU Steal",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 96,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": true,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_disk_util___of_time_working_average{instance=~\"$node\",dimension=\"utilization\",family!~\"^/.*\"}) by (instance,family))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} ({{family}})",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Disk Time Busy",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": "105",
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 90,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"system\",instance=~\"$node\"}) by (instance) > 0)",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node CPU System",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 46,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": 500,
+        "sort": "min",
+        "sortDesc": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "bottomk(1, netdata_disk_space_GiB_average{family!~\"/dev|/dev/.*|/boot|/var/lib/osd/.*|/opt/pwx/.*|/run|/run/.*\",dimension=\"avail\",instance=~\"$node\"})",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} ({{family}})",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Lowest Node Disk Free",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "decgbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 98,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "sideWidth": 500,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "bottomk(1, 100 - ( sum(netdata_disk_space_GiB_average{family!~\"/dev|/dev/.*|/boot|/var/lib/osd/.*|/opt/pwx/.*|/run|/run/.*\",dimension=\"used\",instance=~\"$node\"}) by (instance, family) / (sum(netdata_disk_space_GiB_average{family!~\"/dev|/dev/.*|/boot|/var/lib/osd/.*|/opt/pwx/.*|/run|/run/.*\",dimension=\"used\",instance=~\"$node\"}) by (instance, family) + sum(netdata_disk_space_GiB_average{family!~\"/dev|/dev/.*|/boot|/var/lib/osd/.*|/opt/pwx/.*|/run|/run/.*\",dimension=\"avail\",instance=~\"$node\"}) by (instance, family)) ) * 100)",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}} ({{family}})",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Lowest Node Disk % Free",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 21
+      },
+      "hiddenSeries": false,
+      "id": 97,
+      "legend": {
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(1, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open File Descriptors",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 24
+      },
+      "hiddenSeries": false,
+      "id": 48,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "hideEmpty": true,
+        "hideZero": false,
+        "max": true,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "topk(1, sum(netdata_apps_files_open_files_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_files_open_files_average{instance=~\"$node\"}) by (instance))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node Open Files",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": false,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "decimals": 2,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 25
+      },
+      "hiddenSeries": false,
+      "id": 91,
+      "legend": {
+        "alignAsTable": false,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null as zero",
+      "options": {
+        "dataLinks": []
+      },
+      "paceLength": 10,
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+        {
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=\"user\",instance=~\"$node\"}) by (instance) > 0)",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Top Node CPU User",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0.1",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
       "decimals": 0,
       "fill": 1,
       "fillGradient": 10,
       "gridPos": {
-        "h": 12,
-        "w": 7,
-        "x": 12,
-        "y": 24
+        "h": 7,
+        "w": 12,
+        "x": 6,
+        "y": 26
       },
+      "hiddenSeries": false,
       "id": 70,
       "legend": {
         "alignAsTable": true,
@@ -3369,7 +3880,7 @@
         "min": false,
         "rightSide": true,
         "show": true,
-        "sort": "max",
+        "sort": "current",
         "sortDesc": true,
         "total": false,
         "values": true
@@ -3446,220 +3957,25 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": null,
       "decimals": 0,
-      "fill": 1,
-      "fillGradient": 10,
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 19,
-        "y": 24
-      },
-      "id": 26,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": true,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "sum(ceil(rate(engine_daemon_network_actions_seconds_count[1m]))) by (action)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 10,
-          "legendFormat": "{{action}}",
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Docker Network Actions",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 3,
         "w": 6,
-        "x": 0,
+        "x": 18,
         "y": 27
       },
-      "id": 90,
+      "hiddenSeries": false,
+      "id": 52,
       "legend": {
-        "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(2, avg(netdata_cpu_cpu_percentage_average{dimension=\"system\",instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node CPU System",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 0,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 6,
-        "y": 27
-      },
-      "id": 72,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "hideEmpty": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
         "show": false,
         "total": false,
         "values": true
@@ -3682,8 +3998,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(2, netdata_disk_space_GiB_average{family=\"/var/lib/docker\",dimension=~\"avail\",instance=~\"$node\"})",
+          "expr": "topk(1, sum(netdata_apps_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_pipes_open_pipes_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_pipes_open_pipes_average{instance=~\"$node\"}) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -3693,10 +4010,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Lowest Node /var/lib/docker",
+      "title": "Top Node Open Pipes",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "transparent": true,
@@ -3711,7 +4028,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "decgbytes",
+          "format": "none",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -3737,125 +4054,28 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 2,
-      "fill": 0,
-      "fillGradient": 0,
+      "datasource": null,
+      "decimals": 1,
+      "fill": 1,
+      "fillGradient": 1,
       "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 9,
-        "y": 27
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 29
       },
-      "id": 15,
+      "hiddenSeries": false,
+      "id": 94,
       "legend": {
         "alignAsTable": false,
-        "avg": false,
+        "avg": true,
         "current": true,
         "hideEmpty": true,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "rightSide": false,
         "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "bottomk(2, sum(netdata_system_ram_MiB_average{dimension=~\"free|cached|buffers\",instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Lowest Node Memory Available",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "decmbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "decimals": 2,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 0,
-      "fill": 1,
-      "fillGradient": 10,
-      "gridPos": {
-        "h": 7,
-        "w": 5,
-        "x": 19,
-        "y": 29
-      },
-      "id": 28,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -3873,303 +4093,13 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "sum(ceil(rate(engine_daemon_container_actions_seconds_count[1m]))) by (action)",
-          "format": "time_series",
-          "intervalFactor": 10,
-          "legendFormat": "{{action}}",
-          "refId": "A",
-          "step": 10
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Docker Container Actions",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": false,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 30
-      },
-      "id": 91,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
       "stack": false,
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(2, avg(netdata_cpu_cpu_percentage_average{dimension=\"user\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, avg(netdata_cpu_cpu_percentage_average{dimension=~\"irq|softirq\",instance=~\"$node\"}) by (instance) > 0)",
           "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node CPU User",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "description": "Amount of CPU time stolen by the hypervisor for other VMs",
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 6,
-        "y": 30
-      },
-      "id": 92,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(2, avg(netdata_cpu_cpu_percentage_average{dimension=\"steal\",instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Node CPU Steal",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 33
-      },
-      "id": 94,
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": true,
-      "targets": [
-        {
-          "expr": "topk(2, avg(netdata_cpu_cpu_percentage_average{dimension=~\"irq|softirq\",instance=~\"$node\"}) by (instance))",
-          "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A",
@@ -4202,7 +4132,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0.1",
           "show": true
         },
         {
@@ -4224,31 +4154,31 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 1,
+      "datasource": null,
+      "decimals": 0,
+      "fill": 0,
+      "fillGradient": 0,
       "gridPos": {
         "h": 3,
         "w": 6,
-        "x": 6,
-        "y": 33
+        "x": 18,
+        "y": 30
       },
-      "id": 93,
+      "hiddenSeries": false,
+      "id": 50,
       "legend": {
-        "alignAsTable": false,
         "avg": true,
         "current": true,
         "hideEmpty": true,
         "hideZero": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": false,
         "total": false,
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
       "options": {
@@ -4262,22 +4192,22 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
-      "steppedLine": true,
+      "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, avg(netdata_cpu_cpu_percentage_average{dimension=\"nice\",instance=~\"$node\"}) by (instance))",
+          "expr": "topk(1, sum(netdata_apps_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_users_sockets_open_sockets_average{instance=~\"$node\"}) by (instance) + sum(netdata_groups_sockets_open_sockets_average{instance=~\"$node\"}) by (instance))",
           "format": "time_series",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
-          "refId": "A",
-          "step": 2
+          "refId": "A"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Node CPU Nice",
+      "title": "Top Node Open Sockets",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -4289,13 +4219,13 @@
         "buckets": null,
         "mode": "time",
         "name": null,
-        "show": true,
+        "show": false,
         "values": []
       },
       "yaxes": [
         {
           "decimals": 0,
-          "format": "percent",
+          "format": "none",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -4318,12 +4248,13 @@
     },
     {
       "columns": [],
+      "datasource": null,
       "fontSize": "80%",
       "gridPos": {
         "h": 17,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 33
       },
       "hideTimeOverride": true,
       "id": 20,
@@ -4333,8 +4264,8 @@
       "scroll": false,
       "showHeader": true,
       "sort": {
-        "col": 1,
-        "desc": false
+        "col": 2,
+        "desc": true
       },
       "styles": [
         {
@@ -4545,8 +4476,8 @@
       "type": "table"
     }
   ],
-  "refresh": "30s",
-  "schemaVersion": 19,
+  "refresh": false,
+  "schemaVersion": 21,
   "style": "dark",
   "tags": [
     "docker",
@@ -4643,5 +4574,5 @@
   "timezone": "",
   "title": "Nodes (netdata+dockerd+cadvisor)",
   "uid": "qSrIgbFWz",
-  "version": 6539
+  "version": 6540
 }
