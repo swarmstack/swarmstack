@@ -62,10 +62,11 @@ A set of ansible playbooks and a docker-compose stack that:
 Optional
 
 - [Errbot](https://github.com/swarmstack/errbot-docker) - Connect alerts to social rooms to not already natively supported by Alertmanager
-- [InfluxDB](https://github.com/swarmstack/influxdb) - Useful for longer-term Prometheus storage/retrieval in certain workloads
+- [InfluxDB](https://github.com/swarmstack/influxdb) - [deprecated] Useful for longer-term Prometheus storage/retrieval in certain workloads
 - [Loki](https://github.com/swarmstack/loki) - Like Prometheus but for logs
 - [TeamPass](https://github.com/swarmstack/teampass) - Secure collaborative team management for shared credentials
 - [Trickster](https://github.com/swarmstack/trickster) - In-memory Prometheus data cache for frequently re-requested tsdb blocks (accelerator for Grafana if you have popular dashboards)
+- [VictoriaMetrics](https://github.com/swarmstack/victoria-metrics) - Fast, cost-effective and scalable time series database, long-term remote storage for Prometheus
 
 ---
 
@@ -255,9 +256,9 @@ There is an adjunct [https://github.com/swarmstack/loki](https://github.com/swar
 
 ### Prometheus
 
-The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus tsdb data volume will be created for HA swarmstack users. Prometheus itself is not designed for long-term storage and retrival of data, but can work with several storage back-ends as remote-read and remote-write targets. If you find that you need to perform queries on metrics data older than a few days, you should explore deploying other options for long-term storage and retrieval of Prometheus data. Prometheus can optionally replicate metrics stored within it's own internal time-series database (tsdb) out to one or more external tsdb such as InfluxDB and supports efficient remote-read and write from these longer-term storage sources.
+The data retention period for Prometheus is defaulted to 48 hours within the docker compose files, and a default 10GB Prometheus data volume will be created for HA swarmstack users. Prometheus itself is not designed for long-term storage and retrival of data, but can work with several storage back-ends as remote-read and remote-write targets. If you find that you need to perform queries on metrics data older than a few days, you should explore deploying other options for long-term storage and retrieval of Prometheus data. Prometheus can optionally replicate metrics stored within it's own internal time-series database (TSDB) out to one or more external TSDB such as VictoriaMetrics, and supports efficient remote-write capabilities for replicating data into these longer-term storage sources.
 
-InfluxDB and Postgres (even streaming read-replication) can be used to persist metrics data in a way that Prometheus can consume it, other [storage back-ends for Prometheus](https://prometheus.io/docs/operating/integrations/) are also available. The project [swarmstack/influxdb](https://github.com/swarmstack/influxdb) can help swarmstack users quickly bring up an optional InfluxDB remote read-write back-end for hosting longer-term Prometheus metrics.
+VictoriaMetrics can be used to persist metrics data in a way that Prometheus-compatible applications (such as Grafana)  can consume it. Other [storage back-ends for Prometheus](https://prometheus.io/docs/operating/integrations/) are also available. The project [swarmstack/victoria-metrics](https://github.com/swarmstack/victoria-metrics) can help swarmstack users quickly bring up an optional VictoriaMetrics remote-write back-end for hosting longer-term metrics. See [Remote Write Storage Wars](https://promcon.io/2019-munich/talks/remote-write-storage-wars/) for more information.
 
 You might instead choose to scale your Prometheus using a federated architecture across multiple Prometheus shards using [Thanos](https://github.com/improbable-eng/thanos), see [PromCon 2018: Thanos - Prometheus at Scale](https://youtu.be/Fb_lYX01IX4)
 
