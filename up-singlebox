@@ -1,0 +1,24 @@
+#!/bin/bash
+
+## Run this script to deploy or update stack containers when their config files have been changed
+
+STACK=swarmstack
+
+
+
+if uname | grep -q "Darwin"; then
+    mod_time_fmt="-f %m"
+else
+    mod_time_fmt="-c %Y"
+fi
+
+export CONFALERTMANANGER=$(stat $mod_time_fmt alertmanager/conf/)
+export CONFCADDY=$(stat $mod_time_fmt caddy/)
+export CONFCADDYCERT=$(stat $mod_time_fmt caddy/caddycerts/)
+export CONFDOCKERGC=$(stat $mod_time_fmt ./docker-gc-exclude)
+export CONFGRAFANADASH=$(stat $mod_time_fmt grafana/dashboards/)
+export CONFKARMA=$(stat $mod_time_fmt karma/)
+export CONFPROM=$(stat $mod_time_fmt prometheus/conf/)
+export CONFPROMRULES=$(stat $mod_time_fmt prometheus/rules/)
+
+docker stack deploy --resolve-image always -c docker-compose-singlebox.yml ${STACK}

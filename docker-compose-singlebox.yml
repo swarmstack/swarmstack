@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 #  This "singlebox" stack will use LOCAL storage and expects to be deployed to
 #  a single Docker swarm host so that the volumes will always be available on
@@ -93,6 +93,7 @@ version: "3.4"
 # and caddy_cert occurances below if using certificates or Let's Encrypt.
 
 networks:
+
   net:
     driver: overlay
     driver_opts:
@@ -100,6 +101,7 @@ networks:
     attachable: true
 
 volumes:
+
     alertmanager:
     alertmanagerB:
     caddycerts:
@@ -109,45 +111,58 @@ volumes:
     prometheus:
 
 configs:
+
   alertmanager_config:
     file: ./alertmanager/conf/alertmanager.yml
+    name: alertmanager_config$CONFALERTMANANGER
 
   caddy_config:
     file: ./caddy/Caddyfile-singlebox
+    name: caddy_config$CONFCADDY
   caddy_www:
     file: ./caddy/index-singlebox.html
+    name: caddy_www$CONFCADDY
   #caddy_cert:
   #  file: ./caddy/caddycerts/cert.pem
+  #  name: caddy_cert$CONFCADDYCERT
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
+  #  name: caddy_key$CONFCADDYCERT
 
-  docker-garbage-collection:
+  docker_garbage_collection:
     file: ./docker-gc-exclude
+    name: docker_garbage_collection$CONFDOCKERGC
 
   grafana_dashboards_nodes:
     file: ./grafana/dashboards/nodes-netdata-dockerd-cadvisor.json
     #file: ./grafana/dashboards/nodes-node-exporter-dockerd-cadvisor.json
+    name: grafana_dashboards_nodes$CONFGRAFANADASH
   grafana_dashboards_containers:
     file: ./grafana/dashboards/containers-netdata-dockerd-cadvisor.json
     #file: ./grafana/dashboards/containers-node-exporter-dockerd-cadvisor.json
-  grafana_dashboards_prometheus-2-stats:
+    name: grafana_dashboards_containers$CONFGRAFANADASH
+  grafana_dashboards_prometheus_2_stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
+    name: grafana_dashboards_prometheus_2_stats$CONFGRAFANADASH
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
     file: ./grafana/dashboards.yml
 
-  karma-conf:
+  karma_conf:
     file: ./karma/karma.yaml
+    name: karma_conf$CONFKARMA
 
-  prometheus-conf:
+  prometheus_conf:
     file: ./prometheus/conf/prometheus-singlebox.yml
+    name: prometheus_conf$CONFPROM
   prometheus_rules_nodes:
     file: ./prometheus/rules/nodes.yml
+    name: prometheus_rules_nodes$CONFPROMRULES
   prometheus_rules_containers:
     file: ./prometheus/rules/containers.yml
-
+    name: prometheus_rules_containers$CONFPROMRULES
 
 services:
 
@@ -295,7 +310,7 @@ services:
   docker-gc:
     image: clockworksoul/docker-gc-cron:latest
     configs:
-      - source: docker-garbage-collection
+      - source: docker_garbage_collection
         target: /etc/docker-gc-exclude
     deploy:
       mode: global
@@ -336,7 +351,7 @@ services:
         target: /etc/grafana/dashboards/nodes.json
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
-      - source: grafana_dashboards_prometheus-2-stats
+      - source: grafana_dashboards_prometheus_2_stats
         target: /etc/grafana/dashboards/prometheus-2-stats.json
       - source: grafana_provisioning_dashboards
         target: /etc/grafana/provisioning/dashboards/dashboards.yml
@@ -382,7 +397,7 @@ services:
   karma:
     image: lmierzwa/karma:v0.54
     configs:
-      - source: karma-conf
+      - source: karma_conf
         target: /karma.yaml
     deploy:
       labels:
@@ -456,7 +471,7 @@ services:
       - '--storage.tsdb.retention.time=48h'
       - '--web.enable-admin-api'
     configs:
-      - source: prometheus-conf
+      - source: prometheus_conf
         target: /etc/prometheus/prometheus.yml
       - source: prometheus_rules_nodes
         target: /etc/prometheus/nodes.yml

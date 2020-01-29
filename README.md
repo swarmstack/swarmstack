@@ -8,6 +8,7 @@
     - [WHY?](#why)
     - [REQUIREMENTS](#requirements)
     - [INSTALLATION](#installation)
+        - [Updating](#updating)
     - [MONITORING ALERTING AND LOGGING](#monitoring-alerting-and-logging)
         - [Monitoring](#monitoring)
         - [Alerting](#alerting)
@@ -102,7 +103,7 @@ Portworx provides a high-availability storage solution for containers that seeks
 
 There is a [docker-compose-singlebox.yml](https://github.com/swarmstack/swarmstack/blob/master/docker-compose-singlebox.yml) stack that can be used to evaluate swarmstack on a single Docker swarm host without requiring etcd and Portworx or other persistent storage. Please see the INSTALLATION section for instructions on installing this _singlebox_ version of swarmstack.
 
-3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions to the Portworx storage cluster that swarmstack will install. _More devices usually equals better performance_. If bringing your own existing Docker swarm, 17.09.0+ is required by the swarmstack compose file. swarmstack will install or upgrade all defined _[swarm]_ nodes to the latest stable version of Docker and will attempt to join all _[swarm]_ hosts in the cluster to the _SWARMJOIN_ defined host. You can change the Docker version installed, including using bleeding-edge repos if desired, by altering the docker.yml playbook.
+3 or more Enterprise Linux 7 (RHEL 7/CentOS 7) hosts _(baremetal / VM or a combination)_, with each contributing (1) or more additional virtual or physical _unused_ block devices or partitions to the Portworx storage cluster that swarmstack will install. _More devices usually equals better performance_. If bringing your own existing Docker swarm, 17.12.0+ is required by the swarmstack compose file (version 3.5). swarmstack will install or upgrade all defined _[swarm]_ nodes to the latest stable version of Docker and will attempt to join all _[swarm]_ hosts in the cluster to the _SWARMJOIN_ defined host. You can change the Docker version installed, including using bleeding-edge repos if desired, by altering the docker.yml playbook.
 
 Using the free [Portworx PX-Developer](https://github.com/portworx/px-dev) version by default, swarmstack will install a storage cluster for each set of (3) hosts added to the cluster, which must provide a minimum 40GB (needed by swarmstack) up to the Portworx developer version limits of 1TB of persistent storage for up to _40_ volumes across those 3 nodes. Adding 1TB drives/partitions from each node would be optimal to fill out the 1TB of replicated space. You can contribute unused block device(s) or partition(s), adding more smaller NMVe/SSDs on bare-metal or cloud-provider high-IOPS block devices would provide Portworx faster storage, but Portworx functions even across 3 VMs on the same machine each contributing storage from a single shared USB2 NAS, so scale your storage depending on your expected persistent-storage workloads. Block devices or partitions larger than 1TB can be contributed, but only 1TB of persistent storage will be available without licensing the PX-Enterprise version.
 
@@ -188,6 +189,10 @@ ansible-playbook -i clusters/swarmstack [playbooks/swarmstack.yml](https://githu
 
 * _This deploys or redeploys the swarmstack DevOps monitoring stack to the Docker swarm cluster. This includes installing or updating NetData on each node in order for Prometheus to collect metrics from it._
 
+### Updating
+
+If you make changes to the local service configuration files in /usr/local/src/localswarmstack/, such as altering Prometheus configuation or rules, you can run the [up](https://github.com/swarmstack/swarmstack/blob/master/up) script which will cause swarm to update only the services where configuration changes are detected. There is a similar script [up-singlebox](https://github.com/swarmstack/swarmstack/blob/master/up-singlebox) for these users as well.
+
 ---
 
 ## MONITORING ALERTING AND LOGGING
@@ -203,10 +208,12 @@ Various Prometheus [exporters](https://prometheus.io/docs/instrumenting/exporter
 To attach your own applications into Prometheus monitoring, you'll need to make sure you deploy your services to attach to the swarmstack monitoring network in your own docker-compose files. See [swarmstack/errbot-docker/docker-compose-swarmstack.yml](https://github.com/swarmstack/errbot-docker/blob/master/docker-compose-swarmstack.yml) for an example Docker compose service attaching to swarmstack_net to be monitored:
 
 ```
+version: "3.5"
+
 networks:
   default:
-    external:
-      name: swarmstack_net
+    external: true
+    name: swarmstack_net
 ```
 
 If you have an existing attachable encrypted Docker swarm network, replace the network stanza in docker-compose.yml with your own.

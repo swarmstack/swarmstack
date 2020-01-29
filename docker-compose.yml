@@ -1,6 +1,7 @@
-version: "3.4"
+version: "3.5"
 
 networks:
+
   net:
     driver: overlay
     driver_opts:
@@ -8,6 +9,7 @@ networks:
     attachable: true
 
 volumes:
+
     alertmanager:
       driver: pxd
       driver_opts:
@@ -51,52 +53,70 @@ volumes:
         shared: "true"
 
 configs:
+
   alertmanager_config:
     file: ./alertmanager/conf/alertmanager.yml
+    name: alertmanager_config$CONFALERTMANANGER
 
   caddy_config:
     file: ./caddy/Caddyfile
+    name: caddy_config$CONFCADDY
   caddy_www:
     file: ./caddy/index.html
+    name: caddy_www$CONFCADDY
   #caddy_cert:
   #  file: ./caddy/caddycerts/cert.pem
+  #  name: caddy_cert$CONFCADDYCERT
   #caddy_key:
   #  file: ./caddy/caddycerts/key.pem
+  #  name: caddy_key$CONFCADDYCERT
 
-  docker-garbage-collection:
+  docker_garbage_collection:
     file: ./docker-gc-exclude
+    name: docker_garbage_collection$CONFDOCKERGC
 
   grafana_dashboards_nodes:
     file: ./grafana/dashboards/nodes-netdata-dockerd-cadvisor.json
     #file: ./grafana/dashboards/nodes-node-exporter-dockerd-cadvisor.json
+    name: grafana_dashboards_nodes$CONFGRAFANADASH
   grafana_dashboards_containers:
     file: ./grafana/dashboards/containers-netdata-dockerd-cadvisor.json
     #file: ./grafana/dashboards/containers-node-exporter-dockerd-cadvisor.json
-  grafana_dashboards_etcd-cluster:
+    name: grafana_dashboards_containers$CONFGRAFANADASH
+  grafana_dashboards_etcd_cluster:
     file: ./grafana/dashboards/etcd-cluster.json
-  grafana_dashboards_portworx-cluster-status:
+    name: grafana_dashboards_etcd_cluster$CONFGRAFANADASH
+  grafana_dashboards_portworx_cluster_status:
     file: ./grafana/dashboards/portworx-cluster-status.json
-  grafana_dashboards_portworx-volumes-status:
+    name: grafana_dashboards_portworx_cluster_status$CONFGRAFANADASH
+  grafana_dashboards_portworx_volumes_status:
     file: ./grafana/dashboards/portworx-volumes-status.json
-  grafana_dashboards_prometheus-2-stats:
+    name: grafana_dashboards_portworx_volumes_status$CONFGRAFANADASH
+  grafana_dashboards_prometheus_2_stats:
     file: ./grafana/dashboards/prometheus-2-stats.json
+    name: grafana_dashboards_prometheus_2_stats$CONFGRAFANADASH
 
   grafana_provisioning_datasources:
     file: ./grafana/datasources/prometheus.yaml
   grafana_provisioning_dashboards:
     file: ./grafana/dashboards.yml
 
-  karma-conf:
+  karma_conf:
     file: ./karma/karma.yaml
+    name: karma_conf$CONFKARMA
 
-  prometheus-conf:
+  prometheus_conf:
     file: ./prometheus/conf/prometheus.yml
+    name: prometheus_conf$CONFPROM
   prometheus_rules_nodes:
     file: ./prometheus/rules/nodes.yml
+    name: prometheus_rules_nodes$CONFPROMRULES
   prometheus_rules_containers:
     file: ./prometheus/rules/containers.yml
+    name: prometheus_rules_containers$CONFPROMRULES
   prometheus_rules_portworx:
     file: ./prometheus/rules/portworx.yml
+    name: prometheus_rules_portworx$CONFPROMRULES
 
 services:
 
@@ -253,7 +273,7 @@ services:
   docker-gc:
     image: clockworksoul/docker-gc-cron:latest
     configs:
-      - source: docker-garbage-collection
+      - source: docker_garbage_collection
         target: /etc/docker-gc-exclude
     deploy:
       mode: global
@@ -292,15 +312,15 @@ services:
     configs:
       - source: grafana_dashboards_containers
         target: /etc/grafana/dashboards/containers.json
-      - source: grafana_dashboards_etcd-cluster
+      - source: grafana_dashboards_etcd_cluster
         target: /etc/grafana/dashboards/etcd-cluster.json
       - source: grafana_dashboards_nodes
         target: /etc/grafana/dashboards/nodes.json
-      - source: grafana_dashboards_portworx-cluster-status
+      - source: grafana_dashboards_portworx_cluster_status
         target: /etc/grafana/dashboards/portworx-cluster-status.json
-      - source: grafana_dashboards_portworx-volumes-status
+      - source: grafana_dashboards_portworx_volumes_status
         target: /etc/grafana/dashboards/portworx-volumes-status.json
-      - source: grafana_dashboards_prometheus-2-stats
+      - source: grafana_dashboards_prometheus_2_stats
         target: /etc/grafana/dashboards/prometheus-2-stats.json
       - source: grafana_provisioning_dashboards
         target: /etc/grafana/provisioning/dashboards/dashboards.yml
@@ -349,7 +369,7 @@ services:
   karma:
     image: lmierzwa/karma:v0.54
     configs:
-      - source: karma-conf
+      - source: karma_conf
         target: /karma.yaml
     deploy:
       labels:
@@ -425,7 +445,7 @@ services:
       - '--storage.tsdb.retention.time=48h'
       - '--web.enable-admin-api'
     configs:
-      - source: prometheus-conf
+      - source: prometheus_conf
         target: /etc/prometheus/prometheus.yml
       - source: prometheus_rules_nodes
         target: /etc/prometheus/nodes.yml
