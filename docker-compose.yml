@@ -382,10 +382,10 @@ services:
       - net
 
   kthxbye:
-    image: lmierzwa/kthxbye:v0.5
+    image: lmierzwa/kthxbye:v0.6
     command:
-     - '-alertmanager.addr'
-     - 'alertmanager:9093'
+     - '-alertmanager.uri'
+     - 'http://alertmanager:9093'
      - '-extend-if-expiring-in'
      - '5m'
      - '-extend-by'
@@ -394,6 +394,8 @@ services:
      - 'ACK'
      - '-interval'
      - '60s'
+     - '-max-duration'
+     - '0'
     deploy:
       mode: replicated
       replicas: 1
