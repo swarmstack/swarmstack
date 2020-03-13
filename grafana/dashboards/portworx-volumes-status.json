@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
-  "iteration": 1580163567991,
+  "id": 3,
+  "iteration": 1584126487910,
   "links": [],
   "panels": [
     {
@@ -28,7 +28,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 5,
+        "h": 10,
         "w": 5,
         "x": 0,
         "y": 0
@@ -64,20 +64,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": " topk(1, px_volume_readthroughput{cluster=~\"$cluster\",volumename=~\"$volumename\"} ) by (cluster)",
+          "expr": "topk(1, rate(px_volume_dev_read_bytes_total{cluster=~\"$cluster\",volumename=~\"($volumename)\"}[$__interval]) > 100000 )",
           "format": "time_series",
           "hide": false,
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "({{cluster}}) {{volumename}}",
+          "legendFormat": "Read: ({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 20
+        },
+        {
+          "expr": "- topk(1, rate(px_volume_dev_written_bytes_total{cluster=~\"$cluster\",volumename=~\"($volumename)\"}[$__interval]) > 100000 )",
+          "interval": "",
+          "legendFormat": "Write: ({{cluster}}) {{volumename}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Top Volume Read Throughput",
+      "title": "Top Volume Throughput",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -121,6 +128,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "decimals": 1,
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
@@ -162,7 +170,7 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, px_volume_vol_read_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
+          "expr": "topk(1, rate(px_volume_dev_read_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}[$__interval]) > 0.0001 )",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -171,7 +179,7 @@
           "step": 10
         },
         {
-          "expr": "- topk(1, px_volume_vol_write_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
+          "expr": "- topk(1, rate(px_volume_dev_read_latency_seconds{cluster=~\"$cluster\",volumename=~\"$volumename\"}[$__interval]) > 0.0001 )",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -270,8 +278,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, (px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}/px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"})*100) by (cluster)",
+          "expr": "topk(1, (px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}/px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"})*100)",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
@@ -340,7 +349,6 @@
       "hideTimeOverride": true,
       "id": 23,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
@@ -350,6 +358,7 @@
       },
       "styles": [
         {
+          "align": "auto",
           "colorMode": "row",
           "colors": [
             "rgba(50, 172, 45, 0.97)",
@@ -368,6 +377,7 @@
         },
         {
           "alias": "Cluster",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -384,6 +394,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -400,6 +411,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -416,6 +428,7 @@
         },
         {
           "alias": "Node",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -429,11 +442,12 @@
           "thresholds": [
             ""
           ],
-          "type": "string",
+          "type": "hidden",
           "unit": "short"
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -450,6 +464,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": "value",
           "colors": [
             "rgba(50, 172, 45, 0.97)",
@@ -469,6 +484,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -485,6 +501,7 @@
         },
         {
           "alias": "Volume Name",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -515,104 +532,6 @@
       "title": "Volume Fill",
       "transform": "table",
       "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "decimals": 1,
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 0,
-        "y": 5
-      },
-      "hiddenSeries": false,
-      "id": 31,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": true
-      },
-      "lines": false,
-      "linewidth": 2,
-      "links": [],
-      "nullPointMode": "null as zero",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 1,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "topk(1, px_volume_writethroughput{cluster=~\"$cluster\",volumename=~\"($volumename)\"}  > 0 ) by (cluster)",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "Write: ({{cluster}}) {{volumename}}",
-          "refId": "A",
-          "step": 20
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Top Volume Write Throughput",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "transparent": true,
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 1,
-          "format": "Bps",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "aliasColors": {},
@@ -663,8 +582,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(2, px_volume_depth_io{cluster=~\"$cluster\",volumename=~\"($volumename)\"} > 0) by (cluster)",
+          "expr": "topk(1, px_volume_dev_depth_io{cluster=~\"$cluster\",volumename=~\"($volumename)\"} > 0)",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A",
@@ -759,8 +679,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "bottomk(1, px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"($volumename)\"} - px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"($volumename)\"}) by (cluster)",
+          "expr": "bottomk(1, sum by (volumename,cluster) (px_volume_capacity_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"} - px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}))",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A"
@@ -819,7 +740,7 @@
       "fill": 1,
       "fillGradient": 1,
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 10,
         "x": 0,
         "y": 10
@@ -855,13 +776,20 @@
       "steppedLine": true,
       "targets": [
         {
-          "expr": "topk(1, px_volume_iops{cluster=~\"$cluster\",volumename=~\"($volumename)\"} > 0) by (cluster)",
+          "expr": "topk(1, rate(px_volume_dev_reads_total{cluster=~\"$cluster\",volumename=~\"($volumename)\"}[$__interval]) > 0)",
           "format": "time_series",
           "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
-          "legendFormat": "({{cluster}}) {{volumename}}",
+          "legendFormat": "Read: ({{cluster}}) {{volumename}}",
           "refId": "A",
           "step": 20
+        },
+        {
+          "expr": "- topk(1, rate(px_volume_dev_writes_total{cluster=~\"$cluster\",volumename=~\"($volumename)\"}[$__interval]) > 0)",
+          "interval": "1m",
+          "legendFormat": "Write: ({{cluster}}) {{volumename}}",
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -890,7 +818,7 @@
           "label": "",
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -906,196 +834,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "columns": [
-        {
-          "text": "Current",
-          "value": "current"
-        }
-      ],
-      "datasource": null,
-      "filterNull": false,
-      "fontSize": "80%",
-      "gridPos": {
-        "h": 5,
-        "w": 10,
-        "x": 0,
-        "y": 15
-      },
-      "hideTimeOverride": true,
-      "id": 12,
-      "links": [],
-      "options": {},
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 9,
-        "desc": false
-      },
-      "styles": [
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Time",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "__name__",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Cluster",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "cluster",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "instance",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Node",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "node",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "node_id",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "volumeid",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Volume Name",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "volumename",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "sort(px_volume_halevel{cluster=~\"$cluster\"})",
-          "format": "table",
-          "instant": true,
-          "intervalFactor": 4,
-          "legendFormat": "",
-          "refId": "A",
-          "step": 2
-        }
-      ],
-      "timeFrom": "1m",
-      "title": "Volume Replication (HA) Level",
-      "transform": "table",
-      "transparent": true,
-      "type": "table"
     },
     {
       "aliasColors": {},
@@ -1142,8 +880,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "topk(1, px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"}) by (cluster)",
+          "expr": "topk(1, px_volume_usage_bytes{cluster=~\"$cluster\",volumename=~\"$volumename\"})",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "({{cluster}}) {{volumename}}",
           "refId": "A"
@@ -1204,7 +943,6 @@
       },
       "id": 30,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
@@ -1215,12 +953,14 @@
       "styles": [
         {
           "alias": "Time",
+          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1237,6 +977,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1253,6 +994,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1269,6 +1011,7 @@
         },
         {
           "alias": "Cluster",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1285,6 +1028,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1301,6 +1045,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1317,6 +1062,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1333,6 +1079,7 @@
         },
         {
           "alias": "Node",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1344,11 +1091,12 @@
           "mappingType": 1,
           "pattern": "node",
           "thresholds": [],
-          "type": "string",
+          "type": "hidden",
           "unit": "short"
         },
         {
           "alias": "Volume Name",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1373,36 +1121,41 @@
           "refId": "A"
         }
       ],
-      "title": "Volume Usage",
+      "title": "Volume Used",
       "transform": "table",
       "transparent": true,
       "type": "table"
     },
     {
-      "columns": [],
+      "columns": [
+        {
+          "text": "Current",
+          "value": "current"
+        }
+      ],
       "datasource": null,
       "filterNull": false,
       "fontSize": "80%",
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 10,
         "x": 0,
-        "y": 20
+        "y": 17
       },
       "hideTimeOverride": true,
-      "id": 9,
+      "id": 12,
       "links": [],
-      "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
       "sort": {
         "col": 9,
-        "desc": true
+        "desc": false
       },
       "styles": [
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1419,6 +1172,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1435,6 +1189,7 @@
         },
         {
           "alias": "Cluster",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1451,22 +1206,7 @@
         },
         {
           "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1483,6 +1223,41 @@
         },
         {
           "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "job",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Node",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "node",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1499,6 +1274,184 @@
         },
         {
           "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "volumeid",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Volume Name",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "volumename",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "expr": "bottomk(1,px_volume_halevel{cluster=~\"$cluster\"}) by (cluster)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 4,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 2
+        }
+      ],
+      "timeFrom": "1m",
+      "title": "Lowest Volume Replication (HA) Level",
+      "transform": "table",
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": null,
+      "filterNull": false,
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 4,
+        "w": 10,
+        "x": 0,
+        "y": 21
+      },
+      "hideTimeOverride": true,
+      "id": 9,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 9,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Time",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "__name__",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "Cluster",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "cluster",
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "job",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "instance",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "node_id",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1515,6 +1468,7 @@
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1531,6 +1485,7 @@
         },
         {
           "alias": "Volume Name",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1547,6 +1502,7 @@
         },
         {
           "alias": "Node",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1564,9 +1520,10 @@
       ],
       "targets": [
         {
-          "expr": "px_volume_capacity_bytes{cluster=~\"$cluster\"}",
+          "expr": "topk(1, px_volume_capacity_bytes{cluster=~\"$cluster\"}) by (cluster)",
           "format": "table",
           "instant": true,
+          "interval": "",
           "intervalFactor": 4,
           "legendFormat": "",
           "refId": "A",
@@ -1574,14 +1531,14 @@
         }
       ],
       "timeFrom": "1m",
-      "title": "Volume Size",
+      "title": "Top Volume Size",
       "transform": "table",
       "transparent": true,
       "type": "table"
     }
   ],
   "refresh": "",
-  "schemaVersion": 21,
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [
     "portworx"
@@ -1600,6 +1557,7 @@
         "definition": "px_cluster_status_cluster_size",
         "hide": 0,
         "includeAll": true,
+        "index": -1,
         "label": "Cluster",
         "multi": true,
         "name": "cluster",
@@ -1627,6 +1585,7 @@
         "definition": "label_values(px_volume_usage_bytes,volumename)",
         "hide": 0,
         "includeAll": true,
+        "index": -1,
         "label": "Volume",
         "multi": true,
         "name": "volumename",
@@ -1645,7 +1604,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -1674,7 +1633,10 @@
     ]
   },
   "timezone": "browser",
-  "title": "Portworx Volumes Status",
-  "uid": "29tJy65iz",
-  "version": 4
+  "title": "Portworx (px-dev) Volumes Status",
+  "uid": "28tJy75iz",
+  "variables": {
+    "list": []
+  },
+  "version": 9
 }
