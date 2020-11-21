@@ -367,7 +367,7 @@ services:
       - grafana:/var/lib/grafana
 
   karma:
-    image: lmierzwa/karma:v0.70
+    image: lmierzwa/karma:v0.74
     configs:
       - source: karma_conf
         target: /karma.yaml
@@ -382,7 +382,7 @@ services:
       - net
 
   kthxbye:
-    image: lmierzwa/kthxbye:v0.8
+    image: lmierzwa/kthxbye:v0.9
     command:
      - '-alertmanager.uri'
      - 'http://alertmanager:9093'
